@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="AEMG_EX.TurnView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AEMG_EX"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Width="800" Height="450" MouseLeftButtonDown="Grid_MouseDown" IsHitTestVisible="True">
+        <Grid.Background>
+            <ImageBrush ImageSource="{Binding ScreenIMG}"/>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <!-- AF Bar-->
+            <RowDefinition Height="auto"/>
+            <!-- Empty space -->
+            <RowDefinition Height="*"/>
+            <!-- Skill row -->
+            <RowDefinition Height="auto"/>
+            <!-- Character row -->
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <!-- AF Bar-->
+        <Grid Grid.Row="0" VerticalAlignment="Top">
+            <Button Style="{StaticResource ImageButton}" Tag="{StaticResource AFButton}" Width="400" Height="80" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Command="{Binding SelectAFCommand}"/>
+        </Grid>
+        <!-- Empty space -->
+        <!-- Skill row -->
+        <Grid x:Name="FrontlineSkill" Grid.Row="2" Grid.Column="0" Width="800" Style="{StaticResource SlideUpAnimation}"
+              Visibility="{Binding IsFrontlineSkillVisible, Converter={local:BooleanToVisibilityConverter}}">
+            <Border Background="{StaticResource BackgroundDarkBrush}" BorderThickness="0 2 0 2" BorderBrush="{StaticResource BorderLightBrush}">
+                <Grid Background="Transparent" Margin="15 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Style="{StaticResource ImageWithTextButton}" Content="Default" Height="38" Tag="{StaticResource SkillButton}" 
+                            FontSize="16" Foreground="{StaticResource ForegroundWhiteBrush}" FontFamily="Times New Roman"
+                            Command="{Binding SelectSkillCommand}" CommandParameter="0"/>
+                    <Button Grid.Column="1" Style="{StaticResource ImageWithTextButton}" Content="Skill One" Height="38" Tag="{StaticResource SkillButton}" 
+                            FontSize="16" Foreground="{StaticResource ForegroundWhiteBrush}" FontFamily="Times New Roman"
+                            Command="{Binding SelectSkillCommand}" CommandParameter="1"/>
+                    <Button Grid.Column="2" Style="{StaticResource ImageWithTextButton}" Content="Skill Two" Height="38" Tag="{StaticResource SkillButton}" 
+                            FontSize="16" Foreground="{StaticResource ForegroundWhiteBrush}" FontFamily="Times New Roman"
+                            Command="{Binding SelectSkillCommand}" CommandParameter="2"/>
+                    <Button Grid.Column="3" Style="{StaticResource ImageWithTextButton}" Content="Skill Three" Height="38" Tag="{StaticResource SkillButton}" 
+                            FontSize="16" Foreground="{StaticResource ForegroundWhiteBrush}" FontFamily="Times New Roman"
+                            Command="{Binding SelectSkillCommand}" CommandParameter="3"/>
+                    <Button Grid.Column="4" Style="{StaticResource ImageWithTextButton}" Content="Switch" Height="38" Tag="{StaticResource SwitchButton}" 
+                            FontSize="16" Foreground="{StaticResource ForegroundWhiteBrush}" FontFamily="Times New Roman"
+                            Command="{Binding SelectSwitchCommand}"/>
+                </Grid>
+            </Border>
+        </Grid>
+        <Grid x:Name="BacklineSkill" Grid.Row="2" Grid.Column="0" Style="{StaticResource SlideUpAnimation}"
+              Visibility="{Binding IsBacklineSkillVisible, Converter={local:BooleanToVisibilityConverter}}">
+            <Border Background="{StaticResource BackgroundDarkBrush}" BorderThickness="0 2 0 2" BorderBrush="{StaticResource BorderLightBrush}" Padding="5">
+                <Grid Background="Transparent" Margin="10 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Style="{StaticResource ImageWithTextButton}" Content="Default" Width="auto" Height="38" Tag="{StaticResource SkillButton}" IsEnabled="False"
+                            FontSize="16" Foreground="{StaticResource ForegroundWhiteBrush}" FontFamily="Times New Roman"/>
+                    <Button Grid.Column="1" Style="{StaticResource ImageWithTextButton}" Content="Skill One" Width="auto" Height="38" Tag="{StaticResource SkillButton}" IsEnabled="False"
+                            FontSize="16" Foreground="{StaticResource ForegroundWhiteBrush}" FontFamily="Times New Roman"/>
+                    <Button Grid.Column="2" Style="{StaticResource ImageWithTextButton}" Content="Skill Two" Width="auto" Height="38" Tag="{StaticResource SkillButton}" IsEnabled="False"
+                            FontSize="16" Foreground="{StaticResource ForegroundWhiteBrush}" FontFamily="Times New Roman"/>
+                    <Button Grid.Column="3" Style="{StaticResource ImageWithTextButton}" Content="Skill Three" Width="auto" Height="38" Tag="{StaticResource SkillButton}" IsEnabled="False"
+                            FontSize="16" Foreground="{StaticResource ForegroundWhiteBrush}" FontFamily="Times New Roman"/>
+                    <Grid Grid.Column="4">
+                        <Button Grid.Column="4" Style="{StaticResource ImageWithTextButton}" Content="Front line" Width="auto" Height="38" Tag="{StaticResource SwitchButton}" 
+                            FontSize="16" Foreground="{StaticResource ForegroundWhiteBrush}" FontFamily="Times New Roman"
+                                Visibility="{Binding IsResetFrontlineVisible, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=reverse}"
+                            Command="{Binding SelectFrontlineCommand}"/>
+                        <Button Grid.Column="4" Style="{StaticResource ImageWithTextButton}" Content="Reset" Width="auto" Height="38" Tag="{StaticResource SwitchButton}" 
+                            FontSize="16" Foreground="{StaticResource ForegroundWhiteBrush}" FontFamily="Times New Roman"
+                                Visibility="{Binding IsResetFrontlineVisible, Converter={local:BooleanToVisibilityConverter}}"
+                            Command="{Binding ResetFrontlineCommand}"/>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid x:Name="SelectCharacterToMovePopup" Grid.Row="2" Grid.Column="0" Visibility="{Binding IsMove, Converter={local:BooleanToVisibilityConverter}}">
+            <Border Background="{StaticResource BackgroundDarkBrush}" BorderThickness="0 2 0 2" BorderBrush="{StaticResource BorderLightBrush}" Padding="5">
+                <TextBlock Margin="12 0 0 0" Text="Select characters to transfer" Foreground="{StaticResource ForegroundWhiteBrush}" VerticalAlignment="Center" FontSize="16"/>
+            </Border>
+        </Grid>
+        
+        <!-- Character row -->
+        <Grid Grid.Row="3" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <!-- Left padding -->
+                <ColumnDefinition Width="12"/>
+                <!-- Frontline -->
+                <ColumnDefinition Width="auto"/>
+                <!-- Seperate -->
+                <ColumnDefinition Width="12"/>
+                <!-- Backline -->
+                <ColumnDefinition Width="auto"/>
+                <!-- Attack Button, Sub move -->
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!-- Frontline -->
+            <ListBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Frontline}" Style="{StaticResource FrontlineStyle}" 
+                     SelectedItem="{Binding SelectedCharacter}" SelectedIndex="{Binding SelectedFrontlineCharacterIndex}"/>
+
+            <!--Backline-->
+            <ListBox Grid.Row="0" Grid.Column="3" ItemsSource="{Binding Backline}" Style="{StaticResource BacklineStyle}" SelectedItem="{Binding SelectedCharacter}" SelectedIndex="{Binding SelectedBacklineCharacterIndex}"/>
+            <!-- Attack Button, Sub move -->
+            <Grid Grid.Row="0" Grid.Column="4">
+                <Button Style="{StaticResource ImageButton}" Tag="{StaticResource AttackButton}" Margin="0 -20 0 0" Height="100" 
+                        Visibility="{Binding IsAttackButtonVisible, Converter={local:BooleanToVisibilityConverter}}"
+                        Command="{Binding DataContext.AddTurnCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"/>
+                <Button Style="{StaticResource ImageWithTextButton}" Content="Sub move" Tag="{StaticResource Submove}"
+                        Foreground="{StaticResource ForegroundWhiteBrush}" FontSize="20" Margin="-20 0 0 -4.8" VerticalContentAlignment="Stretch"
+                        Width="100" Height="88" BorderBrush="{StaticResource SkillBorderBrush}" BorderThickness="2"
+                        Visibility="{Binding IsReserveButtonVisible, Converter={local:BooleanToVisibilityConverter}}"
+                        Command="{Binding SelectReserveCommand}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

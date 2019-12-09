@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AEDFB056-6D0F-47EF-BA86-9C6C5738F4A3}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>AEMG_EX</RootNamespace>
+    <AssemblyName>AEMG-EX</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>AEMG-EX.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Costura, Version=4.1.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Costura.Fody.4.1.0\lib\net40\Costura.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Bootstrap\Bootstrap.cs" />
+    <Compile Include="Converter\BacklineSkillVisibilityConverter.cs" />
+    <Compile Include="Converter\LeftRightToImageConverter.cs" />
+    <Compile Include="Converter\NullToVisibilityConverter.cs" />
+    <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converter\SkillEnumToStringConverter.cs" />
+    <Compile Include="CustomControl\NumbericTextBox.cs" />
+    <Compile Include="Views\UserControl\AEActionView\EXPBattleView.xaml.cs">
+      <DependentUpon>EXPBattleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControl\AEActionView\FoodView.xaml.cs">
+      <DependentUpon>FoodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControl\AEActionView\ReFoodView.xaml.cs">
+      <DependentUpon>ReFoodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControl\AESettingView.xaml.cs">
+      <DependentUpon>AESettingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControl\AEActionList.xaml.cs">
+      <DependentUpon>AEActionList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControl\AEActionView\TrashMobBattle.xaml.cs">
+      <DependentUpon>TrashMobBattle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControl\AEActionView\TurnView.xaml.cs">
+      <DependentUpon>TurnView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControl\CustomElement\CutCornerBox.xaml.cs">
+      <DependentUpon>CutCornerBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControl\MacroSelectionView.xaml.cs">
+      <DependentUpon>MacroSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AEMG.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AEMG.xaml.cs">
+      <DependentUpon>AEMG.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Styles\Animation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Button.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Color.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ComboBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Image.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\List.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Tab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ScrollViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ToolTip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControl\AEActionView\EXPBattleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControl\AEActionView\FoodView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControl\AEActionView\ReFoodView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControl\AESettingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControl\AEActionList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControl\AEActionView\TrashMobBattle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControl\AEActionView\TurnView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControl\CustomElement\CutCornerBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControl\MacroSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AEMG-EX.Core\AEMG-EX.Core.csproj">
+      <Project>{300208d1-ff25-4f38-a877-9c9e1b03cab0}</Project>
+      <Name>AEMG-EX.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{A2CF0525-6750-409B-9D8A-02782D778F79}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EMM.Core\EMM.Core.csproj">
+      <Project>{F2E8DC53-3CB2-46CA-AF4E-A325E789B286}</Project>
+      <Name>EMM.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="AEMG-EX.ico" />
+    <Content Include="Images\Battle\C-5.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Battle\C-6.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Battle\C-3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Battle\C-2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Battle\C-4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Battle\C-1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Images\UI\GoLeft.png" />
+    <Resource Include="Images\UI\GoRight.png" />
+    <Resource Include="Images\UI\TitleText.png" />
+    <Resource Include="Images\UI\ReFoodDialog_Ask.png" />
+    <Resource Include="Images\UI\ReFoodDialog_No.png" />
+    <Resource Include="Images\UI\ReFoodDialog_Yes.png" />
+    <Resource Include="Images\UI\ReFoodScreen.jpg" />
+    <Resource Include="Images\UI\FoodScreen.jpg" />
+    <Resource Include="Images\UI\FoodDialog_Ask.jpg" />
+    <Resource Include="Images\UI\FoodDialog_No.jpg" />
+    <Resource Include="Images\UI\FoodDialog_Yes.jpg" />
+    <Resource Include="Images\Toolbar\Hint.png" />
+    <Resource Include="Images\Toolbar\Back.png" />
+    <Resource Include="Images\Toolbar\Forward.png" />
+    <Resource Include="Images\Toolbar\Delete.png" />
+    <Resource Include="Images\Toolbar\ReloadFolder.png" />
+    <Resource Include="Images\UI\Back_normal.png" />
+    <Resource Include="Images\UI\TitleBackground.png" />
+    <Resource Include="Images\UI\TitleImage.png" />
+    <Resource Include="Images\UI\CatLeft.png" />
+    <Resource Include="Images\UI\CatRight.png" />
+    <Resource Include="Images\Toolbar\Erase.png" />
+    <Resource Include="Images\Toolbar\EMM_Icon.png" />
+    <Resource Include="Images\Toolbar\Download.png" />
+    <Content Include="Images\UI\BattleScreenBoss.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\UI\AFScreen.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\UI\BattleScreen.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Images\UI\AF.png" />
+    <Resource Include="Images\UI\Submove.png" />
+    <Resource Include="Images\Toolbar\Close.png" />
+    <Resource Include="Images\UI\atk-normal.png" />
+    <Resource Include="Images\UI\Switchbutton.png" />
+    <Resource Include="Images\UI\Skillbutton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\Add.png" />
+    <Resource Include="Images\Toolbar\Find.png" />
+    <Resource Include="Images\Toolbar\Sync.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Fody.6.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.0\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.6.0.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.0.0\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props'))" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)EMM\bin\Debug\"
+copy "$(TargetPath)" "$(SolutionDir)EMM\bin\Release\"
+xcopy /e /y "$(SolutionDir)AEMG-EX\$(OutDir)Images" "$(SolutionDir)EMM\bin\Debug\Images\"
+xcopy /e /y "$(SolutionDir)AEMG-EX\$(OutDir)Images" "$(SolutionDir)EMM\bin\Release\Images\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

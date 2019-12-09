@@ -1,0 +1,131 @@
+﻿<Window x:Class="EMM.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EMM"
+        xmlns:core="clr-namespace:EMM.Core.ViewModels;assembly=EMM.Core"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Easy Macro Maker" Height="720" Width="600"
+        Closing="Window_Closing" AllowDrop="True" Drop="Window_Drop">
+    <!--<StackPanel>
+        <Button Content="Save" Command="{Binding SaveCommand}"/>
+        <Button Content="Load" Command="{Binding LoadCommand}"/>
+        <Button Content="Save setting" Command="{Binding SaveSettingCommand}"/>
+        <Button Content="SaveActions" Command="{Binding SaveActionsCommand}"/>
+        <Button Content="LoadActions" Command="{Binding LoadActionsCommand}"/>
+        <Button Content="Test Cick" Command="{Binding TestClickCommand}"/>
+        <Button Content="Test Cick 2" Command="{Binding TestClickCommand2}"/>
+        <Button Content="Test swipe" Command="{Binding TestSwipeCommand}"/>
+    </StackPanel>-->
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type core:ClickViewModel}">
+            <local:ClickView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type core:SwipeViewModel}">
+            <local:SwipeView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type core:WaitViewModel}">
+            <local:WaitView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type core:AEViewModel}">
+            <local:AEView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type core:ActionGroupViewModel}">
+            <local:CustomActionView/>
+        </DataTemplate>
+        
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding MacroManager.NewCommand}"/>
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding MacroManager.OpenCommand}"/>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding MacroManager.SaveCommand}"/>
+        <KeyBinding Key="S" Modifiers="Ctrl + Shift" Command="{Binding MacroManager.SaveAsCommand}"/>
+        <KeyBinding Key="F10" Command="{Binding TimerTool.OpenTimerToolCommand}"/>
+    </Window.InputBindings>
+    
+    <Grid>
+
+        <Grid.RowDefinitions>
+            
+            <!-- Menu -->
+            <RowDefinition Height="Auto"/>
+            
+            <!-- Contents  -->
+            <RowDefinition Height="*"/>
+            
+        </Grid.RowDefinitions>
+        
+        <!-- Menu: File -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File" DataContext="{Binding MacroManager}">
+                <MenuItem Header="_New" Tag="{StaticResource NewButton}" InputGestureText="Ctrl + N" Command="{Binding NewCommand}"/>
+                <MenuItem Header="_Open" InputGestureText="Ctrl + O" Command="{Binding OpenCommand}"/>
+                <MenuItem Header="R_ecent" ItemsSource="{Binding RecentList}" />
+                <Separator/>
+                <MenuItem Header="_Save" InputGestureText="Ctrl + S" Command="{Binding SaveCommand}"/>
+                <MenuItem Header="S_ave As" InputGestureText="Ctrl + Shift + S" Command="{Binding SaveAsCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Tools">
+                <MenuItem Header="Timer" InputGestureText="F10" Command="{Binding TimerTool.OpenTimerToolCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ClockButton}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Options" DataContext="{Binding CurrentSettings}">
+                <MenuItem Header="Show Group Toolbar" IsCheckable="True" IsChecked="{Binding IsGroupToolBarVisible}"/>
+                <MenuItem Header="Show Action Toolbar" IsCheckable="True" IsChecked="{Binding IsActionToolBarVisible}"/>
+                <Separator/>
+                <MenuItem Header="Auto Check For Update" IsCheckable="True" IsChecked="{Binding IsAutoUpdateEnable}"/>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="Check For Update" Command="{Binding AutoUpdater.CheckForUpdateCommand}"/>
+                <Separator/>
+                <MenuItem Header="About"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Contents -->
+        <Grid Grid.Row="1" IsEnabled="{Binding MacroManager.IsMacroLoaded}">
+            <Grid.RowDefinitions>
+
+                <!-- Macro Info -->
+                <RowDefinition Height="Auto"/>
+
+                <!-- Macro Edit Area. Resizable -->
+                <RowDefinition Height="*"/>
+                
+                <!-- Setting -->
+                <RowDefinition Height="Auto"/>
+                
+                <!-- Export button -->
+                <RowDefinition Height="Auto"/>
+
+            </Grid.RowDefinitions>
+
+            <!-- Macro Info -->
+            <local:MacroInfoView DataContext="{Binding MacroManager.CurrentMacro}" Margin="50 10 10 0" Grid.Row="0" />
+
+            <!-- Macro Edit Area. Resizable -->
+            <local:MacroEditView DataContext="{Binding MacroManager.CurrentMacro}" Margin="10 10 10 0" Grid.Row="1"/>
+
+            <!-- Export Settings -->
+            <local:SettingView Grid.Row="2" DataContext="{Binding CurrentSettings}" Margin="20 0 20 0"/>
+
+            <Button Grid.Row="3" Content="CONVERT" Command="{Binding ScriptGenerator.ConvertCommand}" 
+                    Width="64" Height="30" HorizontalAlignment="Right" Margin="0 -30 30 2"/>
+        </Grid>
+        
+    </Grid>
+    
+</Window>

@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="AEMG_EX.TrashMobBattle"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AEMG_EX"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Settings -->
+            <RowDefinition Height="auto"/>
+
+            <!-- Game Screen -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!-- Settings -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Move character -->
+                <ColumnDefinition Width="auto"/>
+                <!-- Wait for next turn -->
+                <ColumnDefinition Width="auto"/>
+                <!-- AF Time -->
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <!-- Move character -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" ToolTip="Rearrange the character to better visualize the battle">
+                <TextBlock Text="Rearrange " VerticalAlignment="Center" FontWeight="Bold"/>
+                <Button Style="{StaticResource ImageButton}" Tag="{StaticResource Back}" Height="16"
+                    Command="{Binding CurrentTurn.MoveCharacterLeftCommand}"/>
+                <Button Style="{StaticResource ImageButton}" Tag="{StaticResource Forward}" Height="16"
+                    Command="{Binding CurrentTurn.MoveCharacterRightCommand}"/>
+            </StackPanel>
+            <StackPanel Margin="5 0 0 0" Orientation="Horizontal" Grid.Column="1">
+                <TextBlock Text="Wait: " VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBox Text="{Binding CurrentTurn.WaitNextTurnTime, UpdateSourceTrigger=PropertyChanged}" 
+                         VerticalAlignment="Stretch" Margin="0 1" VerticalContentAlignment="Center" Width="50"
+                         ToolTip="Time in milisecond(s) to wait for next turn or battle end&#x0a;Default: 8000ms for normal, 12000ms for boss"/>
+            </StackPanel>
+            <StackPanel Margin="5 0 0 0" Orientation="Horizontal" Grid.Column="2" Visibility="{Binding CurrentTurn.IsAF, Converter={local:BooleanToVisibilityConverter}}">
+                <TextBlock Text="AF Time: " VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBox Text="{Binding CurrentTurn.AFTime, UpdateSourceTrigger=PropertyChanged}" 
+                         VerticalAlignment="Stretch" Margin="0 1" VerticalContentAlignment="Center" Width="50"
+                         ToolTip="How long Another Force should last in miliseconds&#x0a;Default 15000ms"/>
+            </StackPanel>
+        </Grid>
+        <!-- Game Screen -->
+        <TabControl Grid.Row="1" ItemsSource="{Binding TurnList}" SelectedItem="{Binding CurrentTurn}" SelectedIndex="{Binding CurrentTurnIndex}"
+                    Width="800" Height="488"
+                    BorderThickness="0" Padding="0" Style="{StaticResource NoWrapTabControl}">
+            <TabControl.Resources>
+                <Style TargetType="TabItem" BasedOn="{StaticResource TabItemStyle}"/>
+            </TabControl.Resources>
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Turn - "/>
+                        <TextBlock Text="{Binding TurnOrder}"/>
+                        <Button Margin="3 0 0 0"
+                                Style="{StaticResource ImageButton}" Tag="{StaticResource Close}" Height="10"
+                                Command="{Binding DataContext.RemoveTurnCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+    </Grid>
+    
+</UserControl>

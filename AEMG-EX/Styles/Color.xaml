@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AEMG_EX">
+    <Color x:Key="ForegoundLight">#d0d0d0</Color>
+    <SolidColorBrush x:Key="ForegoundLightBrush" Color="{StaticResource ForegoundLight}"/>
+    <Color x:Key="SkillBorder">#898970</Color>
+    <SolidColorBrush x:Key="SkillBorderBrush" Color="{StaticResource SkillBorder}"/>
+    <Color x:Key="BackgroundDark">#020406</Color>
+    <SolidColorBrush x:Key="BackgroundDarkBrush" Color="{StaticResource BackgroundDark}"/>
+    <Color x:Key="BorderLight">#62819d</Color>
+    <SolidColorBrush x:Key="BorderLightBrush" Color="{StaticResource BorderLight}"/>
+    <Color x:Key="ButtonBackground">#619ccc</Color>
+    <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="{StaticResource ButtonBackground}"/>
+    <Color x:Key="ButtonBorder">#484934</Color>
+    <SolidColorBrush x:Key="ButtonBorderBrush" Color="{StaticResource ButtonBorder}"/>
+    <Color x:Key="ForegroundWhite">#e6e6e6</Color>
+    <SolidColorBrush x:Key="ForegroundWhiteBrush" Color="{StaticResource ForegroundWhite}"/>
+    <Color x:Key="BackgroundDarkTransparent" R="20" G="50" B="70" A="200"/>
+    <SolidColorBrush x:Key="BackgroundDarkTransparentBrush" Color="{StaticResource BackgroundDarkTransparent}"/>
+
+    <Color x:Key="BackgroundLightTransparent" R="0" G="0" B="0" A="200"/>
+    <SolidColorBrush x:Key="BackgroundLightTransparentBrush" Color="{StaticResource BackgroundLightTransparent}"/>
+
+</ResourceDictionary>

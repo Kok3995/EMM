@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="EMM.NumberUpDown"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EMM"
+             mc:Ignorable="d" 
+             d:DesignHeight="32" d:DesignWidth="64">
+    <Grid Height="{Binding Height, RelativeSource={RelativeSource AncestorType=UserControl}}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <local:NumbericTextBox x:Name="numbericTextBox" Grid.RowSpan="2" Width="{Binding Width, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                Text="{Binding NumbericTextBox, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"/>
+        <Viewbox Grid.Row="0" Grid.Column="1" >
+            <RepeatButton Content="△" Margin="-10 0 0 0" FontSize="10"
+                          Click="UpRepeatButton_Click"/>
+        </Viewbox>
+        <Viewbox Grid.Row="1" Grid.Column="1">
+            <RepeatButton Content="▽" Margin="-10 0 0 0" FontSize="10"
+                          Click="DownRepeatButton_Click"/>
+        </Viewbox>
+        
+
+
+    </Grid>
+</UserControl>

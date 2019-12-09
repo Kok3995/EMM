@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="AEMG_EX.ReFoodView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AEMG_EX"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Width="800" Height="450" x:Name="MainGrid" >
+        <Grid.Background>
+            <ImageBrush ImageSource="{StaticResource ReFoodScreen}"/>
+        </Grid.Background>
+        <Button Style="{StaticResource ImageButton}" Tag="{StaticResource BackAE}" Width="100" Height="42" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Command="{Binding BackCommand}" ToolTip="Not to Eat Food"/>
+        <Image Visibility="{Binding EatOrNotToEat, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=reverse}">
+            <Image.Style>
+                <Style TargetType="{x:Type Image}">
+                    <Setter Property="Source" Value="{StaticResource ReFoodDialog_Ask}"/>
+                    <Setter Property="Width" Value="500"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=NoButton, Path=IsMouseOver}" Value="True">
+                            <Setter Property="Source" Value="{StaticResource ReFoodDialog_No}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=YesButton, Path=IsMouseOver}" Value="True">
+                            <Setter Property="Source" Value="{StaticResource ReFoodDialog_Yes}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+
+        <local:CutCornerBox Margin="10" VerticalAlignment="Top" >
+            <local:CutCornerBox.Style>
+                <Style TargetType="{x:Type local:CutCornerBox}">
+                    <Setter Property="Text" Value="Eat it?"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DataContext.EatOrNotToEat, ElementName=MainGrid}" Value="True">
+                            <Setter Property="Text" Value="Hit Points and Magic Points completely restored."/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </local:CutCornerBox.Style>
+        </local:CutCornerBox>
+
+        <Canvas Visibility="{Binding EatOrNotToEat, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=reverse}">
+            <Button x:Name="NoButton" Style="{StaticResource EmptyButton}" Canvas.Left="150" Canvas.Top="190" Width="230" Height="72" Background="Transparent" 
+                    ToolTip="This actually does nothing"/>
+            <Button x:Name="YesButton" Style="{StaticResource EmptyButton}" Canvas.Left="420" Canvas.Top="190" Width="230" Height="72" Background="Transparent"
+                    Command="{Binding UseCommand}" ToolTip="Eat Food"/>
+        </Canvas>
+
+    </Grid>
+</UserControl>

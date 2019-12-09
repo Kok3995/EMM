@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="EMM.ActionListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EMM"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Grid.Column="2">
+
+        <Grid.ColumnDefinitions>
+
+            <!-- Actions Toolbar -->
+            <ColumnDefinition Width="Auto"/>
+
+            <!-- Actions label, list -->
+            <ColumnDefinition Width="*"/>
+
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+
+            <!-- Actions labels -->
+            <RowDefinition Height="Auto"/>
+
+            <!-- Toolbar, list -->
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+
+        <!-- Action Label -->
+        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+            <Label Margin="10 0" Content="Actions"/>
+            <Menu Background="Transparent" Height="24" Margin="-10 0 0 0">
+                <MenuItem Style="{StaticResource AddMenu}" Tag="{StaticResource AddButton}">
+                    <MenuItem Header="New Click" Command="{Binding AddCommand}" CommandParameter="Click"/>
+                    <MenuItem Header="New Swipe" Command="{Binding AddCommand}" CommandParameter="Swipe"/>
+                    <MenuItem Header="New Wait" Command="{Binding AddCommand}" CommandParameter="Wait"/>
+                    <!--<MenuItem Header="New Recorded" Command="{Binding AddCommand}" CommandParameter="Recorded"/>-->
+                    <MenuItem Header="New Another Eden" Command="{Binding AddCommand}" CommandParameter="AE"/>
+                    <Separator/>
+                    <MenuItem Header="Insert New">
+                        <MenuItem Header="Click" Command="{Binding InsertCommand}" CommandParameter="Click"/>
+                        <MenuItem Header="Swipe" Command="{Binding InsertCommand}" CommandParameter="Swipe"/>
+                        <MenuItem Header="Wait" Command="{Binding InsertCommand}" CommandParameter="Wait"/>
+                        <MenuItem Header="Recorded" Command="{Binding InsertCommand}" CommandParameter="Recorded"/>
+                        <MenuItem Header="Another Eden" Command="{Binding InsertCommand}" CommandParameter="AE"/>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+            <local:CustomActionManagerView Height="24" DataContext="{Binding DataContext.CustomActionManager, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"/>
+        </StackPanel>
+
+        <!-- Actions Toolbar -->
+        <StackPanel Grid.Row="1" Grid.Column="0"
+                            Visibility="{Binding DataContext.CurrentSettings.IsActionToolBarVisible, RelativeSource={RelativeSource AncestorType=local:MainWindow}, Converter={local:BooleanToVisibilityConverter}}">
+
+            <Button Style="{StaticResource ImageButton}" Tag="{StaticResource CopyButton}" Command="{Binding CopyCommand}" />
+            <Button Style="{StaticResource ImageButton}" Tag="{StaticResource CutButton}" Command="{Binding CutCommand}" />
+            <Button Style="{StaticResource ImageButton}" Tag="{StaticResource PasteButton}" Command="{Binding PasteCommand}"/>
+            <Button Style="{StaticResource ImageButton}" Tag="{StaticResource DeleteButton}" Command="{Binding DeleteCommand}"/>
+            <Button Style="{StaticResource ImageButton}" Tag="{StaticResource UpButton}" Command="{Binding UpCommand}"/>
+            <Button Style="{StaticResource ImageButton}" Tag="{StaticResource DownButton}" Command="{Binding DownCommand}"/>
+        </StackPanel>
+
+        <!-- Action list -->
+        <local:AutoListBox x:Name="ActionList" Grid.Row="1" Grid.Column="1" IsHitTestVisible="True" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"
+                                 ItemsSource="{Binding ViewModelList}" 
+                                 Style="{StaticResource ActionList}" 
+                                 SelectedItem="{Binding SelectedItem}" SelectedIndex="{Binding SelectedItemIndex}">
+            <local:AutoListBox.InputBindings>
+                <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}"/>
+                <KeyBinding Key="X" Modifiers="Ctrl" Command="{Binding CutCommand}"/>
+                <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding PasteCommand}"/>
+                <KeyBinding Key="Delete" Command="{Binding DeleteCommand}"/>
+                <KeyBinding Key="Up" Modifiers="Ctrl" Command="{Binding UpCommand}"/>
+                <KeyBinding Key="Down" Modifiers="Ctrl" Command="{Binding DownCommand}"/>
+                <KeyBinding Key="F5" Command="{Binding DataContext.ScriptGenerator.TestSelectedActionCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"/>
+            </local:AutoListBox.InputBindings>
+            <local:AutoListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="New Click" Command="{Binding AddCommand}" CommandParameter="Click"/>
+                    <MenuItem Header="New Swipe" Command="{Binding AddCommand}" CommandParameter="Swipe"/>
+                    <MenuItem Header="New Wait" Command="{Binding AddCommand}" CommandParameter="Wait"/>
+                    <!--<MenuItem Header="New Recorded" Command="{Binding AddCommand}" CommandParameter="Recorded"/>-->
+                    <MenuItem Header="New Another Eden" Command="{Binding AddCommand}" CommandParameter="AE"/>
+                    <Separator/>
+                    <MenuItem Header="Insert New">
+                        <MenuItem Header="Click" Command="{Binding InsertCommand}" CommandParameter="Click"/>
+                        <MenuItem Header="Swipe" Command="{Binding InsertCommand}" CommandParameter="Swipe"/>
+                        <MenuItem Header="Wait" Command="{Binding InsertCommand}" CommandParameter="Wait"/>
+                        <!--<MenuItem Header="Recorded" Command="{Binding InsertCommand}" CommandParameter="Recorded"/>-->
+                        <MenuItem Header="Another Eden" Command="{Binding InsertCommand}" CommandParameter="AE"/>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Test Selected" InputGestureText="F5" Command="{Binding PlacementTarget.Tag.ScriptGenerator.TestSelectedActionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                    <Separator/>
+                    <MenuItem Header="Copy" InputGestureText="Ctrl + C" Command="{Binding CopyCommand}"/>
+                    <MenuItem Header="Cut" InputGestureText="Ctrl + X" Command="{Binding CutCommand}"/>
+                    <MenuItem Header="Paste" InputGestureText="Ctrl + V" Command="{Binding PasteCommand}"/>
+                    <Separator/>
+                    <MenuItem Header="Delete" InputGestureText="Delete" Command="{Binding DeleteCommand}"/>
+                    <Separator/>
+                    <MenuItem Header="Up" InputGestureText="Ctrl + Up" Command="{Binding UpCommand}"/>
+                    <MenuItem Header="Down" InputGestureText="Ctrl + Down" Command="{Binding DownCommand}"/>
+                </ContextMenu>
+            </local:AutoListBox.ContextMenu>
+        </local:AutoListBox>
+    </Grid>
+</UserControl>

@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:EMM">
+
+    <!-- Toolbar button -->
+    <BitmapImage x:Key="AddButton" UriSource="..\Images\Toolbar\Add.bmp" />
+    <BitmapImage x:Key="CopyButton" UriSource="..\Images\Toolbar\Copy.bmp" />
+    <BitmapImage x:Key="CutButton" UriSource="..\Images\Toolbar\Cut.bmp" />
+    <BitmapImage x:Key="PasteButton" UriSource="..\Images\Toolbar\Paste.bmp" />
+    <BitmapImage x:Key="DeleteButton" UriSource="..\Images\Toolbar\Delete.bmp" />
+    <BitmapImage x:Key="UpButton" UriSource="..\Images\Toolbar\Up.bmp" />
+    <BitmapImage x:Key="DownButton" UriSource="..\Images\Toolbar\Down.bmp" />
+    
+    <!-- Application Button -->
+    <BitmapImage x:Key="AboutButton" UriSource="..\Images\MenuItemIcon\About.bmp" />
+    <BitmapImage x:Key="ApplicationButton" UriSource="..\Images\MenuItemIcon\Application.bmp" />
+    <BitmapImage x:Key="DownloadButton" UriSource="..\Images\MenuItemIcon\Download.bmp" />
+    <BitmapImage x:Key="ExitButton" UriSource="..\Images\MenuItemIcon\Exit.bmp" />
+    <BitmapImage x:Key="NewButton" UriSource="..\Images\MenuItemIcon\New document.bmp" />
+    <BitmapImage x:Key="OpenButton" UriSource="..\Images\MenuItemIcon\Open.bmp" />
+    <BitmapImage x:Key="SaveButton" UriSource="..\Images\MenuItemIcon\Save.bmp" />
+    <BitmapImage x:Key="SaveAsButton" UriSource="..\Images\MenuItemIcon\SaveAs.bmp" />
+    <BitmapImage x:Key="ApplyButton" UriSource="..\Images\MenuItemIcon\Apply.png" />
+    <BitmapImage x:Key="EraseButton" UriSource="..\Images\MenuItemIcon\Erase.png" />
+    <BitmapImage x:Key="ModifyButton" UriSource="..\Images\MenuItemIcon\Modify.bmp" />
+    <BitmapImage x:Key="ClockButton" UriSource="..\Images\MenuItemIcon\Clock.bmp" />
+    <BitmapImage x:Key="CloseButton" UriSource="..\Images\MenuItemIcon\Close.png" />
+    <BitmapImage x:Key="ListButton" UriSource="..\Images\MenuItemIcon\List.png" />
+    
+    <!-- Timer Icon -->
+    <BitmapImage x:Key="StartTimerButton" UriSource="..\Images\MiscIcon\Play.png" />
+    <BitmapImage x:Key="StopTimerButton" UriSource="..\Images\MiscIcon\Stop.png" />
+
+
+
+</ResourceDictionary>

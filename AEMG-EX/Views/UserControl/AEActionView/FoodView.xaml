@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="AEMG_EX.FoodView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AEMG_EX"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Width="800" Height="450" x:Name="MainGrid" >
+        <Grid.Background>
+            <ImageBrush ImageSource="{StaticResource FoodScreen}"/>
+        </Grid.Background>
+        <Button Style="{StaticResource ImageButton}" Tag="{StaticResource BackAE}" Width="100" Height="42" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Command="{Binding BackCommand}" ToolTip="Not to Eat Food"/>
+        <Image Visibility="{Binding EatOrNotToEat, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=reverse}">
+            <Image.Style>
+                <Style TargetType="{x:Type Image}">
+                    <Setter Property="Source" Value="{StaticResource FoodDialog_Ask}"/>
+                    <Setter Property="Width" Value="500"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=NoButton, Path=IsMouseOver}" Value="True">
+                            <Setter Property="Source" Value="{StaticResource FoodDialog_No}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=YesButton, Path=IsMouseOver}" Value="True">
+                            <Setter Property="Source" Value="{StaticResource FoodDialog_Yes}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+        
+        <!--<Grid HorizontalAlignment="Center" Margin="10" Width="602" Height="52" VerticalAlignment="Top" Visibility="{Binding EatOrNotToEat, Converter={local:BooleanToVisibilityConverter}}">
+            <Path Stroke="#c7bc89" StrokeThickness="2">
+                <Path.Data>
+                    <PathGeometry>
+                        <PathGeometry.Figures>
+                            <PathFigureCollection>
+                                <PathFigure StartPoint="10,0">
+                                    <LineSegment Point="590,0"/>
+                                    <LineSegment Point="600,10"/>
+                                    <LineSegment Point="600,40"/>
+                                    <LineSegment Point="590,50"/>
+                                    <LineSegment Point="10,50"/>
+                                    <LineSegment Point="0,40"/>
+                                    <LineSegment Point="0,10"/>
+                                    <LineSegment Point="10,0"/>
+                                </PathFigure>
+                            </PathFigureCollection>
+                        </PathGeometry.Figures>
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
+            <Grid Background="{StaticResource BackgroundLightTransparentBrush}">
+                <Grid.Clip>
+                    <GeometryGroup>
+                        <PathGeometry>
+                            <PathGeometry.Figures>
+                                <PathFigureCollection>
+                                    <PathFigure StartPoint="10,0">
+                                        <LineSegment Point="590,0"/>
+                                        <LineSegment Point="600,10"/>
+                                        <LineSegment Point="600,40"/>
+                                        <LineSegment Point="590,50"/>
+                                        <LineSegment Point="10,50"/>
+                                        <LineSegment Point="0,40"/>
+                                        <LineSegment Point="0,10"/>
+                                        <LineSegment Point="10,0"/>
+                                    </PathFigure>
+                                </PathFigureCollection>
+                            </PathGeometry.Figures>
+                        </PathGeometry>
+                    </GeometryGroup>
+                </Grid.Clip>
+            </Grid>
+            <TextBlock Text="HP and MP completely restored." Foreground="{StaticResource ForegroundWhiteBrush}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20"/>
+        </Grid>-->
+
+        <local:CutCornerBox Text="HP and MP completely restored." Margin="10" VerticalAlignment="Top" Visibility="{Binding EatOrNotToEat, Converter={local:BooleanToVisibilityConverter}}"/>
+
+        <Canvas Visibility="{Binding EatOrNotToEat, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=reverse}">
+            <Button x:Name="NoButton" Style="{StaticResource EmptyButton}" Canvas.Left="235" Canvas.Top="240" Width="155" Height="52" Background="Transparent" 
+                    ToolTip="This actually does nothing"/>
+            <Button x:Name="YesButton" Style="{StaticResource EmptyButton}" Canvas.Left="410" Canvas.Top="240" Width="155" Height="52" Background="Transparent"
+                    Command="{Binding UseCommand}" ToolTip="Eat Food"/>
+        </Canvas>
+
+    </Grid>
+    
+</UserControl>

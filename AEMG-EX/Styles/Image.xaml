@@ -1,0 +1,41 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AEMG_EX">
+
+    <BitmapImage x:Key="Add" UriSource="../Images/Toolbar/Add.png"/>
+    <BitmapImage x:Key="Find" UriSource="../Images/Toolbar/Find.png"/>
+    <BitmapImage x:Key="ReloadFolder" UriSource="../Images/Toolbar/ReloadFolder.png"/>
+    <BitmapImage x:Key="Sync" UriSource="../Images/Toolbar/Sync.png"/>
+    <BitmapImage x:Key="Close" UriSource="../Images/Toolbar/Close.png"/>
+    <BitmapImage x:Key="Back" UriSource="../Images/Toolbar/Back.png"/>
+    <BitmapImage x:Key="Forward" UriSource="../Images/Toolbar/Forward.png"/>
+    <BitmapImage x:Key="Hint" UriSource="../Images/Toolbar/Hint.png"/>
+    <BitmapImage x:Key="Delete" UriSource="../Images/Toolbar/Delete.png"/>
+    <BitmapImage x:Key="Erase" UriSource="../Images/Toolbar/Erase.png"/>
+    <BitmapImage x:Key="EMM" UriSource="../Images/Toolbar/EMM_Icon.png"/>
+    <BitmapImage x:Key="Download" UriSource="../Images/Toolbar/Download.png"/>
+
+
+    <BitmapImage x:Key="SkillButton" UriSource="../Images/UI/Skillbutton.png"/>
+    <BitmapImage x:Key="SwitchButton" UriSource="../Images/UI/Switchbutton.png"/>
+    <BitmapImage x:Key="Submove" UriSource="../Images/UI/Submove.png"/>
+    <BitmapImage x:Key="AttackButton" UriSource="../Images/UI/atk-normal.png"/>
+    <BitmapImage x:Key="AFButton" UriSource="../Images/UI/AF.png"/>
+    <BitmapImage x:Key="BackAE" UriSource="../Images/UI/Back_normal.png"/>
+    <BitmapImage x:Key="FoodScreen" UriSource="../Images/UI/FoodScreen.jpg"/>
+    <BitmapImage x:Key="FoodDialog_Ask" UriSource="../Images/UI/FoodDialog_Ask.jpg"/>
+    <BitmapImage x:Key="FoodDialog_Yes" UriSource="../Images/UI/FoodDialog_Yes.jpg"/>
+    <BitmapImage x:Key="FoodDialog_No" UriSource="../Images/UI/FoodDialog_No.jpg"/>
+    <BitmapImage x:Key="ReFoodScreen" UriSource="../Images/UI/ReFoodScreen.jpg"/>
+    <BitmapImage x:Key="ReFoodDialog_Ask" UriSource="../Images/UI/ReFoodDialog_Ask.png"/>
+    <BitmapImage x:Key="ReFoodDialog_Yes" UriSource="../Images/UI/ReFoodDialog_Yes.png"/>
+    <BitmapImage x:Key="ReFoodDialog_No" UriSource="../Images/UI/ReFoodDialog_No.png"/>
+    <BitmapImage x:Key="TitleBackground" UriSource="../Images/UI/TitleBackground.png"/>
+    <BitmapImage x:Key="TitleImage" UriSource="../Images/UI/TitleImage.png"/>
+    <BitmapImage x:Key="TitleText" UriSource="../Images/UI/TitleText.png"/>
+    <BitmapImage x:Key="GoLeft" UriSource="../Images/UI/GoLeft.png"/>
+    <BitmapImage x:Key="GoRight" UriSource="../Images/UI/GoRight.png"/>
+    <BitmapImage x:Key="CatLeft" UriSource="../Images/UI/CatLeft.png"/>
+    <BitmapImage x:Key="CatRight" UriSource="../Images/UI/CatRight.png"/>
+
+</ResourceDictionary>

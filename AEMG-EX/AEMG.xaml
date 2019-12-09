@@ -1,0 +1,104 @@
+﻿<Window x:Class="AEMG_EX.AEMG"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AEMG_EX"
+        xmlns:core="clr-namespace:AEMG_EX.Core;assembly=AEMG-EX.Core"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="AEMG-EX" Height="574" Width="1240" MinHeight="574" MinWidth="1240"
+        Drop="Window_Drop" AllowDrop="True">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type core:TrashMobBattleViewModel}">
+            <local:TrashMobBattle/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type core:TurnViewModel}">
+            <local:TurnView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type core:BossBattleViewModel}">
+            <local:TrashMobBattle/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type core:EXPBattleViewModel}">
+            <local:EXPBattleView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type core:FoodViewModel}">
+            <local:FoodView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type core:ReFoodViewModel}">
+            <local:ReFoodView/>
+        </DataTemplate>
+
+    </Window.Resources>
+    <Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Auto Check for Update" IsCheckable="True" IsChecked="{Binding Settings.IsAutoUpdateEnable}"/>
+        </ContextMenu>
+    </Window.ContextMenu>
+    
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <!-- Macro relate -->
+            <ColumnDefinition Width="*"/>
+            
+            <!-- Options -->
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <!-- Macro relate -->
+        <Grid Grid.Row="0" Grid.Column="0" Margin="0 0 10 0">
+            
+            <Grid.RowDefinitions>
+                <!-- Macro Manager -->
+                <RowDefinition Height="auto"/>
+                <!-- AEAction List -->
+                <RowDefinition Height="*"/>
+                <!-- Setting -->
+                <RowDefinition Height="auto"/>
+                
+                <!-- Convert Button -->
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Macro Manager -->
+            <local:MacroSelectionView Grid.Row="0" Grid.Column="0" DataContext="{Binding MacroManager}"/>
+            
+            <!-- AEActionList -->
+            <local:AEActionList Margin="0 5 0 0" Grid.Row="1" Grid.Column="0" DataContext="{Binding AEActionListViewModel}"/>
+
+
+            <!-- Setting -->
+            <local:AESettingView Grid.Row="2" Grid.Column="0" DataContext="{Binding Settings}"/>
+            
+            <!-- Convert Button -->
+            <Button Grid.Row="2" Grid.Column="0"  Content="CONVERT" 
+                    Width="80" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 10 0"
+                    Command="{Binding ConvertCommand}"/>
+        </Grid>
+        
+        <!-- Options -->
+        <Grid Grid.Row="0" Grid.Column="1" >
+            <!-- Default screen -->
+            <Grid Visibility="{Binding AEActionListViewModel.SelectedAEAction, Converter={local:NullToVisibilityConverter}, ConverterParameter=reverse}">
+                <Image Source="{StaticResource TitleBackground}" Stretch="Fill"/>
+                <Image Source="{StaticResource TitleImage}" VerticalAlignment="Center"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="1" Source="{StaticResource TitleText}" HorizontalAlignment="Center"/>
+                </Grid>
+            </Grid>
+            
+            <ContentPresenter Content="{Binding AEActionListViewModel.SelectedAEAction}"/>
+        </Grid>
+
+    </Grid>
+</Window>
