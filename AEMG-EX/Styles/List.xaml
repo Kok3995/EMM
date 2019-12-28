@@ -17,7 +17,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding ActionDescription}"/>
                         <TextBlock Text=" - "/>
-                        <TextBlock Text="{Binding AEAction}"/>
+                        <TextBlock Text="{Binding AEAction, Converter={local:AEActionToStringConverter}}"/>
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>

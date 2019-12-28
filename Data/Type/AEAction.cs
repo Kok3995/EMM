@@ -9,6 +9,7 @@
         TrashMobBattle,
         BossBattle,
         FoodAD,
-        ReFoodAD
+        ReFoodAD,
+        Wait
     }
 }

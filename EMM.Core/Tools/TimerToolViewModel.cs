@@ -15,24 +15,6 @@ namespace EMM.Core.Tools
             dispatcherTimer.Tick += OnTimerTicked;
 
             InitializeCommands();
-
-            Messenger.Register((sender, e) =>
-            {
-                if (e.TimerMessage != TimerMessage.StartTimer)
-                    return;
-
-                this.timerTool.StartTimer();
-                dispatcherTimer.Start();
-            });
-
-            Messenger.Register((sender, e) =>
-            {
-                if (e.TimerMessage != TimerMessage.StopTimer)
-                    return;
-
-                this.timerTool.StopTimer();
-                dispatcherTimer.Stop();
-            });
         }
 
         private void OnTimerTicked(object sender, EventArgs e)
@@ -58,13 +40,13 @@ namespace EMM.Core.Tools
             {
                 if (!IsTimerToolOpen)
                 {
-                    Messenger.Send(this, new TimerEventArgs(TimerMessage.OpenTimer));
+                    Messenger.Send(this, new ToolEventArgs(ToolMessage.OpenTimer));
                     IsTimerToolOpen = true;
                     StartMouseHookCommand.Execute(null);
                 }
                 else
                 {
-                    Messenger.Send(this, new TimerEventArgs(TimerMessage.CloseTimer));
+                    Messenger.Send(this, new ToolEventArgs(ToolMessage.CloseTimer));
                     IsTimerToolOpen = false;
                     UnHookMouseCommand.Execute(null);
                 }
@@ -73,7 +55,7 @@ namespace EMM.Core.Tools
             StartMouseHookCommand = new RelayCommand(p =>
             {
                 IsTimerStart = true;
-                mouseHook.StartHook();
+                mouseHook.StartHook(LeftClickHookCallBack);
             }, p => IsTimerStart == false);
 
             UnHookMouseCommand = new RelayCommand(p =>
@@ -81,6 +63,23 @@ namespace EMM.Core.Tools
                 IsTimerStart = false;               
                 mouseHook.StopHook();
             }, p => IsTimerStart == true);
+        }
+
+        private IntPtr LeftClickHookCallBack(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            if (nCode >= 0 && (MouseMessages)wParam == MouseMessages.WM_LBUTTONDOWN)
+            {
+                this.timerTool.StartTimer();
+                dispatcherTimer.Start();
+            }
+
+            if (nCode >= 0 && (MouseMessages)wParam == MouseMessages.WM_LBUTTONUP)
+            {
+                this.timerTool.StopTimer();
+                dispatcherTimer.Stop();
+            }
+
+            return MouseHook.CallNextHookEx(mouseHook.GetCurrentHookID(), nCode, wParam, lParam);
         }
     }
 }

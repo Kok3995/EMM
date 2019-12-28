@@ -65,6 +65,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bootstrap\Bootstrap.cs" />
+    <Compile Include="Converter\AEActionToStringConverter.cs" />
     <Compile Include="Converter\BacklineSkillVisibilityConverter.cs" />
     <Compile Include="Converter\LeftRightToImageConverter.cs" />
     <Compile Include="Converter\NullToVisibilityConverter.cs" />
@@ -79,6 +80,9 @@
     </Compile>
     <Compile Include="Views\UserControl\AEActionView\ReFoodView.xaml.cs">
       <DependentUpon>ReFoodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControl\AEActionView\WaitView.xaml.cs">
+      <DependentUpon>WaitView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControl\AESettingView.xaml.cs">
       <DependentUpon>AESettingView.xaml</DependentUpon>
@@ -158,6 +162,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserControl\AEActionView\WaitView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControl\AESettingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -225,6 +233,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\UI\BattleScreenEXP.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="AEMG-EX.ico" />
     <Content Include="Images\Battle\C-5.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -268,6 +279,7 @@
     <Resource Include="Images\Toolbar\Erase.png" />
     <Resource Include="Images\Toolbar\EMM_Icon.png" />
     <Resource Include="Images\Toolbar\Download.png" />
+    <Resource Include="Images\UI\WaitScreen.jpg" />
     <Content Include="Images\UI\BattleScreenBoss.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

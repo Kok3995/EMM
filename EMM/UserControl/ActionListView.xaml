@@ -33,18 +33,53 @@
             <Label Margin="10 0" Content="Actions"/>
             <Menu Background="Transparent" Height="24" Margin="-10 0 0 0">
                 <MenuItem Style="{StaticResource AddMenu}" Tag="{StaticResource AddButton}">
-                    <MenuItem Header="New Click" Command="{Binding AddCommand}" CommandParameter="Click"/>
-                    <MenuItem Header="New Swipe" Command="{Binding AddCommand}" CommandParameter="Swipe"/>
-                    <MenuItem Header="New Wait" Command="{Binding AddCommand}" CommandParameter="Wait"/>
+                    <MenuItem Header="New Click" Command="{Binding AddCommand}" CommandParameter="Click" InputGestureText="Alt + C">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ClickButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="New Swipe" Command="{Binding AddCommand}" CommandParameter="Swipe" InputGestureText="Alt + S">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource SwipeButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="New Wait" Command="{Binding AddCommand}" CommandParameter="Wait" InputGestureText="Alt + W">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource WaitButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <!--<MenuItem Header="New Recorded" Command="{Binding AddCommand}" CommandParameter="Recorded"/>-->
-                    <MenuItem Header="New Another Eden" Command="{Binding AddCommand}" CommandParameter="AE"/>
+                    <MenuItem Header="New Another Eden" Command="{Binding AddCommand}" CommandParameter="AE" InputGestureText="Alt + A">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource AEButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator/>
                     <MenuItem Header="Insert New">
-                        <MenuItem Header="Click" Command="{Binding InsertCommand}" CommandParameter="Click"/>
-                        <MenuItem Header="Swipe" Command="{Binding InsertCommand}" CommandParameter="Swipe"/>
-                        <MenuItem Header="Wait" Command="{Binding InsertCommand}" CommandParameter="Wait"/>
-                        <MenuItem Header="Recorded" Command="{Binding InsertCommand}" CommandParameter="Recorded"/>
-                        <MenuItem Header="Another Eden" Command="{Binding InsertCommand}" CommandParameter="AE"/>
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource InsertButton}"/>
+                        </MenuItem.Icon>
+                        <MenuItem Header="Click" Command="{Binding InsertCommand}" CommandParameter="Click">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource ClickButton}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Swipe" Command="{Binding InsertCommand}" CommandParameter="Swipe">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource SwipeButton}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Wait" Command="{Binding InsertCommand}" CommandParameter="Wait">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource WaitButton}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <!--<MenuItem Header="Recorded" Command="{Binding InsertCommand}" CommandParameter="Recorded"/>-->
+                        <MenuItem Header="Another Eden" Command="{Binding InsertCommand}" CommandParameter="AE">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource AEButton}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                 </MenuItem>
             </Menu>
@@ -79,30 +114,94 @@
             </local:AutoListBox.InputBindings>
             <local:AutoListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="New Click" Command="{Binding AddCommand}" CommandParameter="Click"/>
-                    <MenuItem Header="New Swipe" Command="{Binding AddCommand}" CommandParameter="Swipe"/>
-                    <MenuItem Header="New Wait" Command="{Binding AddCommand}" CommandParameter="Wait"/>
+                    <MenuItem Header="New Click" Command="{Binding AddCommand}" CommandParameter="Click" InputGestureText="Alt + C">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ClickButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="New Swipe" Command="{Binding AddCommand}" CommandParameter="Swipe" InputGestureText="Alt + S">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource SwipeButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="New Wait" Command="{Binding AddCommand}" CommandParameter="Wait" InputGestureText="Alt + W">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource WaitButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <!--<MenuItem Header="New Recorded" Command="{Binding AddCommand}" CommandParameter="Recorded"/>-->
-                    <MenuItem Header="New Another Eden" Command="{Binding AddCommand}" CommandParameter="AE"/>
-                    <Separator/>
-                    <MenuItem Header="Insert New">
-                        <MenuItem Header="Click" Command="{Binding InsertCommand}" CommandParameter="Click"/>
-                        <MenuItem Header="Swipe" Command="{Binding InsertCommand}" CommandParameter="Swipe"/>
-                        <MenuItem Header="Wait" Command="{Binding InsertCommand}" CommandParameter="Wait"/>
-                        <!--<MenuItem Header="Recorded" Command="{Binding InsertCommand}" CommandParameter="Recorded"/>-->
-                        <MenuItem Header="Another Eden" Command="{Binding InsertCommand}" CommandParameter="AE"/>
+                    <MenuItem Header="New Another Eden" Command="{Binding AddCommand}" CommandParameter="AE" InputGestureText="Alt + A">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource AEButton}"/>
+                        </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="Test Selected" InputGestureText="F5" Command="{Binding PlacementTarget.Tag.ScriptGenerator.TestSelectedActionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                    <MenuItem Header="Insert New">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource InsertButton}"/>
+                        </MenuItem.Icon>
+                        <MenuItem Header="Click" Command="{Binding InsertCommand}" CommandParameter="Click">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource ClickButton}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Swipe" Command="{Binding InsertCommand}" CommandParameter="Swipe">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource SwipeButton}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Wait" Command="{Binding InsertCommand}" CommandParameter="Wait">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource WaitButton}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <!--<MenuItem Header="Recorded" Command="{Binding InsertCommand}" CommandParameter="Recorded"/>-->
+                        <MenuItem Header="Another Eden" Command="{Binding InsertCommand}" CommandParameter="AE">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource AEButton}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
                     <Separator/>
-                    <MenuItem Header="Copy" InputGestureText="Ctrl + C" Command="{Binding CopyCommand}"/>
-                    <MenuItem Header="Cut" InputGestureText="Ctrl + X" Command="{Binding CutCommand}"/>
-                    <MenuItem Header="Paste" InputGestureText="Ctrl + V" Command="{Binding PasteCommand}"/>
+                    <MenuItem Header="Test Selected" InputGestureText="F5" 
+                              Command="{Binding PlacementTarget.Tag.ScriptGenerator.TestSelectedActionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource TestButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator/>
-                    <MenuItem Header="Delete" InputGestureText="Delete" Command="{Binding DeleteCommand}"/>
+                    <MenuItem Header="Copy" InputGestureText="Ctrl + C" Command="{Binding CopyCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource CopyButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Cut" InputGestureText="Ctrl + X" Command="{Binding CutCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource CutButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Paste" InputGestureText="Ctrl + V" Command="{Binding PasteCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource PasteButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator/>
-                    <MenuItem Header="Up" InputGestureText="Ctrl + Up" Command="{Binding UpCommand}"/>
-                    <MenuItem Header="Down" InputGestureText="Ctrl + Down" Command="{Binding DownCommand}"/>
+                    <MenuItem Header="Delete" InputGestureText="Delete" Command="{Binding DeleteCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource DeleteButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Up" InputGestureText="Ctrl + Up" Command="{Binding UpCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource UpButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Down" InputGestureText="Ctrl + Down" Command="{Binding DownCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource DownButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </local:AutoListBox.ContextMenu>
         </local:AutoListBox>

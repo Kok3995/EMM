@@ -9,6 +9,9 @@ using EMM.Core.Tools;
 using System.Collections.Generic;
 using System;
 using System.Reflection;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace EMM
 {
@@ -20,6 +23,8 @@ namespace EMM
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            MainWindow = new MainWindow();
 
             //reset working directory
             Environment.CurrentDirectory = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -44,8 +49,7 @@ namespace EMM
             };
 
             var viewModelFactory = new ViewModelFactory(DependencyDict);
-
-            var timerToolVM = new TimerToolViewModel(mouseHook, timerTool);
+            
             var settingVM = new SettingViewModel(Settings.Default(), autoMapper);
             var macroManagerVM = new MacroManagerViewModel(dataIO, messageBox, viewModelFactory);
             var scriptApplyFactory = new ScriptApplyFactory(messageBox, scriptApplyDict);
@@ -53,12 +57,14 @@ namespace EMM
             var scriptGeneratorVM = new ScriptGeneratorViewModel(macroManagerVM, scriptGenerator, messageBox);
             var customActionManager = new CustomActionManager(macroManagerVM, viewModelFactory, dataIO, messageBox);
 
-            var mainWindowViewModel = new MainWindowViewModel(macroManagerVM, settingVM, autoUpdater, timerToolVM, scriptGeneratorVM, customActionManager);
+            var timerToolVM = new TimerToolViewModel(mouseHook, timerTool);
+            var resulutionTool = new ResolutionConverterTool(viewModelFactory);
+            var resolutionToolVM = new ResolutionConverterToolViewModel(resulutionTool, macroManagerVM, messageBox);
+            var autoLocationVM = new AutoLocationViewModel(new MouseHook(), new AutoLocation(), macroManagerVM);
 
-            MainWindow = new MainWindow
-            {
-                DataContext = mainWindowViewModel
-            };
+            var mainWindowViewModel = new MainWindowViewModel(macroManagerVM, settingVM, autoUpdater, timerToolVM, resolutionToolVM, scriptGeneratorVM, customActionManager, autoLocationVM);
+
+            MainWindow.DataContext = mainWindowViewModel;
 
             //Handle arguments
             var agrs = Environment.GetCommandLineArgs();
@@ -69,12 +75,48 @@ namespace EMM
                 macroManagerVM.SetCurrentMacro(filepath);
             }
 
+            // Select the text in a TextBox when it receives focus.
+            EventManager.RegisterClassHandler(typeof(TextBox), TextBox.PreviewMouseLeftButtonDownEvent,
+                new MouseButtonEventHandler(SelectivelyIgnoreMouseButton));
+            EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotKeyboardFocusEvent,
+                new RoutedEventHandler(SelectAllText));
+            EventManager.RegisterClassHandler(typeof(TextBox), TextBox.MouseDoubleClickEvent,
+                new RoutedEventHandler(SelectAllText));
+
             MainWindow.Show();
+        }
+
+        void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
+        {
+            // Find the TextBox
+            DependencyObject parent = e.OriginalSource as UIElement;
+            while (parent != null && !(parent is TextBox))
+                parent = VisualTreeHelper.GetParent(parent);
+
+            if (parent != null)
+            {
+                var textBox = (TextBox)parent;
+                if (!textBox.IsKeyboardFocusWithin)
+                {
+                    // If the text box is not yet focused, give it the focus and
+                    // stop further processing of this click event.
+                    textBox.Focus();
+                    e.Handled = true;
+                }
+            }
+        }
+
+        void SelectAllText(object sender, RoutedEventArgs e)
+        {
+            var textBox = e.OriginalSource as TextBox;
+            if (textBox != null)
+                textBox.SelectAll();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             Messenger.Send(this, new AppEventArgs(EventMessage.SaveSettings));
+
             base.OnExit(e);
         }
     }

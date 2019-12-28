@@ -48,7 +48,12 @@ namespace EMM.Core.ViewModels
             var newVM = this.viewModelFactory.NewActionViewModel(this.BasicAction);
 
             return newVM;
-        } 
+        }
+
+        public IActionViewModel ChangeResolution(double scaleX, double scaleY, MidpointRounding roundMode = MidpointRounding.ToEven)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
     }

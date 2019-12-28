@@ -23,7 +23,7 @@ namespace EMM.Core.ViewModels
         /// </summary>
         /// <param name="macroViewModel">The macro to generate script</param>
         /// <returns></returns>
-        public virtual bool GenerateScript(MacroViewModel macroViewModel)
+        public virtual bool? GenerateScript(MacroViewModel macroViewModel)
         {
             var timer = 200;
 
@@ -42,7 +42,7 @@ namespace EMM.Core.ViewModels
         /// </summary>
         /// <param name="actionViewModelList">The selected action viewmodel</param>
         /// <returns></returns>
-        public virtual bool GenerateScript(IList<IActionViewModel> actionViewModelList, MacroViewModel currentMacro)
+        public virtual bool? GenerateScript(IList<IActionViewModel> actionViewModelList, MacroViewModel currentMacro)
         {
             StringBuilder script = new StringBuilder();
 
@@ -64,6 +64,7 @@ namespace EMM.Core.ViewModels
             GlobalData.CustomX = setting.CustomX;
             GlobalData.CustomY = setting.CustomY;
             GlobalData.Emulator = setting.SelectedEmulator;
+            GlobalData.Randomize = setting.Randomize;
 
             try
             {

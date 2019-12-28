@@ -32,6 +32,10 @@
                                     Command="{Binding CancelResolutionChangedCommand}"/>
                 </StackPanel>
             </Grid>
+            <StackPanel.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding ApplyResolutionChangedCommand}"/>
+                <KeyBinding Key="Esc" Command="{Binding CancelResolutionChangedCommand}"/>
+            </StackPanel.InputBindings>
         </StackPanel>
     </StackPanel>
 </UserControl>

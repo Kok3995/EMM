@@ -62,7 +62,9 @@
     <Compile Include="Abstract\IActionViewModel.cs" />
     <Compile Include="Abstract\IApplyScriptToFolder.cs" />
     <Compile Include="Abstract\IAutoUpdater.cs" />
+    <Compile Include="Abstract\ILocationSettable.cs" />
     <Compile Include="Abstract\IMessageBoxService.cs" />
+    <Compile Include="Abstract\IResolutionChange.cs" />
     <Compile Include="Abstract\IViewModel.cs" />
     <Compile Include="ApplyToFolderStrategy\MemuScriptApply.cs" />
     <Compile Include="ApplyToFolderStrategy\NoxScriptApply.cs" />
@@ -72,15 +74,23 @@
     <Compile Include="Enum\MessageButton.cs" />
     <Compile Include="Enum\MessageImage.cs" />
     <Compile Include="Enum\MessageResult.cs" />
-    <Compile Include="Enum\TimerMessage.cs" />
+    <Compile Include="Enum\MouseHookEventMessage.cs" />
+    <Compile Include="Enum\MouseMessage.cs" />
+    <Compile Include="Enum\ToolMessage.cs" />
     <Compile Include="Extension\DirectoryExtension.cs" />
     <Compile Include="Extension\ListExtension.cs" />
+    <Compile Include="Extension\StringExtension.cs" />
+    <Compile Include="Extension\UsefulStaticMethod.cs" />
     <Compile Include="Messenger\Messenger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Setting\Settings.cs" />
     <Compile Include="TestClass.cs" />
+    <Compile Include="Tools\AutoLocation.cs" />
+    <Compile Include="Tools\AutoLocationViewModel.cs" />
     <Compile Include="Tools\MouseHook.cs" />
+    <Compile Include="Tools\ResolutionConverterTool.cs" />
+    <Compile Include="Tools\ResolutionConverterToolViewModel.cs" />
     <Compile Include="Tools\TimerTool.cs" />
     <Compile Include="Tools\TimerToolViewModel.cs" />
     <Compile Include="Update\AutoUpdater.cs" />
@@ -88,8 +98,8 @@
     <Compile Include="ViewModels\ActionViewModel\ActionGroupViewModel.cs" />
     <Compile Include="ViewModels\ActionViewModel\AEViewModel.cs" />
     <Compile Include="ViewModels\ActionViewModel\ClickViewModel.cs" />
-    <Compile Include="ViewModels\ActionViewModel\MacroViewModel.cs" />
-    <Compile Include="ViewModels\ActionViewModel\CustomActionManager.cs" />
+    <Compile Include="ViewModels\MainViewModel\MacroViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel\CustomActionManager.cs" />
     <Compile Include="ViewModels\ActionViewModel\RecordedViewModel.cs" />
     <Compile Include="ViewModels\ActionViewModel\SwipeViewModel.cs" />
     <Compile Include="ViewModels\ActionViewModel\WaitViewModel.cs" />
@@ -100,7 +110,6 @@
     <Compile Include="ViewModels\MainViewModel\MacroManagerViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel\ScriptGenerator.cs" />
     <Compile Include="ViewModels\MainViewModel\ScriptGeneratorViewModel.cs" />
-    <Compile Include="ViewModels\MainViewModel\TestMainWindow.cs" />
     <Compile Include="ViewModels\MainViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelFactory.cs" />
   </ItemGroup>

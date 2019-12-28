@@ -35,6 +35,10 @@
             <local:ReFoodView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type core:WaitViewModel}">
+            <local:WaitView />
+        </DataTemplate>
+
     </Window.Resources>
     <Window.ContextMenu>
         <ContextMenu>

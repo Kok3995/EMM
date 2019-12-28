@@ -3,27 +3,41 @@
                     xmlns:local="clr-namespace:EMM">
 
     <!-- Toolbar button -->
-    <BitmapImage x:Key="AddButton" UriSource="..\Images\Toolbar\Add.bmp" />
-    <BitmapImage x:Key="CopyButton" UriSource="..\Images\Toolbar\Copy.bmp" />
-    <BitmapImage x:Key="CutButton" UriSource="..\Images\Toolbar\Cut.bmp" />
-    <BitmapImage x:Key="PasteButton" UriSource="..\Images\Toolbar\Paste.bmp" />
-    <BitmapImage x:Key="DeleteButton" UriSource="..\Images\Toolbar\Delete.bmp" />
-    <BitmapImage x:Key="UpButton" UriSource="..\Images\Toolbar\Up.bmp" />
-    <BitmapImage x:Key="DownButton" UriSource="..\Images\Toolbar\Down.bmp" />
+    <BitmapImage x:Key="AddButton" UriSource="..\Images\Toolbar\Add.png" />
+    <BitmapImage x:Key="CopyButton" UriSource="..\Images\Toolbar\Copy.png" />
+    <BitmapImage x:Key="CutButton" UriSource="..\Images\Toolbar\Cut.png" />
+    <BitmapImage x:Key="PasteButton" UriSource="..\Images\Toolbar\Paste.png" />
+    <BitmapImage x:Key="DeleteButton" UriSource="..\Images\Toolbar\Delete.png" />
+    <BitmapImage x:Key="UpButton" UriSource="..\Images\Toolbar\Up.png" />
+    <BitmapImage x:Key="DownButton" UriSource="..\Images\Toolbar\Down.png" />
+    <BitmapImage x:Key="ClickButton" UriSource="..\Images\Toolbar\Click.png" />
+    <BitmapImage x:Key="SwipeButton" UriSource="..\Images\Toolbar\Swipe.png" />
+    <BitmapImage x:Key="WaitButton" UriSource="..\Images\Toolbar\Wait.png" />
+    <BitmapImage x:Key="AEButton" UriSource="..\Images\Toolbar\AE.png" />
+    <BitmapImage x:Key="InsertButton" UriSource="..\Images\Toolbar\Insert.png" />
+    <BitmapImage x:Key="TestButton" UriSource="..\Images\Toolbar\Test.png" />
+    <BitmapImage x:Key="GroupButton" UriSource="..\Images\Toolbar\Group.png" />
+    <BitmapImage x:Key="CustomButton" UriSource="..\Images\Toolbar\Custom.png" />
+    <BitmapImage x:Key="CustomAddButton" UriSource="..\Images\Toolbar\CustomAdd.png" />
+    <BitmapImage x:Key="CustomLoadButton" UriSource="..\Images\Toolbar\CustomLoad.png" />
     
     <!-- Application Button -->
-    <BitmapImage x:Key="AboutButton" UriSource="..\Images\MenuItemIcon\About.bmp" />
+    <BitmapImage x:Key="AboutButton" UriSource="..\Images\MenuItemIcon\About.png" />
+    <BitmapImage x:Key="PaypalButton" UriSource="..\Images\MenuItemIcon\Paypal.png" />
+    <BitmapImage x:Key="BookButton" UriSource="..\Images\MenuItemIcon\Book.png" />
+    <BitmapImage x:Key="KeyboardButton" UriSource="..\Images\MenuItemIcon\Keyboard.png" />
     <BitmapImage x:Key="ApplicationButton" UriSource="..\Images\MenuItemIcon\Application.bmp" />
-    <BitmapImage x:Key="DownloadButton" UriSource="..\Images\MenuItemIcon\Download.bmp" />
-    <BitmapImage x:Key="ExitButton" UriSource="..\Images\MenuItemIcon\Exit.bmp" />
-    <BitmapImage x:Key="NewButton" UriSource="..\Images\MenuItemIcon\New document.bmp" />
-    <BitmapImage x:Key="OpenButton" UriSource="..\Images\MenuItemIcon\Open.bmp" />
-    <BitmapImage x:Key="SaveButton" UriSource="..\Images\MenuItemIcon\Save.bmp" />
-    <BitmapImage x:Key="SaveAsButton" UriSource="..\Images\MenuItemIcon\SaveAs.bmp" />
+    <BitmapImage x:Key="DownloadButton" UriSource="..\Images\MenuItemIcon\Download.png" />
+    <BitmapImage x:Key="ExitButton" UriSource="..\Images\MenuItemIcon\Exit.png" />
+    <BitmapImage x:Key="NewButton" UriSource="..\Images\MenuItemIcon\New document.png" />
+    <BitmapImage x:Key="OpenButton" UriSource="..\Images\MenuItemIcon\Open.png" />
+    <BitmapImage x:Key="SaveButton" UriSource="..\Images\MenuItemIcon\Save.png" />
+    <BitmapImage x:Key="SaveAsButton" UriSource="..\Images\MenuItemIcon\SaveAs.png" />
     <BitmapImage x:Key="ApplyButton" UriSource="..\Images\MenuItemIcon\Apply.png" />
     <BitmapImage x:Key="EraseButton" UriSource="..\Images\MenuItemIcon\Erase.png" />
     <BitmapImage x:Key="ModifyButton" UriSource="..\Images\MenuItemIcon\Modify.bmp" />
-    <BitmapImage x:Key="ClockButton" UriSource="..\Images\MenuItemIcon\Clock.bmp" />
+    <BitmapImage x:Key="ClockButton" UriSource="..\Images\MenuItemIcon\Clock.png" />
+    <BitmapImage x:Key="ResolutionToolButton" UriSource="..\Images\MenuItemIcon\ResolutionTool.png" />
     <BitmapImage x:Key="CloseButton" UriSource="..\Images\MenuItemIcon\Close.png" />
     <BitmapImage x:Key="ListButton" UriSource="..\Images\MenuItemIcon\List.png" />
     
@@ -31,6 +45,8 @@
     <BitmapImage x:Key="StartTimerButton" UriSource="..\Images\MiscIcon\Play.png" />
     <BitmapImage x:Key="StopTimerButton" UriSource="..\Images\MiscIcon\Stop.png" />
 
+    <!-- -->
+    <BitmapImage x:Key="EMMLogo" UriSource="..\Images\MiscIcon\EMMLogo.png" />
 
 
 </ResourceDictionary>

@@ -4,5 +4,9 @@
 
     <Color x:Key="BorderLight">#62819d</Color>
     <SolidColorBrush x:Key="BorderLightBrush" Color="{StaticResource BorderLight}"/>
-    
+    <Color x:Key="Red">#c0392b</Color>
+    <SolidColorBrush x:Key="RedBrush" Color="{StaticResource Red}"/>
+    <Color x:Key="Green">#27ae60</Color>
+    <SolidColorBrush x:Key="GreenBrush" Color="{StaticResource Green}"/>
+
 </ResourceDictionary>

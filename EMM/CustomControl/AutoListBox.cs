@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace EMM
 {
-    public class AutoListBox : ListBox
+    public class AutoListBox : ScrollIntoViewListBox
     {
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
@@ -40,6 +40,13 @@ namespace EMM
         {
             this.IsMouseDoubleClicked = false;
             base.OnMouseDown(e);
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key.Equals(Key.Enter))
+                this.IsMouseDoubleClicked = false;
+            base.OnKeyDown(e);
         }
 
         /// <summary>

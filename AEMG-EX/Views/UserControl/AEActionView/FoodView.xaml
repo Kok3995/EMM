@@ -29,52 +29,6 @@
             </Image.Style>
         </Image>
         
-        <!--<Grid HorizontalAlignment="Center" Margin="10" Width="602" Height="52" VerticalAlignment="Top" Visibility="{Binding EatOrNotToEat, Converter={local:BooleanToVisibilityConverter}}">
-            <Path Stroke="#c7bc89" StrokeThickness="2">
-                <Path.Data>
-                    <PathGeometry>
-                        <PathGeometry.Figures>
-                            <PathFigureCollection>
-                                <PathFigure StartPoint="10,0">
-                                    <LineSegment Point="590,0"/>
-                                    <LineSegment Point="600,10"/>
-                                    <LineSegment Point="600,40"/>
-                                    <LineSegment Point="590,50"/>
-                                    <LineSegment Point="10,50"/>
-                                    <LineSegment Point="0,40"/>
-                                    <LineSegment Point="0,10"/>
-                                    <LineSegment Point="10,0"/>
-                                </PathFigure>
-                            </PathFigureCollection>
-                        </PathGeometry.Figures>
-                    </PathGeometry>
-                </Path.Data>
-            </Path>
-            <Grid Background="{StaticResource BackgroundLightTransparentBrush}">
-                <Grid.Clip>
-                    <GeometryGroup>
-                        <PathGeometry>
-                            <PathGeometry.Figures>
-                                <PathFigureCollection>
-                                    <PathFigure StartPoint="10,0">
-                                        <LineSegment Point="590,0"/>
-                                        <LineSegment Point="600,10"/>
-                                        <LineSegment Point="600,40"/>
-                                        <LineSegment Point="590,50"/>
-                                        <LineSegment Point="10,50"/>
-                                        <LineSegment Point="0,40"/>
-                                        <LineSegment Point="0,10"/>
-                                        <LineSegment Point="10,0"/>
-                                    </PathFigure>
-                                </PathFigureCollection>
-                            </PathGeometry.Figures>
-                        </PathGeometry>
-                    </GeometryGroup>
-                </Grid.Clip>
-            </Grid>
-            <TextBlock Text="HP and MP completely restored." Foreground="{StaticResource ForegroundWhiteBrush}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20"/>
-        </Grid>-->
-
         <local:CutCornerBox Text="HP and MP completely restored." Margin="10" VerticalAlignment="Top" Visibility="{Binding EatOrNotToEat, Converter={local:BooleanToVisibilityConverter}}"/>
 
         <Canvas Visibility="{Binding EatOrNotToEat, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=reverse}">

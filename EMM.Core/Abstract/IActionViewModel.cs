@@ -4,7 +4,7 @@ using System;
 
 namespace EMM.Core
 {
-    public interface IActionViewModel : IViewModel
+    public interface IActionViewModel : IViewModel, IResolutionChange
     {
         BasicAction BasicAction { get; set; }
 

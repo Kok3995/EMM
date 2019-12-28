@@ -42,14 +42,19 @@ namespace EMM.Core.ViewModels
         public IActionViewModel SelectedItem { get; set; }
 
         /// <summary>
-        /// The index of the selected group
+        /// The index of the selected group, default to -1 so insert work first time
         /// </summary>
-        public int SelectedItemIndex { get; set; }
+        public int SelectedItemIndex { get; set; } = -1;
 
         /// <summary>
         /// Indicate if cut command is used previously
         /// </summary>
         public bool IsCut { get; set; }
+
+        /// <summary>
+        /// Disable action list part when no action group selected or created
+        /// </summary>
+        public bool IsActionEnable => (SelectedItem == null) ? false : true;
 
         #endregion
 

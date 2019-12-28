@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="AEMG_EX.WaitView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AEMG_EX"
+             mc:Ignorable="d" 
+             d:DesignHeight="540" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Option -->                
+            <RowDefinition Height="auto"/>
+            
+            <!-- Useless screenshot -->
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <!-- Option -->
+        <StackPanel Grid.Row="0" Margin="5 0 0 0" Orientation="Horizontal" Grid.Column="1">
+            <TextBlock Text="Wait: " VerticalAlignment="Center" FontWeight="Bold"/>
+            <local:NumbericTextBox Text="{Binding WaitTime, UpdateSourceTrigger=PropertyChanged}" Padding="2"
+                         VerticalAlignment="Stretch" Margin="0 1" VerticalContentAlignment="Center" Width="50"
+                         ToolTip="Time in milisecond(s) to wait&#x0a;This usually use to wait for horror to pass&#x0a;Consult the one who made this macro for more information"/>
+        </StackPanel>
+
+        <!-- Useless screenshot -->
+        <Grid Grid.Row="1" Width="800" Height="450" x:Name="MainGrid" ToolTip="This actually does absolutely NOTHING, like seriously, nothing at all" >
+            <Grid.Background>
+                <ImageBrush ImageSource="{StaticResource WaitScreen}"/>
+            </Grid.Background>
+            
+            <!-- Speech Bubble -->
+            <Grid Width="500" Height="100" VerticalAlignment="Top">
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Setter Property="Opacity" Value="0"/>
+                        <Setter Property="Margin" Value="200 10 0 0"/>
+                        <Style.Triggers>
+                            <EventTrigger RoutedEvent="Grid.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.5" From="0" To="1" BeginTime="0:0:1" Storyboard.TargetProperty="Opacity" />
+                                        <ThicknessAnimation Duration="0:0:0.5" From="200 20 0 0" To="200 10 0 0" BeginTime="0:0:1" Storyboard.TargetProperty="Margin" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Path Fill="{StaticResource BackgroundLightTransparentBrush}" Stretch="Fill" Stroke="{StaticResource SkillBorderBrush}" HorizontalAlignment="Left" Grid.Row="1" Data="m 8.8216837 0.59221189 c -4.0499546 0 -7.3103292 3.27273941 -7.3103292 7.33805321 V 45.793069 c 0 4.065315 3.2603746 7.338055 7.3103292 7.338055 H 30.045836 L 9.7957079 98.866316 54.996195 53.131124 H 491.99788 c 4.04996 0 7.31034 -3.27274 7.31034 -7.338055 V 7.9302651 c 0 -4.0653138 -3.26038 -7.33805321 -7.31034 -7.33805321 z"/>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0 8" FontSize="25" Text="Hello, I'm here to 💀🗲☡💥 you up" TextWrapping="Wrap" Foreground="{StaticResource ForegroundWhiteBrush}"/>
+            </Grid>
+        </Grid>
+               
+    </Grid>
+    
+</UserControl>

@@ -16,6 +16,9 @@ namespace AEMG_EX.Core
             this.actionProvider = actionProvider;
             SelectedLeftRight = new ObservableCollection<Action>(new List<Action> { Action.RunLeft, Action.RunRight, Action.RunLeft, Action.RunRight });
 
+            base.TurnList = new ObservableCollection<TurnViewModel>() { new EXPTurnViewModel() };
+            base.CurrentTurn = base.TurnList[0];
+
             this.InitializeCommand();
         }
 
@@ -32,6 +35,11 @@ namespace AEMG_EX.Core
         /// Number of battles to loop
         /// </summary>
         public int Loop { get; set; } = 1;
+
+        /// <summary>
+        /// The time it took to go back to field after battle is won
+        /// </summary>
+        public int BattleExitTime { get; set; } = 5000;
 
         #region Commands
 
@@ -67,9 +75,15 @@ namespace AEMG_EX.Core
 
         public override AEAction AEAction => AEAction.EXPBattle;
 
-        public IAEActionViewModel Copy()
+        protected override void AddTurn()
         {
-            throw new System.NotImplementedException();
+            if (TotalTurn == 0)
+            {
+                this.TurnList.Add(new EXPTurnViewModel());
+            }
+
+            this.TurnList.Add(new EXPTurnViewModel(this.TurnList[TotalTurn - 1] as EXPTurnViewModel));
+            CurrentTurn = this.TurnList[TotalTurn - 1];
         }
 
         #endregion
@@ -87,8 +101,18 @@ namespace AEMG_EX.Core
                     throw new InvalidOperationException("Only support RunLeft, RunRight action");                        
             }
 
+            //Add Wait for battle to load
+            runList.Add(this.actionProvider.GetWait(4000));
+
             //add battle
             runList.AddRange(base.UserChoicesToActionList());
+
+            //add exit battle
+            int clickNum = (int)(BattleExitTime/(this.actionProvider.GetCharacterAction(Action.ClickAttack)[0] as Click).WaitBetweenAction);
+            for (int i = 0; i < clickNum; i++)
+            {
+                runList.AddRange(this.actionProvider.GetCharacterAction(Action.ClickAttack));
+            }
 
             var completeList = new List<IAction>();
 

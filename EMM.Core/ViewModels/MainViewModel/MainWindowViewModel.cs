@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using EMM.Core.Update;
 using EMM.Core.Tools;
 using EMM.Core.Service;
+using System.Reflection;
 
 namespace EMM.Core.ViewModels
 {
@@ -25,7 +26,7 @@ namespace EMM.Core.ViewModels
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public MainWindowViewModel(MacroManagerViewModel macroManager, SettingViewModel setting, IAutoUpdater autoUpdater, TimerToolViewModel timerTool, ScriptGeneratorViewModel scriptGenerator, CustomActionManager customActionManager)
+        public MainWindowViewModel(MacroManagerViewModel macroManager, SettingViewModel setting, IAutoUpdater autoUpdater, TimerToolViewModel timerTool, ResolutionConverterToolViewModel resolutionConverterTool, ScriptGeneratorViewModel scriptGenerator, CustomActionManager customActionManager, AutoLocationViewModel AutoLocation)
         {
             this.MacroManager = macroManager;
             this.CurrentSettings = setting;
@@ -33,6 +34,8 @@ namespace EMM.Core.ViewModels
             this.TimerTool = timerTool;
             this.ScriptGenerator = scriptGenerator;
             this.CustomActionManager = customActionManager;
+            this.ResolutionConverterTool = resolutionConverterTool;
+            this.AutoLocation = AutoLocation;
 
             InitializeCommands();
 
@@ -49,6 +52,8 @@ namespace EMM.Core.ViewModels
         #endregion
 
         #region Public Properties
+
+        public string TitleWithVersion => string.Format("Easy Macro Maker {0}", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
 
         /// <summary>
         /// Managed loaded macro
@@ -70,39 +75,24 @@ namespace EMM.Core.ViewModels
         /// </summary>
         public TimerToolViewModel TimerTool { get; set; }
 
+        public ResolutionConverterToolViewModel ResolutionConverterTool { get; set; }
+
         public ScriptGeneratorViewModel ScriptGenerator { get; set; }
 
         public CustomActionManager CustomActionManager { get; set; }
 
+        public AutoLocationViewModel AutoLocation { get; set; }
+
         #endregion
 
         #region Commands
-        public ICommand TestClickCommand { get; set; }
 
         /// <summary>
         /// Initilize all commands in this viewmodel
         /// </summary>
         private void InitializeCommands()
         {           
-            TestClickCommand = new RelayCommand(p =>
-            {
-                //var test = new TestClass();
-
-                //var timer = 200;
-
-                //GlobalData.Emulator = Emulator.MEMU;
-
-                //File.WriteAllText("Test", test.ReturnTestTemplate().GenerateScript(ref timer).ToString());
-
-                //var time = DateTime.Now.ToString("yyyy'-'MM'-'dd' 'hh':'mm':'ss");
-                //var str = Uri.EscapeDataString(time);
-
-                var memu = new MemuScriptApply(new MessageBoxService());
-
-                memu.ApplyScriptTo("test", CurrentSettings.MemuScriptLocation, new System.Text.StringBuilder("hello test here"));
-
-
-            });          
+      
         }
 
         #endregion

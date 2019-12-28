@@ -36,7 +36,12 @@ namespace AEMG_EX.Core
         {
             ConvertCommand = new RelayCommand(p =>
             {
-                if (this.scriptGenerator.GenerateScript(MacroManager.GetCurrentTemplate(), AEActionListViewModel.AEActionList))
+                var result = this.scriptGenerator.GenerateScript(MacroManager.GetCurrentTemplate(), AEActionListViewModel.AEActionList);
+
+                if (result == null)
+                    return;
+
+                if (result == true)
                     this.messageBoxService.ShowMessageBox("Done", "Convert", MessageButton.OK, MessageImage.Information, MessageResult.OK);
                 else
                     this.messageBoxService.ShowMessageBox("Error. Check your setting or contact me for help", "Convert", MessageButton.OK, MessageImage.Error, MessageResult.OK);

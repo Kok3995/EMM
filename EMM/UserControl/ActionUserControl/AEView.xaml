@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EMM"
              xmlns:core="clr-namespace:EMM.Core.ViewModels;assembly=EMM.Core"
+             xmlns:data="clr-namespace:Data;assembly=Data"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="500">
     <StackPanel Margin="35 0">
@@ -23,7 +24,13 @@
             <TextBlock Text="●  "/>
             <TextBlock Text="Another Eden Action: " FontWeight="DemiBold"/>
             <ComboBox ItemsSource="{Binding AEOptionList}" SelectedItem="{Binding AnotherEdenAction}"
-                      Width="150" Padding="4"/>
+                      Width="150" Padding="4">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type data:AEAction}">
+                        <TextBlock Text="{Binding Converter={local:AEActionToStringConverter}}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </StackPanel>
         <StackPanel Margin="5" Orientation="Horizontal">
             <TextBlock Text="●  "/>

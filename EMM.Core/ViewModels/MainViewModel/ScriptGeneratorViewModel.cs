@@ -37,7 +37,11 @@ namespace EMM.Core.ViewModels
 
             ConvertCommand = new RelayCommand(p =>
             {
-                if(this.scriptGenerator.GenerateScript(this.macroManager.CurrentMacro))
+                var result = this.scriptGenerator.GenerateScript(this.macroManager.CurrentMacro);
+                if (result == null)
+                    return;
+
+                if (result == true)
                     this.messageBoxService.ShowMessageBox("Done", "Convert", MessageButton.OK, MessageImage.Information, MessageResult.OK);
                 else
                     this.messageBoxService.ShowMessageBox("Error. Check your setting or contact me for help", "Convert", MessageButton.OK, MessageImage.Error, MessageResult.OK);
@@ -46,7 +50,7 @@ namespace EMM.Core.ViewModels
             TestSelectedActionCommand = new RelayCommand(p =>
             {
                 this.scriptGenerator.GenerateScript((this.macroManager.CurrentMacro.SelectedItem as ActionGroupViewModel).ViewModelList.GetSelectedElement(), this.macroManager.CurrentMacro);
-            }, p => (this.macroManager.CurrentMacro.SelectedItem as ActionGroupViewModel).SelectedItem != null);
+            }, p => (this.macroManager.CurrentMacro.SelectedItem as ActionGroupViewModel)?.SelectedItem != null);
         }
     }
 }

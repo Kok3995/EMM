@@ -21,7 +21,10 @@
                 <TextBlock Text="Custom Action Settings:" FontWeight="DemiBold"/>
                 <local:ActionDescriptionRepeatView/>
             </StackPanel>
-            <Button Content="Save" Command="{Binding DataContext.CustomActionManager.SaveCustomActionCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" Margin="10 0 0 0"/>
+            <Button Content="Save" Width="50" ToolTip="Save this custom action"
+                    Command="{Binding DataContext.CustomActionManager.SaveCustomActionCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" Margin="10 0 0 0"/>
+            <Button Content="Unpack" Width="50" ToolTip="Unpack this custom action back to individual actions"
+                    Command="{Binding DataContext.CustomActionManager.UnPackCustomActionCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" Margin="10 0 0 0"/>
         </StackPanel>
         
         <Grid Grid.Row="1">

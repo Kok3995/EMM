@@ -8,6 +8,6 @@ namespace EMM.Core
     /// </summary>
     public interface IApplyScriptToFolder
     {
-        bool ApplyScriptTo(string scriptName, string path, StringBuilder script, bool prompt = true);
+        bool? ApplyScriptTo(string scriptName, string path, StringBuilder script, bool prompt = true);
     }
 }

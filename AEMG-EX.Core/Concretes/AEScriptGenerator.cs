@@ -31,7 +31,7 @@ namespace AEMG_EX.Core
         /// <param name="macro">The macro template</param>
         /// <param name="aEActionList">AEAction list from user choice</param>
         /// <returns></returns>
-        public bool GenerateScript(MacroTemplate macro, IList<IAEActionViewModel> aEActionList, string customName = null)
+        public bool? GenerateScript(MacroTemplate macro, IList<IAEActionViewModel> aEActionList, string customName = null)
         { 
             var timer = 200;
 
@@ -66,6 +66,7 @@ namespace AEMG_EX.Core
             GlobalData.CustomX = setting.CustomX;
             GlobalData.CustomY = setting.CustomY;
             GlobalData.Emulator = setting.SelectedEmulator;
+            GlobalData.Randomize = setting.Randomize;
 
             try
             {

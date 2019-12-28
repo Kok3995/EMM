@@ -11,7 +11,7 @@ namespace EMMUpdater
 {
     public class EMMUpdater
     {
-        private string defaultUpdateFileLocation = @"https://github.com/Kok3995/UpdaterDemo/raw/master/UpdateDemo.zip";
+        private string defaultUpdateFileLocation = @"https://github.com/Kok3995/EMM/releases/latest/download/EMM.zip";
 
         private string updateFolder = Path.Combine(Environment.CurrentDirectory, "Update");
 

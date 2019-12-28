@@ -37,5 +37,7 @@
     <BitmapImage x:Key="GoRight" UriSource="../Images/UI/GoRight.png"/>
     <BitmapImage x:Key="CatLeft" UriSource="../Images/UI/CatLeft.png"/>
     <BitmapImage x:Key="CatRight" UriSource="../Images/UI/CatRight.png"/>
+    <BitmapImage x:Key="WaitScreen" UriSource="../Images/UI/WaitScreen.jpg"/>
+
 
 </ResourceDictionary>

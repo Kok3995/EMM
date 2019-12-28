@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace EMM.Core.ViewModels
 {
-    public class SwipeViewModel : BaseViewModel, IActionViewModel
+    public class SwipeViewModel : BaseViewModel, IActionViewModel, ILocationSettable
     {
         public SwipeViewModel(SimpleAutoMapper autoMapper, ViewModelFactory viewModelFactory)
         {
@@ -67,7 +67,16 @@ namespace EMM.Core.ViewModels
         {
             AddPointCommand = new RelayCommand(p =>
             {
-                var point = new SwipePointWrapper(new SwipePoint());
+                var newSwipePoint = new SwipePoint();
+
+                //set previous point
+                if (PointCollection.Count > 0)
+                {
+                    var lastPoint = PointCollection.LastOrDefault();
+                    newSwipePoint.Point = new Point(lastPoint.PointX, lastPoint.PointY);
+                };
+
+                var point = new SwipePointWrapper(newSwipePoint);
                 this.PointCollection.Add(point);
             });
 
@@ -99,7 +108,7 @@ namespace EMM.Core.ViewModels
         public IActionViewModel MakeCopy()
         {
             var newSwipeVM = (SwipeViewModel)viewModelFactory.NewActionViewModel(this.BasicAction);
-            this.autoMapper.SimpleAutoMap<SwipeViewModel, SwipeViewModel>(this, newSwipeVM, new List<Type> { typeof(ICommand), typeof(ObservableCollection<SwipePointWrapper>) });
+            this.autoMapper.SimpleAutoMap<SwipeViewModel, SwipeViewModel>(this, newSwipeVM, new List<Type> { typeof(ICommand), typeof(ObservableCollection<SwipePointWrapper>), typeof(List<SwipePoint>) });
             newSwipeVM.PointCollection = new ObservableCollection<SwipePointWrapper>(this.PointCollection.Select(i => new SwipePointWrapper(new SwipePoint(i.SwipePoint))));
 
             return newSwipeVM;
@@ -111,6 +120,24 @@ namespace EMM.Core.ViewModels
             this.PointCollection = new ObservableCollection<SwipePointWrapper>((action as Swipe).PointList.Select(i => new SwipePointWrapper(i)).ToList());
 
             return this;
+        }
+
+        public IActionViewModel ChangeResolution(double scaleX, double scaleY, MidpointRounding roundMode = MidpointRounding.ToEven)
+        {
+            var newSwipe = this.MakeCopy() as SwipeViewModel;
+
+            foreach (var swipePointWrapper in newSwipe.PointCollection)
+            {
+                swipePointWrapper.PointX = Math.Round(swipePointWrapper.PointX * scaleX, roundMode);
+                swipePointWrapper.PointY = Math.Round(swipePointWrapper.PointY * scaleY, roundMode);
+            }
+
+            return newSwipe;
+        }
+
+        public void SetLocation(Point location)
+        {
+            this.PointCollection.Add(new SwipePointWrapper(new SwipePoint { Point = location }));
         }
 
         #endregion

@@ -65,6 +65,11 @@ namespace EMM.Core.ViewModels
             return newAE;
         }
 
+        public IActionViewModel ChangeResolution(double scaleX, double scaleY, MidpointRounding roundMode = MidpointRounding.ToEven)
+        {
+            return this.MakeCopy();
+        }
+
         #endregion
     }
 }

@@ -3,6 +3,21 @@ using System.Collections.Generic;
 
 namespace EMM.Core
 {
+    public class ToolEventArgs : EventArgs
+    {
+        public ToolEventArgs(ToolMessage message)
+        {
+            this.ToolMessage = message;
+        }
+
+        public ToolEventArgs()
+        {
+
+        }
+
+        public ToolMessage ToolMessage { get; set; }
+    }
+
     public class DropEventArgs : EventArgs
     {
         public DropEventArgs()
@@ -16,19 +31,6 @@ namespace EMM.Core
         }
 
         public string[] FilePaths { get; set; }
-    }
-
-    public class TimerEventArgs : EventArgs
-    { 
-        public TimerEventArgs(TimerMessage message)
-        {
-            this.TimerMessage = message;
-        }
-        public TimerEventArgs()
-        {
-
-        }
-        public TimerMessage TimerMessage { get; set; }
     }
 
     public class AppEventArgs : EventArgs
@@ -51,7 +53,7 @@ namespace EMM.Core
     {        
         private static event EventHandler<AppEventArgs> AppEvent;
 
-        private static event EventHandler<TimerEventArgs> TimerEvent;
+        private static event EventHandler<ToolEventArgs> ToolEvent;
 
         private static event EventHandler<DropEventArgs> DropEvent;
 
@@ -59,9 +61,9 @@ namespace EMM.Core
         {                    
             AppEvent.Invoke(sender, e);
         }
-        public static void Send(object sender, TimerEventArgs e)
+        public static void Send(object sender, ToolEventArgs e)
         {
-            TimerEvent?.Invoke(sender, e);
+            ToolEvent?.Invoke(sender, e);
         }
         public static void Send(object sender, DropEventArgs e)
         {
@@ -73,10 +75,10 @@ namespace EMM.Core
             AppEvent -= eventHandler;
             AppEvent += eventHandler;
         }
-        public static void Register(EventHandler<TimerEventArgs> eventHandler)
+        public static void Register(EventHandler<ToolEventArgs> eventHandler)
         {
-            TimerEvent -= eventHandler;
-            TimerEvent += eventHandler;
+            ToolEvent -= eventHandler;
+            ToolEvent += eventHandler;
         }
         public static void Register(EventHandler<DropEventArgs> eventHandler)
         {
@@ -88,9 +90,9 @@ namespace EMM.Core
         {
             AppEvent -= eventHandler;
         }
-        public static void UnRegister(EventHandler<TimerEventArgs> eventHandler)
+        public static void UnRegister(EventHandler<ToolEventArgs> eventHandler)
         {
-            TimerEvent -= eventHandler;
+            ToolEvent -= eventHandler;
         }
         public static void UnRegister(EventHandler<DropEventArgs> eventHandler)
         {

@@ -1,5 +1,6 @@
 ﻿using Data;
 using EMM.Core.Converter;
+using System;
 using System.Windows;
 
 namespace EMM.Core.ViewModels
@@ -33,6 +34,11 @@ namespace EMM.Core.ViewModels
         /// </summary>
         public int WaitTime { get; set; }
 
+
+        #endregion
+
+        #region Interface Implement
+
         /// <summary>
         /// Convert the viewmodel back to model for saving, Generate scripts
         /// </summary>
@@ -54,6 +60,11 @@ namespace EMM.Core.ViewModels
             this.autoMapper.SimpleAutoMap<WaitViewModel, WaitViewModel>(this, newWaitVM);
             return newWaitVM;
         }
+
+        public IActionViewModel ChangeResolution(double scaleX, double scaleY, MidpointRounding roundMode = MidpointRounding.ToEven)
+        {
+            return this.MakeCopy();
+        } 
 
         #endregion
     }

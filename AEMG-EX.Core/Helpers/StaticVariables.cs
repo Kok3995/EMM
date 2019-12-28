@@ -20,6 +20,7 @@ namespace AEMG_EX.Core
 
         public static BitmapImage BattleScreenNormal = new BitmapImage(new Uri(Path.Combine(Environment.CurrentDirectory, "Images", "UI", "BattleScreen.jpg")));
         public static BitmapImage BattleScreenBoss = new BitmapImage(new Uri(Path.Combine(Environment.CurrentDirectory, "Images", "UI", "BattleScreenBoss.jpg")));
+        public static BitmapImage BattleScreenEXP = new BitmapImage(new Uri(Path.Combine(Environment.CurrentDirectory, "Images", "UI", "BattleScreenEXP.jpg")));
         public static BitmapImage AFScreen = new BitmapImage(new Uri(Path.Combine(Environment.CurrentDirectory, "Images", "UI", "AFScreen.png")));
     }
 }

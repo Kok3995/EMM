@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="Styles\ScrollViewer.xaml"/>
                 <ResourceDictionary Source="Styles\Tab.xaml"/>
                 <ResourceDictionary Source="Styles\ToolTip.xaml"/>
+                <ResourceDictionary Source="Styles\Path.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
 

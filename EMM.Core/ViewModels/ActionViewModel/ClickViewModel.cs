@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace EMM.Core.ViewModels
 {
-    public class ClickViewModel : BaseViewModel, IActionViewModel
+    public class ClickViewModel : BaseViewModel, IActionViewModel, ILocationSettable
     {
         public ClickViewModel(SimpleAutoMapper autoMapper, ViewModelFactory viewModelFactory)
         {
@@ -80,6 +80,22 @@ namespace EMM.Core.ViewModels
             this.autoMapper.SimpleAutoMap<ClickViewModel, ClickViewModel>(this, clickVM, new List<Type>() { typeof(ClickPointWrapper) });
             clickVM.PointWrapper.point = this.PointWrapper.point;
             return clickVM;
+        }
+
+        public IActionViewModel ChangeResolution(double scaleX, double scaleY, MidpointRounding roundMode = MidpointRounding.ToEven)
+        {
+            var newClick = this.MakeCopy() as ClickViewModel;
+
+            newClick.PointWrapper.X = Math.Round(newClick.PointWrapper.X * scaleX, roundMode);
+            newClick.PointWrapper.Y = Math.Round(newClick.PointWrapper.Y * scaleY, roundMode);
+
+            return newClick;
+        }
+
+        public void SetLocation(Point location)
+        {
+            this.PointWrapper.point = location;
+            OnPropertyChanged(nameof(PointWrapper));
         }
 
         #endregion

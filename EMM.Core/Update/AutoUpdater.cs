@@ -1,5 +1,4 @@
-﻿using EMM.Core.ViewModels;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -72,7 +71,7 @@ namespace EMM.Core.Update
                 wc.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.BypassCache);
                 try
                 {
-                    updateInfoString = await wc.DownloadStringTaskAsync(new System.Uri(updateInfoUrl));
+                    updateInfoString = await wc.DownloadStringTaskAsync(new Uri(updateInfoUrl));
 
                     var currentVersion = Assembly.GetEntryAssembly().GetName().Version;
 
@@ -124,7 +123,7 @@ namespace EMM.Core.Update
 
         private MessageResult UpdateConfirmation()
         {
-            return messageBoxService.ShowMessageBox("There's a new version available. Do you want to update?", "Update", MessageButton.YesNo, MessageImage.Information);
+            return messageBoxService.ShowMessageBox($"There's a new version available ({updateInfo.Version.ToString(3)}). Do you want to update?\nChangelogs:\n{updateInfo.Changelog}", "Update", MessageButton.YesNo, MessageImage.Information);
         }
 
         private UpdateInfo TryToParseUpdateInfo(string updateInfoString)

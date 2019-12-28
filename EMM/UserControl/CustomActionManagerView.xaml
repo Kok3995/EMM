@@ -9,9 +9,17 @@
 
     <Grid>
         <Menu Background="Transparent">
-            <MenuItem Style="{StaticResource AddMenu}" Tag="{StaticResource ListButton}">
-                <MenuItem Header="Create Custom Action" Command="{Binding OpenCustomActionPopupCommand}"/>
-                <MenuItem Header="Custom Actions" ItemsSource="{Binding CustomActionList}" Style="{StaticResource CustomActionList}"/>
+            <MenuItem Style="{StaticResource AddMenu}" Tag="{StaticResource CustomButton}">
+                <MenuItem Header="Create Custom Action" Command="{Binding OpenCustomActionPopupCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource CustomAddButton}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Custom Actions" ItemsSource="{Binding CustomActionList}" Style="{StaticResource CustomActionList}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource CustomLoadButton}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Header="Reset Default" Command="{Binding ResetToDefaultCommand}" ToolTip="Reset Custom Action list to default"/>
             </MenuItem>

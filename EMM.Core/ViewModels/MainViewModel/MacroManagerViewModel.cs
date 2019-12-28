@@ -1,5 +1,6 @@
 ﻿using Data;
 using EMM.Core.Converter;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -34,6 +35,8 @@ namespace EMM.Core.ViewModels
         private IMessageBoxService messageBoxService;
         private ViewModelFactory viewModelFactory;
 
+        private MacroViewModel currentMacro;
+
         #endregion
 
         #region Public Properties
@@ -46,7 +49,15 @@ namespace EMM.Core.ViewModels
         /// <summary>
         /// Current Macro ViewModel ready to be edited....
         /// </summary>
-        public MacroViewModel CurrentMacro { get; set; }
+        public MacroViewModel CurrentMacro
+        {
+            get => this.currentMacro;
+            set
+            {
+                this.currentMacro = value;
+                this.CurrentMacroChanged?.Invoke(this, null);
+            }
+        }
 
         #endregion
 
@@ -76,7 +87,6 @@ namespace EMM.Core.ViewModels
                 var loadedMacro = this.LoadMacroViewModel();
                 if (loadedMacro == null)
                 {
-                    this.messageBoxService.ShowMessageBox("Cannot parse the file", "ERROR", MessageButton.OK, MessageImage.Error);
                     return;
                 }
                 
@@ -102,6 +112,8 @@ namespace EMM.Core.ViewModels
 
         #region Events
 
+        public event EventHandler CurrentMacroChanged;
+
         private void HookEventHandler()
         {
             //Handler file drop
@@ -116,6 +128,7 @@ namespace EMM.Core.ViewModels
                 var filePath = e.FilePaths[0];
 
                 var loadedMacro = this.dataIO.LoadMacroFileFromPath(filePath);
+
                 if (loadedMacro == null)
                 {
                     this.messageBoxService.ShowMessageBox("Cannot parse the file", "ERROR", MessageButton.OK, MessageImage.Error);
@@ -148,7 +161,6 @@ namespace EMM.Core.ViewModels
         public void SetCurrentMacro(MacroViewModel macro)
         {
             this.CurrentMacro = macro;
-            this.CurrentMacro.AcceptChanges();
         }
 
         /// <summary>
@@ -158,6 +170,21 @@ namespace EMM.Core.ViewModels
         public void SetCurrentMacro(string path)
         {
             this.CurrentMacro = this.LoadMacroViewModel(path);
+            this.CurrentMacro?.AcceptChanges();
+        }
+
+        public MacroViewModel GetCurrentMacro()
+        {
+            return this.CurrentMacro;
+        }
+
+        /// <summary>
+        /// Get the currently selected action, return null if no selection
+        /// </summary>
+        /// <returns></returns>
+        public IActionViewModel GetCurrentSelectedActionViewModel()
+        {
+            return (this.CurrentMacro?.SelectedItem as ActionGroupViewModel)?.SelectedItem;
         }
 
         /// <summary>
@@ -177,7 +204,11 @@ namespace EMM.Core.ViewModels
         /// <returns></returns>
         public MacroViewModel LoadMacroViewModel(string path)
         {
-            var macroTemplate = this.dataIO.LoadMacroFileFromPath(path).MacroTemplate;
+            var macroTemplate = this.dataIO.LoadMacroFileFromPath(path)?.MacroTemplate;
+
+            if (macroTemplate == null)
+                return null;
+
             var vm = viewModelFactory.NewMacroViewModel().PopulateProperties(macroTemplate);
             vm.MacroPath = path;
             return vm;

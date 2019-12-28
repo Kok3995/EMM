@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="26" d:DesignWidth="400">
     <StackPanel Orientation="Horizontal">
-        <TextBox Text="{Binding ActionDescription, UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="10 0" Padding="4"/>
+        <TextBox Text="{Binding ActionDescription, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 0" Padding="4"/>
         <TextBlock Text="Repeat: " FontWeight="DemiBold"/>
         <local:NumberUpDown NumbericTextBox="{Binding Repeat, UpdateSourceTrigger=PropertyChanged}" Width="50" Height="26"/>
     </StackPanel>

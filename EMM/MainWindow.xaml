@@ -7,18 +7,8 @@
         xmlns:core="clr-namespace:EMM.Core.ViewModels;assembly=EMM.Core"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Easy Macro Maker" Height="720" Width="600"
+        Title="{Binding TitleWithVersion, FallbackValue='Easy Macro Maker'}" Height="720" Width="600"
         Closing="Window_Closing" AllowDrop="True" Drop="Window_Drop">
-    <!--<StackPanel>
-        <Button Content="Save" Command="{Binding SaveCommand}"/>
-        <Button Content="Load" Command="{Binding LoadCommand}"/>
-        <Button Content="Save setting" Command="{Binding SaveSettingCommand}"/>
-        <Button Content="SaveActions" Command="{Binding SaveActionsCommand}"/>
-        <Button Content="LoadActions" Command="{Binding LoadActionsCommand}"/>
-        <Button Content="Test Cick" Command="{Binding TestClickCommand}"/>
-        <Button Content="Test Cick 2" Command="{Binding TestClickCommand2}"/>
-        <Button Content="Test swipe" Command="{Binding TestSwipeCommand}"/>
-    </StackPanel>-->
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type core:ClickViewModel}">
@@ -49,6 +39,14 @@
         <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding MacroManager.SaveCommand}"/>
         <KeyBinding Key="S" Modifiers="Ctrl + Shift" Command="{Binding MacroManager.SaveAsCommand}"/>
         <KeyBinding Key="F10" Command="{Binding TimerTool.OpenTimerToolCommand}"/>
+        <KeyBinding Key="F11" Command="{Binding ResolutionConverterTool.OpenResolutionConverterToolCommand}"/>
+        
+        <!-- Binding for new action -->
+        <KeyBinding Key="G" Modifiers="Alt" Command="{Binding MacroManager.CurrentMacro.AddCommand}" CommandParameter="Group"/>
+        <KeyBinding Key="C" Modifiers="Alt" Command="{Binding MacroManager.CurrentMacro.SelectedItem.AddCommand}" CommandParameter="Click"/>
+        <KeyBinding Key="S" Modifiers="Alt" Command="{Binding MacroManager.CurrentMacro.SelectedItem.AddCommand}" CommandParameter="Swipe"/>
+        <KeyBinding Key="W" Modifiers="Alt" Command="{Binding MacroManager.CurrentMacro.SelectedItem.AddCommand}" CommandParameter="Wait"/>
+        <KeyBinding Key="A" Modifiers="Alt" Command="{Binding MacroManager.CurrentMacro.SelectedItem.AddCommand}" CommandParameter="AE"/>
     </Window.InputBindings>
     
     <Grid>
@@ -66,19 +64,44 @@
         <!-- Menu: File -->
         <Menu Grid.Row="0">
             <MenuItem Header="_File" DataContext="{Binding MacroManager}">
-                <MenuItem Header="_New" Tag="{StaticResource NewButton}" InputGestureText="Ctrl + N" Command="{Binding NewCommand}"/>
-                <MenuItem Header="_Open" InputGestureText="Ctrl + O" Command="{Binding OpenCommand}"/>
-                <MenuItem Header="R_ecent" ItemsSource="{Binding RecentList}" />
+                <MenuItem Header="_New" Tag="{StaticResource NewButton}" InputGestureText="Ctrl + N" Command="{Binding NewCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource NewButton}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Open" InputGestureText="Ctrl + O" Command="{Binding OpenCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource OpenButton}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="R_ecent" ItemsSource="{Binding RecentList}" ToolTip="To be implemented...&#x0a;My disappointment is immeasurable, and my day is ruined."/>
                 <Separator/>
-                <MenuItem Header="_Save" InputGestureText="Ctrl + S" Command="{Binding SaveCommand}"/>
-                <MenuItem Header="S_ave As" InputGestureText="Ctrl + Shift + S" Command="{Binding SaveAsCommand}"/>
+                <MenuItem Header="_Save" InputGestureText="Ctrl + S" Command="{Binding SaveCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource SaveButton}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="S_ave As" InputGestureText="Ctrl + Shift + S" Command="{Binding SaveAsCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource SaveAsButton}" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator/>
-                <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ExitButton}" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem Header="Timer" InputGestureText="F10" Command="{Binding TimerTool.OpenTimerToolCommand}">
                     <MenuItem.Icon>
                         <Image Source="{StaticResource ClockButton}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Resolution Converter" InputGestureText="F11" Command="{Binding ResolutionConverterTool.OpenResolutionConverterToolCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ResolutionToolButton}"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -89,9 +112,33 @@
                 <MenuItem Header="Auto Check For Update" IsCheckable="True" IsChecked="{Binding IsAutoUpdateEnable}"/>
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Header="Check For Update" Command="{Binding AutoUpdater.CheckForUpdateCommand}"/>
+                <MenuItem Header="Check For Update" Command="{Binding AutoUpdater.CheckForUpdateCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource DownloadButton}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator/>
-                <MenuItem Header="About"/>
+                <MenuItem Header="How-to" Click="Howto_Click" >
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource BookButton}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Hotkeys" Click="Hotkeys_Click">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource KeyboardButton}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="About" Click="About_Click">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource AboutButton}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Donate!" Click="Donate_Click">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource PaypalButton}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
 
@@ -122,7 +169,9 @@
             <!-- Export Settings -->
             <local:SettingView Grid.Row="2" DataContext="{Binding CurrentSettings}" Margin="20 0 20 0"/>
 
-            <Button Grid.Row="3" Content="CONVERT" Command="{Binding ScriptGenerator.ConvertCommand}" 
+            <!--<Button Grid.Row="3" Content="CONVERT" Command="{Binding ScriptGenerator.ConvertCommand}" 
+                    Width="64" Height="30" HorizontalAlignment="Right" Margin="0 -30 30 2"/>-->
+            <Button Grid.Row="3" Content="CONVERT" Command="{Binding AutoLocation.ToggleCaptureLocationCommand}" 
                     Width="64" Height="30" HorizontalAlignment="Right" Margin="0 -30 30 2"/>
         </Grid>
         

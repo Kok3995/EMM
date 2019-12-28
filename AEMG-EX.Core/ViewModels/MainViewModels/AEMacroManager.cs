@@ -184,6 +184,7 @@ namespace AEMG_EX.Core
 
         private void DropMacroHandler(string[] filepaths)
         {
+            int error = 0;
             if (filepaths == null || filepaths.Length < 1)
                 return;
 
@@ -195,9 +196,15 @@ namespace AEMG_EX.Core
 
                 var macro = this.scanner.ScanSingle(filepath);
 
+                if (macro == null)
+                    error++;
+
                 if (macro != null)
                     this.CopyAndAddMacroToList(macro);
             }
+
+            if (error > 0)
+                this.messageBoxService.ShowMessageBox(error + " file(s) can not be parsed", "Error", MessageButton.OK, MessageImage.Error);
         }
 
         #endregion

@@ -18,6 +18,7 @@ namespace AEMG_EX.Core
                 { AEAction.BossBattle, typeof(BossBattleViewModel) },
                 { AEAction.FoodAD, typeof(FoodViewModel) },
                 { AEAction.ReFoodAD, typeof(ReFoodViewModel) },
+                { AEAction.Wait, typeof(WaitViewModel) },
             };
 
             var autoMapper = new SimpleAutoMapper();

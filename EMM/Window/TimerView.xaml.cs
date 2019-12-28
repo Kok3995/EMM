@@ -16,11 +16,22 @@ namespace EMM
 
             Messenger.Register((sender, e) =>
             {
-                if (e.TimerMessage != TimerMessage.CloseTimer)
+                if (e.ToolMessage != ToolMessage.CloseTimer)
                     return;
 
                 this.Close();
             });
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (this.DataContext is TimerToolViewModel viewModel)
+            {
+                if (viewModel.IsTimerStart)
+                    viewModel.UnHookMouseCommand.Execute(null);
+            }
+
+            base.OnClosing(e);
         }
     }
 }

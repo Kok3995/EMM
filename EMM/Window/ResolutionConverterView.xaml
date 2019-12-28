@@ -1,0 +1,64 @@
+﻿<Window x:Class="EMM.ResolutionConverterView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EMM"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Title="Resolution Converter" Height="180" Width="400">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Margin="0 0 0 10">
+            See <Hyperlink NavigateUri="https://www.kok-emm.com/How-to#Resolution-Converter" RequestNavigate="Hyperlink_RequestNavigate">How-to</Hyperlink> for more information
+        </TextBlock>       
+        
+        <!-- Current resolution -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 0 0 10" VerticalAlignment="Center">
+            <TextBlock Text="Current Resolution: " FontWeight="DemiBold" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding CurrentResolution, UpdateSourceTrigger=PropertyChanged, FallbackValue='No Macro Open'}" VerticalAlignment="Center" Foreground="#c0392b"/>
+        </StackPanel>
+        <!-- Convert to resolution -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" IsEnabled="{Binding IsResolutionModify}">
+            <TextBlock Text="Convert To: " FontWeight="DemiBold" VerticalAlignment="Center"/>
+            <local:NumbericTextBox Text="{Binding ConvertX, UpdateSourceTrigger=PropertyChanged}" Width="50" Padding="2" VerticalAlignment="Center" Foreground="#2ecc71" TextAlignment="Center"/>
+            <TextBlock Text="X" VerticalAlignment="Center"/>
+            <local:NumbericTextBox Text="{Binding ConvertY, UpdateSourceTrigger=PropertyChanged}" Width="50" Padding="2" VerticalAlignment="Center" Foreground="#2ecc71" TextAlignment="Center"/>
+            <!-- Scale X -->
+            <StackPanel Orientation="Horizontal" MaxWidth="100">
+                <TextBlock Text="ScaleX: " FontWeight="DemiBold" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                <TextBlock Text="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged, FallbackValue='0.00'}" VerticalAlignment="Center">
+                    <TextBlock.Foreground>
+                        <MultiBinding Converter="{local:ScaleValueToForegroundConverter}">
+                            <Binding Path="ScaleX"/>
+                            <Binding Path="ScaleY"/>
+                        </MultiBinding>
+                    </TextBlock.Foreground>
+                </TextBlock>
+            </StackPanel>
+            <!-- Scale Y -->
+            <StackPanel Orientation="Horizontal" MaxWidth="100">
+                <TextBlock Text="ScaleY: " FontWeight="DemiBold" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                <TextBlock Text="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged, FallbackValue='0.00'}" VerticalAlignment="Center">
+                    <TextBlock.Foreground>
+                        <MultiBinding Converter="{local:ScaleValueToForegroundConverter}">
+                            <Binding Path="ScaleX"/>
+                            <Binding Path="ScaleY"/>
+                        </MultiBinding>
+                    </TextBlock.Foreground>
+                </TextBlock>
+            </StackPanel>
+        </StackPanel>
+        <!-- Buttons -->
+        <DockPanel Grid.Row="3" LastChildFill="False" Margin="80 10" Height="30">
+            <Button DockPanel.Dock="Right" Content="Convert" Width="80" Margin="40 0 0 0" Command="{Binding ConvertResolutionCommand}"/>
+            <Button DockPanel.Dock="Left" Content="Undo Convert" Width="80" Command="{Binding UndoConvertResolutionCommand}"/>
+        </DockPanel>
+    </Grid>
+</Window>

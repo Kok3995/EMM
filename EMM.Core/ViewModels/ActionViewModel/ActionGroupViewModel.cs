@@ -69,7 +69,7 @@ namespace EMM.Core.ViewModels
         public IActionViewModel MakeCopy()
         {
             var newGroup = (ActionGroupViewModel)viewModelFactory.NewActionViewModel(this.BasicAction);
-            this.autoMapper.SimpleAutoMap<ActionGroupViewModel, ActionGroupViewModel>(this, newGroup, new List<Type> { typeof(ICommand), typeof(ObservableCollection<IActionViewModel>) });
+            this.autoMapper.SimpleAutoMap<ActionGroupViewModel, ActionGroupViewModel>(this, newGroup, new List<Type> { typeof(ICommand), typeof(ObservableCollection<IActionViewModel>), typeof(IActionViewModel) });
             newGroup.ViewModelList = new ObservableCollection<IActionViewModel>(this.ViewModelList.Select(i => i.MakeCopy()));
             return newGroup;
         }
@@ -79,6 +79,14 @@ namespace EMM.Core.ViewModels
             this.autoMapper.SimpleAutoMap<ActionGroup, ActionGroupViewModel>(actionGroup as ActionGroup, this);
             ViewModelList = this.LoadActionsViewModel(actionGroup.ActionList);
             return this;
+        }
+        public IActionViewModel ChangeResolution(double scaleX, double scaleY, MidpointRounding roundMode = MidpointRounding.ToEven)
+        {
+            var newActionGroupVM = this.MakeCopy() as ActionGroupViewModel;
+
+            newActionGroupVM.ViewModelList = new ObservableCollection<IActionViewModel>(this.ViewModelList.Select(i => i.ChangeResolution(scaleX, scaleY, roundMode)));
+
+            return newActionGroupVM;
         }
 
         #endregion

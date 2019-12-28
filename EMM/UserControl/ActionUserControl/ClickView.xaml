@@ -21,6 +21,12 @@
             <TextBlock Text="●  "/>
             <TextBlock Text="Location: " FontWeight="DemiBold"/>
             <local:PointInput X="{Binding PointWrapper.X}" Y="{Binding PointWrapper.Y}"/>
+            <Button Margin="10 0 0 0" Background="Transparent" BorderThickness="0" Style="{StaticResource MinimalButton}"
+                    Command="{Binding DataContext.AutoLocation.ToggleCaptureLocationCommand, RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"
+                    ToolTip="Auto Capture Location&#x0a;Green = ON, Red = OFF&#x0a;Auto capture the location of the target window with right click&#x0a;The FIRST right click will also be the click that select the window&#x0a;Toggle this if the target window is wrong"
+                    ToolTipService.ShowDuration="10000">
+                <Path Style="{StaticResource CrossHairPath}" VerticalAlignment="Center"/>
+            </Button>
         </StackPanel>
         <StackPanel Margin="5" Orientation="Horizontal">
             <TextBlock Text="●  "/>

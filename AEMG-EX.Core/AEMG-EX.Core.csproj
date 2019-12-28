@@ -75,7 +75,9 @@
     <Compile Include="Helpers\StaticVariables.cs" />
     <Compile Include="Settings\AESetting.cs" />
     <Compile Include="Settings\AESettingViewModel.cs" />
+    <Compile Include="ViewModels\AEActionViewModel\EXPTurnViewModel.cs" />
     <Compile Include="ViewModels\AEActionViewModel\BossTurnViewModel.cs" />
+    <Compile Include="ViewModels\AEActionViewModel\WaitViewModel.cs" />
     <Compile Include="ViewModels\AEActionViewModel\ReFoodViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseBattle.cs" />
     <Compile Include="Models\Character.cs" />

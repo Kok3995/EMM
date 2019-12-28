@@ -1,0 +1,46 @@
+﻿<Window x:Class="EMM.AboutView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EMM"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="About" Height="300" Width="500">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <!-- Title -->
+            <RowDefinition Height="auto"/>
+            
+            <!-- Content -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Title -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Image Source="{StaticResource EMMLogo}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Official Site:" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock HorizontalAlignment="Center">
+                <Hyperlink NavigateUri="https://www.kok-emm.com/" RequestNavigate="Site_RequestNavigate">www.kok-emm.com</Hyperlink>
+            </TextBlock>
+            <TextBlock TextWrapping="Wrap">EMM (Easy Macro Maker) is a free, open-source software developed by me. 
+                It can be used to make macroes for various android emulator. This is just a personal project of mine. 
+                The idea is to make it so that managing every action in macroes should be easy with an intuitive interface so anyone can do it and
+            provide a place for user to share their creation hence the website. If you like my work, consider donate to support me.                     
+            </TextBlock>
+            <TextBlock/>
+            <TextBlock HorizontalAlignment="Center">
+                <Hyperlink NavigateUri="https://www.paypal.me/kok3995" RequestNavigate="Site_RequestNavigate">Donate!</Hyperlink>
+            </TextBlock>
+            <DockPanel LastChildFill="False">
+                <TextBlock Text="{Binding CurrentVersion, FallbackValue='Current Version: 1.0'}" FontWeight="DemiBold" DockPanel.Dock="Right"/>
+                <TextBlock>
+                    <Hyperlink NavigateUri="https://fontawesome.com/license" RequestNavigate="Site_RequestNavigate">Font Awesome License</Hyperlink>
+                </TextBlock>
+            </DockPanel>
+        </StackPanel>
+    </Grid>
+</Window>

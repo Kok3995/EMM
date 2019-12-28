@@ -21,7 +21,7 @@ namespace EMM.Core
 
         private IMessageBoxService messageBoxService;
 
-        public bool ApplyScriptTo(string scriptName, string path, StringBuilder script, bool prompt = true)
+        public bool? ApplyScriptTo(string scriptName, string path, StringBuilder script, bool prompt = true)
         {
             try
             {
@@ -51,6 +51,8 @@ namespace EMM.Core
                     {
                         File.WriteAllText(Path.Combine(path, key), script.ToString());
                     }
+                    else
+                        return null; //user press No return null
                 }
 
                 File.WriteAllText(recordsFileFullPath, JsonConvert.SerializeObject(recordsFileContent, Formatting.Indented));
@@ -58,7 +60,7 @@ namespace EMM.Core
             }
             catch (Exception ex)
             {
-                messageBoxService.ShowMessageBox(ex.Message + "\n" + "Something wrong with the records file. Maybe delete it then try again");
+                messageBoxService.ShowMessageBox(ex.Message + "\n" + "Something wrong. Cannot convert. Maybe try to delete the record file then try again");
                 return false;
             }
         }

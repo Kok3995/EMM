@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using EMM.Core.ViewModels;
 using EMM.Core;
+using System.Diagnostics;
 
 namespace EMM
 {
@@ -16,7 +17,7 @@ namespace EMM
 
             Messenger.Register((sender, e) =>
             {
-                if (e.TimerMessage != TimerMessage.OpenTimer)
+                if (e.ToolMessage != ToolMessage.OpenTimer)
                     return;
 
                 var timerView = new TimerView
@@ -27,6 +28,18 @@ namespace EMM
                 timerView.DataContext = (this.DataContext as MainWindowViewModel).TimerTool;
 
                 timerView.Show();
+            });
+
+            Messenger.Register((sender, e) =>
+            {
+                if (e.ToolMessage != ToolMessage.OpenConverter)
+                    return;
+
+                var resolutionConverterView = new ResolutionConverterView();
+
+                resolutionConverterView.DataContext = (this.DataContext as MainWindowViewModel).ResolutionConverterTool;
+
+                resolutionConverterView.Show();
             });
         }
 
@@ -51,6 +64,10 @@ namespace EMM
                 case MessageBoxResult.No:
                     break;
             }
+
+            //unhook autolocation handler
+            if (vm.AutoLocation.IsCaptureStarted)
+                vm.AutoLocation.ToggleCaptureLocationCommand.Execute(null);
         }
 
         private void Window_Drop(object sender, DragEventArgs e)
@@ -59,6 +76,30 @@ namespace EMM
             {
                 Messenger.Send(this, new DropEventArgs((string[])e.Data.GetData(DataFormats.FileDrop)));
             }
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            (new AboutView()).ShowDialog();
+            e.Handled = true;
+        }
+
+        private void Donate_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://www.paypal.me/kok3995"));
+            e.Handled = true;
+        }
+
+        private void Howto_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://www.kok-emm.com/How-to"));
+            e.Handled = true;
+        }
+
+        private void Hotkeys_Click(object sender, RoutedEventArgs e)
+        {
+            (new HotkeysView()).Show();
+            e.Handled = true;
         }
     }
 }

@@ -50,6 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -69,9 +70,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ControlExtension\TextBoxAttachProperties.cs" />
+    <Compile Include="Converter\AEActionToStringConverter.cs" />
+    <Compile Include="Converter\BooleanToRedGreenConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\SbyteToSpeedConverter.cs" />
+    <Compile Include="Converter\ScaleValueToForegroundConverter.cs" />
     <Compile Include="Converter\TextLengthToBackgroundColorConverter.cs" />
+    <Compile Include="CustomControl\ScrollIntoViewListBox.cs" />
     <Compile Include="UserControl\ActionDescriptionRepeatView.xaml.cs">
       <DependentUpon>ActionDescriptionRepeatView.xaml</DependentUpon>
     </Compile>
@@ -113,6 +118,15 @@
     <Compile Include="UserControl\PointInput.xaml.cs">
       <DependentUpon>PointInput.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Window\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\HotkeysView.xaml.cs">
+      <DependentUpon>HotkeysView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\ResolutionConverterView.xaml.cs">
+      <DependentUpon>ResolutionConverterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Window\TimerView.xaml.cs">
       <DependentUpon>TimerView.xaml</DependentUpon>
     </Compile>
@@ -145,6 +159,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Button.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Path.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -212,6 +230,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Window\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\HotkeysView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\ResolutionConverterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Window\TimerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -255,42 +285,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Toolbar\Copy.bmp" />
-    <Resource Include="Images\Toolbar\Cut.bmp" />
-    <Resource Include="Images\Toolbar\Delete.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Toolbar\Add.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Toolbar\Down.bmp" />
-    <Resource Include="Images\Toolbar\Up.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Toolbar\Paste.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\MenuItemIcon\Save.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\MenuItemIcon\About.bmp" />
     <Resource Include="Images\MenuItemIcon\Application.bmp" />
-    <Resource Include="Images\MenuItemIcon\Download.bmp" />
-    <Resource Include="Images\MenuItemIcon\Exit.bmp" />
-    <Resource Include="Images\MenuItemIcon\New document.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\MenuItemIcon\Open.bmp" />
-    <Resource Include="Images\MenuItemIcon\SaveAs.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\MenuItemIcon\Modify.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\MenuItemIcon\Erase.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\MenuItemIcon\Clock.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\MiscIcon\Play.png" />
@@ -309,6 +310,80 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="EMM.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MenuItemIcon\New document.png" />
+    <Resource Include="Images\MenuItemIcon\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MenuItemIcon\Open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MenuItemIcon\SaveAs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MenuItemIcon\Exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MenuItemIcon\About.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MenuItemIcon\Download.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\Add.png" />
+    <Resource Include="Images\Toolbar\Copy.png" />
+    <Resource Include="Images\Toolbar\Cut.png" />
+    <Resource Include="Images\Toolbar\Delete.png" />
+    <Resource Include="Images\Toolbar\Down.png" />
+    <Resource Include="Images\Toolbar\Paste.png" />
+    <Resource Include="Images\Toolbar\Up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\Click.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\Swipe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\AE.png" />
+    <Resource Include="Images\Toolbar\Wait.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\Insert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\Test.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\Group.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\Custom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\CustomAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\CustomLoad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MiscIcon\EMMLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MenuItemIcon\Paypal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MenuItemIcon\ResolutionTool.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MenuItemIcon\Clock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MenuItemIcon\Book.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MenuItemIcon\Keyboard.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

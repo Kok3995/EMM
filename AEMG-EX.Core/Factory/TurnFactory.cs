@@ -10,7 +10,7 @@ namespace AEMG_EX.Core
         {
             { AEAction.TrashMobBattle,  typeof(TurnViewModel) },
             { AEAction.BossBattle,  typeof(BossTurnViewModel) },
-            { AEAction.EXPBattle,  typeof(TurnViewModel) },
+            { AEAction.EXPBattle,  typeof(EXPTurnViewModel) },
         };
 
         public TurnViewModel NewTurn(AEAction aEAction)
