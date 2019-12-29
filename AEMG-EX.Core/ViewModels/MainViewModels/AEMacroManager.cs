@@ -81,10 +81,15 @@ namespace AEMG_EX.Core
             {
                 try
                 {
-                    var loadeds = this.scanner.ScanUserSelected().ToList();
+                    var error = 0;
+
+                    var loadeds = this.scanner.ScanUserSelected((e) => { error++; }).ToList();
 
                     if (loadeds == null || loadeds.Count == 0)
                         return;
+
+                    if (error > 0)
+                        this.messageBoxService.ShowMessageBox(error + " error(s) has occured. Some macro might not be completed", "Error", MessageButton.OK, MessageImage.Error);
 
                     foreach (var loaded in loadeds)
                         CopyAndAddMacroToList(loaded);
@@ -204,7 +209,7 @@ namespace AEMG_EX.Core
             }
 
             if (error > 0)
-                this.messageBoxService.ShowMessageBox(error + " file(s) can not be parsed", "Error", MessageButton.OK, MessageImage.Error);
+                this.messageBoxService.ShowMessageBox(error + " error(s) has occured. Some macro might not be completed", "Error", MessageButton.OK, MessageImage.Error);
         }
 
         #endregion
@@ -281,6 +286,9 @@ namespace AEMG_EX.Core
 
         private void CopyAndAddMacroToList(LoadedTemplate macro)
         {
+            if (macro == null)
+                return;
+
             //If the macro has not already in the folder then copy and add to the list
             if (!AEMGStatic.MACRO_FOLDER.Equals(Path.GetDirectoryName(macro.MacroFullPath), StringComparison.OrdinalIgnoreCase))
             {

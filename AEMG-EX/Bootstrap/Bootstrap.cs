@@ -31,10 +31,10 @@ namespace AEMG_EX
             var scriptApply = new ScriptApplyFactory(messageBox, scriptApplyDict);
             var scanner = new MacroScanner(dataIO, aeActionFactory);
             var macroManager = new AEMacroManager(scanner, messageBox);
-            var actionList = new AEActionListViewModel(macroManager);
             var aESettingVM = new AESettingViewModel(new AESetting());
             var aeScriptGenerator = new AEScriptGenerator(scriptApply, aESettingVM, messageBox, autoMapper);
             var autoUpdater = new AutoUpdater(messageBox);
+            var actionList = new AEActionListViewModel(macroManager);
 
             return new AEMG
             {

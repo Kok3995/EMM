@@ -63,9 +63,9 @@ namespace AEMG_EX.Core
             return dataIO.LoadMacroFileFromPath(path);
         }
 
-        public IEnumerable<LoadedTemplate> ScanUserSelected()
+        public IEnumerable<LoadedTemplate> ScanUserSelected(Action<Newtonsoft.Json.Serialization.ErrorEventArgs> errorCallback = null)
         {
-            return dataIO.LoadFromFileMultiple(AEMGStatic.MACRO_FOLDER);
+            return dataIO.LoadFromFileMultiple(AEMGStatic.MACRO_FOLDER, errorCallback);
         }
     }
 }

@@ -4,6 +4,7 @@ using EMM.Core.Converter;
 using EMM.Core.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace AEMG_EX.Core
 {
@@ -31,7 +32,7 @@ namespace AEMG_EX.Core
         /// <param name="macro">The macro template</param>
         /// <param name="aEActionList">AEAction list from user choice</param>
         /// <returns></returns>
-        public bool? GenerateScript(MacroTemplate macro, IList<IAEActionViewModel> aEActionList, string customName = null)
+        public bool? GenerateScript(MacroTemplate macro, IList<IAEActionViewModel> aEActionList)
         { 
             var timer = 200;
 
@@ -42,8 +43,33 @@ namespace AEMG_EX.Core
 
             var script = macroTemplate.GenerateScript(ref timer);
 
-            return scriptApplyFactory.GetScriptApplier(setting.SelectedEmulator).ApplyScriptTo(string.IsNullOrEmpty(customName) ? macroTemplate.MacroName : customName, setting.SelectedPath, script);
+            return scriptApplyFactory.GetScriptApplier(setting.SelectedEmulator).ApplyScriptTo(string.IsNullOrEmpty(setting.CustomName) ? macroTemplate.MacroName : setting.CustomName, setting.SelectedPath, script);
 
+        }
+
+        /// <summary>
+        /// Generate script for the selected AEaction only
+        /// </summary>
+        /// <param name="macro">The macro template</param>
+        /// <param name="aEActionList">the aeaction to generate script</param>
+        /// <returns></returns>
+        public bool? GenerateScript(MacroTemplate macro, IAEActionViewModel aEAction)
+        {
+            var timer = 200;
+
+            if (!ApplyConvertSetting(macro))
+                return false;
+
+            var actionList = aEAction.UserChoicesToActionList();
+
+            var script = new StringBuilder();
+
+            foreach (var action in actionList)
+            {
+                script.Append(action.GenerateAction(ref timer));
+            }
+
+            return scriptApplyFactory.GetScriptApplier(setting.SelectedEmulator).ApplyScriptTo(string.IsNullOrEmpty(setting.CustomName) ? macro.MacroName + "_Test": setting.CustomName + "_Test", setting.SelectedPath, script, false);
         }
 
         private MacroTemplate ConstructCompleteMacro(MacroTemplate template, IList<IAEActionViewModel> aEActionList)
@@ -53,9 +79,28 @@ namespace AEMG_EX.Core
 
             copiedMacro.ActionGroupList = copiedMacro.ActionGroupList.Select(ag => (IAction)new ActionGroup { Repeat = (ag as ActionGroup).Repeat, ActionList = new List<IAction>((ag as ActionGroup).ActionList) } ).ToList();
 
+            var offset = 0;
+            var lastActionGroupIndex = -1;
+
             foreach (var action in aEActionList)
             {
-                (copiedMacro.ActionGroupList[action.ActionGroupIndex] as ActionGroup).ActionList.InsertRange(action.ActionIndex, action.UserChoicesToActionList());
+                var actionList = action.UserChoicesToActionList();
+                var actionIndexToInsert = action.ActionIndex;
+
+                //Fix index to insert if placeholder in the same actiongroup
+                if (action.ActionGroupIndex == lastActionGroupIndex)
+                {
+                    actionIndexToInsert += offset;
+                    offset += actionList.Count;
+                }
+                else
+                {
+                    offset = actionList.Count;
+                }
+
+                (copiedMacro.ActionGroupList[action.ActionGroupIndex] as ActionGroup).ActionList.InsertRange(actionIndexToInsert, actionList);
+
+                lastActionGroupIndex = action.ActionGroupIndex;
             }
 
             return copiedMacro;

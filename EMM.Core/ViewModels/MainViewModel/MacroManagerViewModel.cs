@@ -36,6 +36,7 @@ namespace EMM.Core.ViewModels
         private ViewModelFactory viewModelFactory;
 
         private MacroViewModel currentMacro;
+        private int errorCount;
 
         #endregion
 
@@ -85,11 +86,12 @@ namespace EMM.Core.ViewModels
                     return;
 
                 var loadedMacro = this.LoadMacroViewModel();
+
                 if (loadedMacro == null)
                 {
                     return;
                 }
-                
+
                 this.CurrentMacro = loadedMacro;
             });
 
@@ -107,7 +109,7 @@ namespace EMM.Core.ViewModels
                 CurrentMacro.AcceptChanges();
             }, p => CurrentMacro != null);
         }
-
+       
         #endregion
 
         #region Events
@@ -127,17 +129,7 @@ namespace EMM.Core.ViewModels
 
                 var filePath = e.FilePaths[0];
 
-                var loadedMacro = this.dataIO.LoadMacroFileFromPath(filePath);
-
-                if (loadedMacro == null)
-                {
-                    this.messageBoxService.ShowMessageBox("Cannot parse the file", "ERROR", MessageButton.OK, MessageImage.Error);
-                    return;
-                }
-
-                this.CurrentMacro = this.LoadMacroViewModel(loadedMacro.MacroTemplate);
-                this.CurrentMacro.MacroPath = loadedMacro.MacroFullPath;
-                this.CurrentMacro.AcceptChanges();
+                this.SetCurrentMacro(filePath);
             });
 
             //SaveMacroBeforeExit
@@ -169,6 +161,10 @@ namespace EMM.Core.ViewModels
         /// <param name="macro"></param>
         public void SetCurrentMacro(string path)
         {
+            var loadedMacro = this.LoadMacroViewModel(path);
+            if (loadedMacro == null)
+                return;
+
             this.CurrentMacro = this.LoadMacroViewModel(path);
             this.CurrentMacro?.AcceptChanges();
         }
@@ -204,12 +200,17 @@ namespace EMM.Core.ViewModels
         /// <returns></returns>
         public MacroViewModel LoadMacroViewModel(string path)
         {
-            var macroTemplate = this.dataIO.LoadMacroFileFromPath(path)?.MacroTemplate;
+            this.errorCount = 0;
+            var loadedMacro = this.dataIO.LoadMacroFileFromPath(path, ErrorCallBack);
+            this.CheckError();
 
-            if (macroTemplate == null)
+            if (loadedMacro == null)
+            {
+                this.messageBoxService.ShowMessageBox("Cannot parse the file", "ERROR", MessageButton.OK, MessageImage.Error);
                 return null;
+            }
 
-            var vm = viewModelFactory.NewMacroViewModel().PopulateProperties(macroTemplate);
+            var vm = viewModelFactory.NewMacroViewModel().PopulateProperties(loadedMacro.MacroTemplate);
             vm.MacroPath = path;
             return vm;
         }
@@ -220,12 +221,25 @@ namespace EMM.Core.ViewModels
         /// <returns></returns>
         public MacroViewModel LoadMacroViewModel()
         {
-            var loadedMacro = this.dataIO.LoadFromFile();
-            if (loadedMacro == null)
+            this.errorCount = 0;
+            var loadedMacro = this.dataIO.LoadFromFile(null, ErrorCallBack);
+            this.CheckError();
+
+            if (loadedMacro == null && errorCount == 0) //User press cancel
                 return null;
+
+            if (loadedMacro == null)
+            {
+                this.messageBoxService.ShowMessageBox("Cannot parse the file", "ERROR", MessageButton.OK, MessageImage.Error);
+                return null;
+            }
+
             var macroViewModel = this.LoadMacroViewModel(loadedMacro.MacroTemplate);
+
             macroViewModel.MacroPath = loadedMacro.MacroFullPath;
+
             macroViewModel.AcceptChanges();
+
             return macroViewModel;
         }
 
@@ -282,6 +296,20 @@ namespace EMM.Core.ViewModels
 
             return false;
         }
+
+        private void ErrorCallBack(Newtonsoft.Json.Serialization.ErrorEventArgs e)
+        {
+            this.errorCount++;
+        }
+        private void CheckError()
+        {
+            if (errorCount > 0)
+            {
+                this.messageBoxService.ShowMessageBox(this.errorCount + " error(s) occur while trying to parse the file. The parsed macro might not be completed", "ERROR", MessageButton.OK, MessageImage.Error);
+                return;
+            }
+        }
+
 
         #endregion
     }

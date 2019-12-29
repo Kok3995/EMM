@@ -33,7 +33,7 @@
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <TextBlock Text="Loop " VerticalAlignment="Center" FontWeight="Bold"/>
                 <local:NumbericTextBox Grid.Column="0" Text="{Binding Loop, UpdateSourceTrigger=PropertyChanged}" Width="40" VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="2.5" Margin="0 1 0 0"
-                                       ToolTip="The number of times to repeat this battle setup&#x0a;Useful when doing EXP run where each battle is the same"/>
+                                       ToolTip="The number of times to repeat this battle setup&#x0a;Useful when doing EXP run where every battles is the same"/>
             </StackPanel>
 
             <!-- Exit Time -->

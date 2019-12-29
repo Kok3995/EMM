@@ -12,16 +12,20 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="Available Options:" FontWeight="Black"/>
-        <ListBox Grid.Row="1" ItemsSource="{Binding AEActionList}" Style="{StaticResource AEActionListBox}"
+        <ListBox Grid.Row="1" ItemsSource="{Binding AEActionList}" Style="{StaticResource AEActionListBox}" 
+                 Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type local:AEMG}}}"
                  SelectedItem="{Binding SelectedAEAction}">
             <ListBox.InputBindings>
                 <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}"/>
                 <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding ApplyCommand}"/>
+                <KeyBinding Key="F5" Command="{Binding Tag.TestSelectedCommand}"/>
             </ListBox.InputBindings>
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Copy Setup" InputGestureText="Ctrl + C" Command="{Binding CopyCommand}"/>
                     <MenuItem Header="Apply Setup" InputGestureText="Ctrl + V" Command="{Binding ApplyCommand}"/>
+                    <Separator/>
+                    <MenuItem Header="Test Selected" InputGestureText="F5" Command="{Binding PlacementTarget.Tag.TestSelectedCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>

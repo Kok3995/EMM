@@ -89,8 +89,8 @@ namespace AEMG_EX.Core
             {
                 ActionDescription = "Move Right A Little",
                 PointList = new List<SwipePoint> {
-                new SwipePoint { Point = new Point(900,420), SwipeSpeed = 20 } , new SwipePoint { Point = new Point(1000,420), HoldTime = 100, SwipeSpeed = 20 } },
-                WaitBetweenAction = 100
+                new SwipePoint { Point = new Point(900,420), SwipeSpeed = 10 } , new SwipePoint { Point = new Point(1000,420), HoldTime = 100, SwipeSpeed = 10 } },
+                WaitBetweenAction = 200
             });
             defaultAction.Dict[Action.ReFoodAD].AddRange(this.GenerateSeriesOfClickBetweenPoint(new Point(1000, 70), new Point(450, 70), 50, "Find Tree"));
             defaultAction.Dict[Action.ReFoodAD].Add(new Click { ActionDescription = "Click Yes", ClickPoint = new Point(780, 400), WaitBetweenAction = 1000, Repeat = 10 });
@@ -101,16 +101,16 @@ namespace AEMG_EX.Core
             {
                 ActionDescription = "Move Left",
                 PointList = new List<SwipePoint> {
-                new SwipePoint { Point = new Point(900,420), SwipeSpeed = 20 } , new SwipePoint { Point = new Point(800,420), HoldTime = 2000, SwipeSpeed = 20 } },
-                WaitBetweenAction = 100
+                new SwipePoint { Point = new Point(900,420), SwipeSpeed = 10 } , new SwipePoint { Point = new Point(700,420), HoldTime = 2000, SwipeSpeed = 10 } },
+                WaitBetweenAction = 200
             });
             //Run right (for exp encounter)
             defaultAction.Dict[Action.RunRight].Add(new Swipe
             {
                 ActionDescription = "Move Right",
                 PointList = new List<SwipePoint> {
-                new SwipePoint { Point = new Point(900,420), SwipeSpeed = 20 } , new SwipePoint { Point = new Point(1000,420), HoldTime = 2000, SwipeSpeed = 20 } },
-                WaitBetweenAction = 100
+                new SwipePoint { Point = new Point(900,420), SwipeSpeed = 10 } , new SwipePoint { Point = new Point(1100,420), HoldTime = 2000, SwipeSpeed = 10 } },
+                WaitBetweenAction = 200
             });
 
             File.WriteAllText(filepath, JsonConvert.SerializeObject(defaultAction));

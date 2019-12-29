@@ -20,7 +20,7 @@ namespace Data
         /// OpenFileDialog to Load macro .emm file
         /// </summary>
         /// <returns>Return null if the user press cancel or close the dialog</returns>
-        public LoadedTemplate LoadFromFile(string initialDirectory = null)
+        public LoadedTemplate LoadFromFile(string initialDirectory = null, Action<Newtonsoft.Json.Serialization.ErrorEventArgs> errorCallback = null)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -39,25 +39,14 @@ namespace Data
             //set last path
             this.lastPath = Path.GetDirectoryName(openFileDialog.FileName);
 
-            string macroString = File.ReadAllText(openFileDialog.FileName);
-
-            var setting = new JsonSerializerSettings();
-            setting.Converters.Add(new CustomJsonConverter());
-            setting.Error = (sender, e) =>
-            {
-                e.ErrorContext.Handled = true;
-            };
-
-            var macro = JsonConvert.DeserializeObject<MacroTemplate>(macroString, setting);
-            
-            return (macro != null) ? new LoadedTemplate { MacroTemplate = macro, MacroFullPath = openFileDialog.FileName } : null;
+            return this.LoadMacroFileFromPath(openFileDialog.FileName, errorCallback);            
         }
 
         /// <summary>
         /// OpenFileDialog to Load multiple macro .emm file
         /// </summary>
         /// <returns>Return null if the user press cancel or close the dialog</returns>
-        public IEnumerable<LoadedTemplate> LoadFromFileMultiple(string initialDirectory = null)
+        public IEnumerable<LoadedTemplate> LoadFromFileMultiple(string initialDirectory = null, Action<Newtonsoft.Json.Serialization.ErrorEventArgs> errorCallback = null)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -78,11 +67,8 @@ namespace Data
             this.lastPath = Path.GetDirectoryName(openFileDialog.FileName);
 
             foreach (var filename in openFileDialog.FileNames)
-            {
-                string macroString = File.ReadAllText(filename);
-
-                //TO DO: Add check for invalid emm
-                yield return new LoadedTemplate { MacroTemplate = JsonConvert.DeserializeObject<MacroTemplate>(macroString, new CustomJsonConverter()), MacroFullPath = filename };
+            { 
+                yield return LoadMacroFileFromPath(filename, errorCallback);
             }
         }
 
@@ -92,7 +78,7 @@ namespace Data
         /// <param name="path"></param>
         /// <returns>return null if can not parse the file</returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public LoadedTemplate LoadMacroFileFromPath(string path)
+        public LoadedTemplate LoadMacroFileFromPath(string path, Action<Newtonsoft.Json.Serialization.ErrorEventArgs> errorCallback = null)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("The path can not be null");
@@ -102,7 +88,9 @@ namespace Data
             var setting = new JsonSerializerSettings();
             setting.Converters.Add(new CustomJsonConverter());
             setting.Error = (sender, e) =>
-            {            
+            {
+                errorCallback?.Invoke(e);
+
                 e.ErrorContext.Handled = true;
             };
 

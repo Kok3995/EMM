@@ -14,6 +14,6 @@ namespace AEMG_EX.Core
 
         }
 
-        public override BitmapImage ScreenIMG => (IsAF == false) ? AEMGStatic.BattleScreenBoss : AEMGStatic.AFScreen;
+        public override BitmapImage ScreenIMG => (IsAF == false) ? AEMGStatic.BattleScreenEXP : AEMGStatic.AFScreen;
     }
 }

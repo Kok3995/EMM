@@ -139,6 +139,7 @@ namespace AEMG_EX.Core
                     }
                 }
 
+                temp.AddRange(this.actionProvider.GetCharacterAction(Action.ClickAttack));
                 temp.Add(this.actionProvider.GetWait(turn.WaitNextTurnTime));
                 list.AddRange(temp);
             }

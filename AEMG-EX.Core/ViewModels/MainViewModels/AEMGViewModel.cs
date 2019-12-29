@@ -31,6 +31,7 @@ namespace AEMG_EX.Core
         public IAutoUpdater AutoUpdater { get; set; }
 
         public ICommand ConvertCommand { get; set; }
+        public ICommand TestSelectedCommand { get; set; }
 
         private void InitializeCommandAndEvents()
         {
@@ -47,10 +48,15 @@ namespace AEMG_EX.Core
                     this.messageBoxService.ShowMessageBox("Error. Check your setting or contact me for help", "Convert", MessageButton.OK, MessageImage.Error, MessageResult.OK);
             });
 
+            TestSelectedCommand = new RelayCommand(p =>
+            {
+                this.scriptGenerator.GenerateScript(MacroManager.GetCurrentTemplate(), aEAction: AEActionListViewModel.GetSelected());
+            });
+
             MacroManager.SelectChanged += (sender, e) =>
             {
                 Settings.CustomName = MacroManager.GetCurrentTemplate()?.MacroName;
             };
-        }
+        }             
     }
 }

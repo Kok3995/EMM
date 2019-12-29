@@ -1,4 +1,6 @@
 ﻿using Data;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 
 namespace AEMG_EX.Core
@@ -23,7 +25,7 @@ namespace AEMG_EX.Core
         /// Open file dialog and Scan all the macro the user selected
         /// </summary>
         /// <returns></returns>
-        IEnumerable<LoadedTemplate> ScanUserSelected();
+        IEnumerable<LoadedTemplate> ScanUserSelected(Action<ErrorEventArgs> errorCallback = null);
 
         IEnumerable<IAEActionViewModel> ScanMacroForPlaceHolder(MacroTemplate macro);
     }

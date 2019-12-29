@@ -10,7 +10,7 @@ namespace AEMG_EX.Core
         public AEActionListViewModel(IMacroManager macroManager)
         {
             this.macroManager = macroManager;
-           
+
             InitializeCommandAndEvents();
         }
 
@@ -26,7 +26,6 @@ namespace AEMG_EX.Core
 
         public ICommand CopyCommand { get; set; }
         public ICommand ApplyCommand { get; set; }
-
         private void InitializeCommandAndEvents()
         {
             CopyCommand = new RelayCommand(p =>
@@ -41,7 +40,7 @@ namespace AEMG_EX.Core
                     if (action.AEAction == copyAEAction.AEAction)
                         action.CopyOntoSelf(copyAEAction);
                 };
-            }, p => this.copyAEAction != null);
+            }, p => this.copyAEAction != null);            
 
             this.macroManager.SelectChanged += (sender, e) =>
             {
@@ -60,5 +59,10 @@ namespace AEMG_EX.Core
         }
 
         #endregion
+
+        public IAEActionViewModel GetSelected()
+        {
+            return this.SelectedAEAction;
+        }
     }
 }
