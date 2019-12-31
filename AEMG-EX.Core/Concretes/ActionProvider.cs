@@ -80,8 +80,8 @@ namespace AEMG_EX.Core
             defaultAction.Dict[Action.Wait].Add(new Wait { ActionDescription = "Wait" });
 
             //Food in AD
-            defaultAction.Dict[Action.FoodAD].Add(new Click { ActionDescription = "Click Menu", ClickPoint = new Point(80,660), WaitBetweenAction = 1000 });
-            defaultAction.Dict[Action.FoodAD].Add(new Click { ActionDescription = "Click Food", ClickPoint = new Point(580, 610), WaitBetweenAction = 1000 });
+            defaultAction.Dict[Action.FoodAD].Add(new Click { ActionDescription = "Click Menu", ClickPoint = new Point(80,660), WaitBetweenAction = 1500 });
+            defaultAction.Dict[Action.FoodAD].Add(new Click { ActionDescription = "Click Food", ClickPoint = new Point(580, 610), WaitBetweenAction = 1500 });
             defaultAction.Dict[Action.FoodAD].Add(new Click { ActionDescription = "Click Use", ClickPoint = new Point(780, 420), WaitBetweenAction = 1000, Repeat = 4 });
 
             //Re eat food after AD
@@ -89,8 +89,8 @@ namespace AEMG_EX.Core
             {
                 ActionDescription = "Move Right A Little",
                 PointList = new List<SwipePoint> {
-                new SwipePoint { Point = new Point(900,420), SwipeSpeed = 10 } , new SwipePoint { Point = new Point(1000,420), HoldTime = 100, SwipeSpeed = 10 } },
-                WaitBetweenAction = 200
+                new SwipePoint { Point = new Point(800,420), SwipeSpeed = 10 } , new SwipePoint { Point = new Point(1000,420), HoldTime = 200, SwipeSpeed = 10 } },
+                WaitBetweenAction = 500
             });
             defaultAction.Dict[Action.ReFoodAD].AddRange(this.GenerateSeriesOfClickBetweenPoint(new Point(1000, 70), new Point(450, 70), 50, "Find Tree"));
             defaultAction.Dict[Action.ReFoodAD].Add(new Click { ActionDescription = "Click Yes", ClickPoint = new Point(780, 400), WaitBetweenAction = 1000, Repeat = 10 });
@@ -102,7 +102,7 @@ namespace AEMG_EX.Core
                 ActionDescription = "Move Left",
                 PointList = new List<SwipePoint> {
                 new SwipePoint { Point = new Point(900,420), SwipeSpeed = 10 } , new SwipePoint { Point = new Point(700,420), HoldTime = 2000, SwipeSpeed = 10 } },
-                WaitBetweenAction = 200
+                WaitBetweenAction = 400
             });
             //Run right (for exp encounter)
             defaultAction.Dict[Action.RunRight].Add(new Swipe
@@ -110,7 +110,7 @@ namespace AEMG_EX.Core
                 ActionDescription = "Move Right",
                 PointList = new List<SwipePoint> {
                 new SwipePoint { Point = new Point(900,420), SwipeSpeed = 10 } , new SwipePoint { Point = new Point(1100,420), HoldTime = 2000, SwipeSpeed = 10 } },
-                WaitBetweenAction = 200
+                WaitBetweenAction = 400
             });
 
             File.WriteAllText(filepath, JsonConvert.SerializeObject(defaultAction));

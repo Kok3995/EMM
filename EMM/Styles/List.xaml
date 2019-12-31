@@ -45,7 +45,77 @@
                         <ControlTemplate TargetType="local:EditableListBoxItem">
                             <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
                                 <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                                    <TextBlock x:Name="ItemTextBlock">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="1" x:Name="ItemTextBlock" ToolTip="{Binding ActionDescription}" ToolTipService.ShowDuration="30000">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} x{1}">
+                                                <Binding Path="ActionDescription"/>
+                                                <Binding Path="Repeat" FallbackValue="1"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBox Grid.Column="1" x:Name="EditableTextBox" BorderThickness="0" Background="{Binding Text, RelativeSource={RelativeSource Self}, Converter={local:TextLengthToBackgroundColorConverter}}"
+                                             Text="{Binding ActionDescription, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"/>
+                                    <Image Margin="0 0 5 0"  Grid.Column="0" Source="{Binding BasicAction, Converter={local:BasicActionToImageConverter}}" Width="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseDoubleClicked" Value="True">
+                                    <Setter TargetName="EditableTextBox" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="ItemTextBlock" Property="Visibility" Value="Hidden"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="False">
+                                    <Setter TargetName="EditableTextBox" Property="Visibility" Value="Hidden"/>
+                                    <Setter TargetName="ItemTextBlock" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                        <Condition Property="IsSelected" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Border}"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                                        <Condition Property="IsSelected" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Style.Resources>
+    </Style>
+
+    <Style x:Key="GroupList" TargetType="local:AutoListBox">
+        <Setter Property="SelectionMode" Value="Extended" />
+        <Style.Resources>
+            <Style TargetType="local:EditableListBoxItem" BasedOn="{StaticResource EditableListBoxItemStyle}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="local:EditableListBoxItem">
+                            <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                    <TextBlock x:Name="ItemTextBlock" ToolTip="{Binding ActionDescription}" ToolTipService.ShowDuration="30000">
                                         <TextBlock.Text>
                                             <MultiBinding StringFormat="{}{0} x{1}">
                                                 <Binding Path="ActionDescription"/>
@@ -100,7 +170,7 @@
             </Style>
         </Style.Resources>
     </Style>
-
+    
     <Style x:Key="PointListBox" TargetType="ListBox">
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Margin" Value="5"/>

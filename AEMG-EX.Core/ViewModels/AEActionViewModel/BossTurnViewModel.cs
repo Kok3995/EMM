@@ -16,6 +16,6 @@ namespace AEMG_EX.Core
 
         public override BitmapImage ScreenIMG => (IsAF == false) ? AEMGStatic.BattleScreenBoss : AEMGStatic.AFScreen;
 
-        public override int WaitNextTurnTime { get; set; } = 12000;
+        public override int WaitNextTurnTime { get; set; } = 15000;
     }
 }

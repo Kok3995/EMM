@@ -7,9 +7,10 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="Resolution Converter" Height="180" Width="400">
+        Title="Resolution Converter" Height="200" Width="400">
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -55,8 +56,13 @@
                 </TextBlock>
             </StackPanel>
         </StackPanel>
+        <!--Round Mode Options-->
+        <StackPanel Grid.Row="3" Margin="0 5 0 0"  Orientation="Horizontal" ToolTip="ToEven: 3.5 to 4, 4.5 to 4&#x0a;AwayFromZero: 3.5 to 4, 4.5 to 5">
+            <TextBlock Text="MidPoint Rounding Mode: " FontWeight="DemiBold" VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding RoundModeOptions}" SelectedItem="{Binding SelectedMode}" Width="120"/>
+        </StackPanel>
         <!-- Buttons -->
-        <DockPanel Grid.Row="3" LastChildFill="False" Margin="80 10" Height="30">
+        <DockPanel Grid.Row="4" LastChildFill="False" Margin="80 10" Height="30">
             <Button DockPanel.Dock="Right" Content="Convert" Width="80" Margin="40 0 0 0" Command="{Binding ConvertResolutionCommand}"/>
             <Button DockPanel.Dock="Left" Content="Undo Convert" Width="80" Command="{Binding UndoConvertResolutionCommand}"/>
         </DockPanel>

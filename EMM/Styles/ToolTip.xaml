@@ -6,14 +6,20 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToolTip}">
-                    <Border Background="AliceBlue" CornerRadius="4" BorderThickness="1" BorderBrush="{StaticResource BorderLightBrush}" MinWidth="100">
-                        <StackPanel Margin="3">
+                    <Border Background="AliceBlue" CornerRadius="4" BorderThickness="1" BorderBrush="{StaticResource BorderLightBrush}">
+                        <StackPanel Margin="3" MinWidth="100" MaxWidth="500">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="{StaticResource AboutButton}" Margin="3"/>
-                                <TextBlock Text="Tips" FontSize="16" FontWeight="Bold" />
+                                <TextBlock Text="Tips" FontSize="16" FontWeight="Bold"/>
                             </StackPanel>
                             <Separator/>
-                            <ContentPresenter VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                            <ContentPresenter VerticalAlignment="Top" HorizontalAlignment="Left">
+                                <ContentPresenter.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextWrapping" Value="Wrap"/>
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </StackPanel>
                     </Border>
                 </ControlTemplate>

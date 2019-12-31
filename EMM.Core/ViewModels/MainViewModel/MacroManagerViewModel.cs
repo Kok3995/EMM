@@ -1,6 +1,7 @@
 ﻿using Data;
 using EMM.Core.Converter;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -72,20 +73,20 @@ namespace EMM.Core.ViewModels
 
         private void InitializeCommands()
         {
-            NewCommand = new RelayCommand(p =>
+            NewCommand = new RelayCommand(async p =>
             {
-                if (ShouldSaveMacro() == null)
+                if (await ShouldSaveMacro() == null)
                     return;
 
                 CurrentMacro = viewModelFactory.NewMacroViewModel();
             });
 
-            OpenCommand = new RelayCommand(p =>
+            OpenCommand = new RelayCommand(async p =>
             {
-                if (ShouldSaveMacro() == null)
+                if (await ShouldSaveMacro() == null)
                     return;
 
-                var loadedMacro = this.LoadMacroViewModel();
+                var loadedMacro = await Task.Run(() => this.LoadMacroViewModel());
 
                 if (loadedMacro == null)
                 {
@@ -97,15 +98,15 @@ namespace EMM.Core.ViewModels
 
             ExitCommand = new RelayCommand(p => Application.Current.Shutdown());
 
-            SaveCommand = new RelayCommand(p =>
+            SaveCommand = new RelayCommand(async p =>
             {
-                this.CurrentMacro.MacroPath = this.SaveMacro(CurrentMacro, this.CurrentMacro.MacroPath);
+                this.CurrentMacro.MacroPath = await Task.Run(() => this.SaveMacro(CurrentMacro, this.CurrentMacro.MacroPath));
                 CurrentMacro.AcceptChanges();
             }, p => CurrentMacro != null);
 
-            SaveAsCommand = new RelayCommand(p =>
+            SaveAsCommand = new RelayCommand(async p =>
             {
-                this.CurrentMacro.MacroPath = this.SaveAsMacro(CurrentMacro, this.CurrentMacro.MacroPath);
+                this.CurrentMacro.MacroPath = await Task.Run(() => this.SaveAsMacro(CurrentMacro, this.CurrentMacro.MacroPath));
                 CurrentMacro.AcceptChanges();
             }, p => CurrentMacro != null);
         }
@@ -119,9 +120,9 @@ namespace EMM.Core.ViewModels
         private void HookEventHandler()
         {
             //Handler file drop
-            Messenger.Register((sender, e) =>
+            Messenger.Register(async (sender, e) =>
             {
-                if (ShouldSaveMacro() == null)
+                if (await ShouldSaveMacro() == null)
                     return;
 
                 if (e.FilePaths == null || e.FilePaths.Length < 1)
@@ -268,7 +269,7 @@ namespace EMM.Core.ViewModels
         /// <summary>
         /// Ask for saving macro if the macro's IsChanged is true
         /// </summary>
-        private bool? ShouldSaveMacro()
+        private async Task<bool?> ShouldSaveMacro()
         {
             if (CurrentMacro == null)
                 return false;
@@ -278,7 +279,7 @@ namespace EMM.Core.ViewModels
                 MessageResult result = MessageResult.Cancel;
                 if (CurrentMacro != null)
                 {
-                    result = this.messageBoxService.ShowMessageBox("Do you want to save the current Macro?", "EMM", MessageButton.YesNoCancel, MessageImage.Question);
+                    result = await Task.Run(() => this.messageBoxService.ShowMessageBox("Do you want to save the current Macro?", "EMM", MessageButton.YesNoCancel, MessageImage.Question));
                 }
 
                 switch (result)

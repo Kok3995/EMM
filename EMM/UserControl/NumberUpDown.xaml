@@ -18,7 +18,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <local:NumbericTextBox x:Name="numbericTextBox" Grid.RowSpan="2" Width="{Binding Width, RelativeSource={RelativeSource AncestorType=UserControl}}"
+        <local:NumbericTextBox x:Name="numbericTextBox" Grid.RowSpan="2" Width="{Binding Width, RelativeSource={RelativeSource AncestorType=UserControl}}" Padding="0 0 10 0"
                                 Text="{Binding NumbericTextBox, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"/>
         <Viewbox Grid.Row="0" Grid.Column="1" >
             <RepeatButton Content="△" Margin="-10 0 0 0" FontSize="10"

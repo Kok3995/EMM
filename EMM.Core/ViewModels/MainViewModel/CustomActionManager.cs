@@ -37,8 +37,8 @@ namespace EMM.Core
         private DataIO dataIO;
         private IMessageBoxService messageBoxService;
 
-        private readonly string savedCustomAction = Path.Combine(Environment.CurrentDirectory, "Saved", "SavedActions");
-        private readonly string defaultCustomAction = Path.Combine(Environment.CurrentDirectory, "Saved", "DefaultSavedActions");
+        private readonly string savedCustomAction = Path.Combine(Environment.CurrentDirectory, "Setting", "SavedActions");
+        private readonly string defaultCustomAction = Path.Combine(Environment.CurrentDirectory, "Setting", "DefaultSavedActions");
 
         #endregion
 
@@ -118,7 +118,7 @@ namespace EMM.Core
                 foreach (var actionVM in selectedActionVM)
                     this.selectedActionGroupViewModel.ViewModelList.Remove(actionVM);
 
-                this.selectedActionGroupViewModel.ViewModelList.Insert(index, customAction);
+                this.selectedActionGroupViewModel.ViewModelList.Insert(index, customAction.MakeCopy());
 
                 OpenCustomActionPopupCommand.Execute(null);
 

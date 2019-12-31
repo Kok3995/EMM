@@ -18,9 +18,9 @@
         <StackPanel Orientation="Horizontal" ToolTip="Do not change the resolution if you're not the one making this macro&#x0a;Use custom output below if you want to change the output resolution">
             <Label Content="Resolution" FontWeight="Bold" Margin="20 0 0 0"/>
             <StackPanel Orientation="Horizontal" IsEnabled="{Binding IsResolutionModify}">
-                <local:NumbericTextBox Text="{Binding OriginalX}" BorderThickness="0"/>
+                <local:NumbericTextBox Text="{Binding OriginalX, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"/>
                 <TextBlock Text="X" VerticalAlignment="Center"/>
-                <local:NumbericTextBox Text="{Binding OriginalY}" BorderThickness="0"/>
+                <local:NumbericTextBox Text="{Binding OriginalY, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"/>
             </StackPanel>
             <Grid>
                 <Button Tag="{StaticResource ModifyButton}" Style="{StaticResource ImageButton}" Width="16" Margin="5 0"

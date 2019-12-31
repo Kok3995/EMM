@@ -142,7 +142,7 @@ namespace AEMG_EX.Core
         public int AFTime { get; set; } = 15000;
 
         /// <summary>
-        /// Time to wait for next turn. Default: 8s for normal battle, 12s for boss
+        /// Time to wait for next turn. Default: 8s for normal battle, 15s for boss
         /// </summary>
         public virtual int WaitNextTurnTime { get; set; } = 8000;
 

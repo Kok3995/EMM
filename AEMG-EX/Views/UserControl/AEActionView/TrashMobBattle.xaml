@@ -36,7 +36,7 @@
                 <TextBlock Text="Wait: " VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBox Text="{Binding CurrentTurn.WaitNextTurnTime, UpdateSourceTrigger=PropertyChanged}" 
                          VerticalAlignment="Stretch" Margin="0 1" VerticalContentAlignment="Center" Width="50"
-                         ToolTip="Time in milisecond(s) to wait for next turn or battle end&#x0a;Default: 8000ms for normal, 12000ms for boss"/>
+                         ToolTip="Time in milisecond(s) to wait for next turn or battle end&#x0a;Default: 8000ms for normal, 15000ms for boss"/>
             </StackPanel>
             <StackPanel Margin="5 0 0 0" Orientation="Horizontal" Grid.Column="2" Visibility="{Binding CurrentTurn.IsAF, Converter={local:BooleanToVisibilityConverter}}">
                 <TextBlock Text="AF Time: " VerticalAlignment="Center" FontWeight="Bold"/>

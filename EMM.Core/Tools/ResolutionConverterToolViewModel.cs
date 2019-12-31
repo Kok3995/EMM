@@ -50,7 +50,7 @@ namespace EMM.Core.Tools
 
         public double ScaleY => (macroManager.CurrentMacro?.OriginalY > 0) ? Math.Round((double)ConvertY / macroManager.CurrentMacro.OriginalY, 2) : 0.00;
 
-        public ObservableCollection<MidpointRounding> RoundModeOptions = new ObservableCollection<MidpointRounding>(Enum.GetValues(typeof(MidpointRounding)).Cast<MidpointRounding>());
+        public ObservableCollection<MidpointRounding> RoundModeOptions { get; set; } = new ObservableCollection<MidpointRounding>(Enum.GetValues(typeof(MidpointRounding)).Cast<MidpointRounding>());
 
         public MidpointRounding SelectedMode { get; set; }
 

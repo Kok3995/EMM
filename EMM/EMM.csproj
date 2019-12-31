@@ -71,6 +71,7 @@
     </ApplicationDefinition>
     <Compile Include="ControlExtension\TextBoxAttachProperties.cs" />
     <Compile Include="Converter\AEActionToStringConverter.cs" />
+    <Compile Include="Converter\BasicActionToImageConverter.cs" />
     <Compile Include="Converter\BooleanToRedGreenConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\SbyteToSpeedConverter.cs" />

@@ -35,16 +35,16 @@ namespace EMM.Core.ViewModels
                 this.scriptGenerator.GenerateScript(this.macroManager.CurrentMacro.ViewModelList.GetSelectedElement(), this.macroManager.CurrentMacro);
             }, p => this.macroManager.CurrentMacro.SelectedItem != null);
 
-            ConvertCommand = new RelayCommand(p =>
+            ConvertCommand = new RelayCommand(async p =>
             {
-                var result = this.scriptGenerator.GenerateScript(this.macroManager.CurrentMacro);
+                var result = await Task.Run(() => this.scriptGenerator.GenerateScript(this.macroManager.CurrentMacro));
                 if (result == null)
                     return;
 
                 if (result == true)
-                    this.messageBoxService.ShowMessageBox("Done", "Convert", MessageButton.OK, MessageImage.Information, MessageResult.OK);
+                    await Task.Run(() => this.messageBoxService.ShowMessageBox("Done", "Convert", MessageButton.OK, MessageImage.Information, MessageResult.OK));
                 else
-                    this.messageBoxService.ShowMessageBox("Error. Check your setting or contact me for help", "Convert", MessageButton.OK, MessageImage.Error, MessageResult.OK);
+                    await Task.Run(() => this.messageBoxService.ShowMessageBox("Error. Check your setting or contact me for help", "Convert", MessageButton.OK, MessageImage.Error, MessageResult.OK));
             });
 
             TestSelectedActionCommand = new RelayCommand(p =>

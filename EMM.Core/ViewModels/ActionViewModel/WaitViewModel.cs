@@ -34,6 +34,11 @@ namespace EMM.Core.ViewModels
         /// </summary>
         public int WaitTime { get; set; }
 
+        /// <summary>
+        /// Dummy properpty for consistent with the view
+        /// </summary>
+        public int Repeat { get; set; } = 1;
+
 
         #endregion
 

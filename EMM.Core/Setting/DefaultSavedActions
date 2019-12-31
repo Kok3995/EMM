@@ -1,0 +1,363 @@
+﻿[
+  {
+    "BasicAction": 5,
+    "ActionDescription": "Up",
+    "Repeat": 1,
+    "ActionList": [
+      {
+        "BasicAction": 1,
+        "ActionDescription": "Swipe Up",
+        "PointList": [
+          {
+            "Point": "800,360",
+            "HoldTime": 20,
+            "SwipeSpeed": 20
+          },
+          {
+            "Point": "800,160",
+            "HoldTime": 20,
+            "SwipeSpeed": 20
+          }
+        ],
+        "Repeat": 1,
+        "WaitBetweenAction": 100
+      }
+    ]
+  },
+  {
+    "BasicAction": 5,
+    "ActionDescription": "Down",
+    "Repeat": 1,
+    "ActionList": [
+      {
+        "BasicAction": 1,
+        "ActionDescription": "Swipe Down",
+        "PointList": [
+          {
+            "Point": "800,360",
+            "HoldTime": 20,
+            "SwipeSpeed": 20
+          },
+          {
+            "Point": "800,560",
+            "HoldTime": 20,
+            "SwipeSpeed": 20
+          }
+        ],
+        "Repeat": 1,
+        "WaitBetweenAction": 100
+      }
+    ]
+  },
+  {
+    "BasicAction": 5,
+    "ActionDescription": "Left",
+    "Repeat": 1,
+    "ActionList": [
+      {
+        "BasicAction": 1,
+        "ActionDescription": "Swipe Left",
+        "PointList": [
+          {
+            "Point": "800,360",
+            "HoldTime": 20,
+            "SwipeSpeed": 10
+          },
+          {
+            "Point": "600,360",
+            "HoldTime": 2000,
+            "SwipeSpeed": 20
+          }
+        ],
+        "Repeat": 1,
+        "WaitBetweenAction": 100
+      }
+    ]
+  },
+  {
+    "BasicAction": 5,
+    "ActionDescription": "Right",
+    "Repeat": 1,
+    "ActionList": [
+      {
+        "BasicAction": 1,
+        "ActionDescription": "Swipe Right",
+        "PointList": [
+          {
+            "Point": "800,360",
+            "HoldTime": 20,
+            "SwipeSpeed": 10
+          },
+          {
+            "Point": "1000,360",
+            "HoldTime": 2000,
+            "SwipeSpeed": 20
+          }
+        ],
+        "Repeat": 1,
+        "WaitBetweenAction": 100
+      }
+    ]
+  },
+  {
+    "BasicAction": 5,
+    "ActionDescription": "Left Up",
+    "Repeat": 1,
+    "ActionList": [
+      {
+        "BasicAction": 1,
+        "ActionDescription": "Swipe Left Up",
+        "PointList": [
+          {
+            "Point": "800,360",
+            "HoldTime": 20,
+            "SwipeSpeed": 10
+          },
+          {
+            "Point": "600,360",
+            "HoldTime": 2000,
+            "SwipeSpeed": 20
+          },
+          {
+            "Point": "600,160",
+            "HoldTime": 12,
+            "SwipeSpeed": 20
+          }
+        ],
+        "Repeat": 1,
+        "WaitBetweenAction": 100
+      }
+    ]
+  },
+  {
+    "BasicAction": 5,
+    "ActionDescription": "Left Down",
+    "Repeat": 1,
+    "ActionList": [
+      {
+        "BasicAction": 1,
+        "ActionDescription": "Swipe Left Down",
+        "PointList": [
+          {
+            "Point": "800,360",
+            "HoldTime": 20,
+            "SwipeSpeed": 10
+          },
+          {
+            "Point": "600,360",
+            "HoldTime": 2000,
+            "SwipeSpeed": 20
+          },
+          {
+            "Point": "600,560",
+            "HoldTime": 12,
+            "SwipeSpeed": 20
+          }
+        ],
+        "Repeat": 1,
+        "WaitBetweenAction": 100
+      }
+    ]
+  },
+  {
+    "BasicAction": 5,
+    "ActionDescription": "Right Up",
+    "Repeat": 1,
+    "ActionList": [
+      {
+        "BasicAction": 1,
+        "ActionDescription": "Swipe Right Up",
+        "PointList": [
+          {
+            "Point": "800,360",
+            "HoldTime": 20,
+            "SwipeSpeed": 10
+          },
+          {
+            "Point": "1000,360",
+            "HoldTime": 2000,
+            "SwipeSpeed": 20
+          },
+          {
+            "Point": "1000,160",
+            "HoldTime": 12,
+            "SwipeSpeed": 20
+          }
+        ],
+        "Repeat": 1,
+        "WaitBetweenAction": 100
+      }
+    ]
+  },
+  {
+    "BasicAction": 5,
+    "ActionDescription": "Right Down",
+    "Repeat": 1,
+    "ActionList": [
+      {
+        "BasicAction": 1,
+        "ActionDescription": "Swipe Right Down",
+        "PointList": [
+          {
+            "Point": "800,360",
+            "HoldTime": 20,
+            "SwipeSpeed": 10
+          },
+          {
+            "Point": "1000,360",
+            "HoldTime": 2000,
+            "SwipeSpeed": 20
+          },
+          {
+            "Point": "1000,560",
+            "HoldTime": 12,
+            "SwipeSpeed": 20
+          }
+        ],
+        "Repeat": 1,
+        "WaitBetweenAction": 100
+      }
+    ]
+  },
+  {
+    "BasicAction": 5,
+    "ActionDescription": "Click Move",
+    "Repeat": 1,
+    "ActionList": [
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click Move",
+        "ClickPoint": "777,640",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 100
+      }
+    ]
+  },
+  {
+    "BasicAction": 5,
+    "ActionDescription": "Horizontal Clicks",
+    "Repeat": 1,
+    "ActionList": [
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 1",
+        "ClickPoint": "400,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 2",
+        "ClickPoint": "450,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 3",
+        "ClickPoint": "500,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 4",
+        "ClickPoint": "550,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 5",
+        "ClickPoint": "600,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 6",
+        "ClickPoint": "650,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 7",
+        "ClickPoint": "700,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 8",
+        "ClickPoint": "750,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 9",
+        "ClickPoint": "800,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 10",
+        "ClickPoint": "850,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 11",
+        "ClickPoint": "900,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 12",
+        "ClickPoint": "950,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      },
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click 13",
+        "ClickPoint": "1000,300",
+        "HoldTime": 0,
+        "Repeat": 1,
+        "WaitBetweenAction": 50
+      }
+    ]
+  },
+  {
+    "BasicAction": 5,
+    "ActionDescription": "Open Chest",
+    "Repeat": 1,
+    "ActionList": [
+      {
+        "BasicAction": 0,
+        "ActionDescription": "Click Chest",
+        "ClickPoint": "555,260",
+        "HoldTime": 0,
+        "Repeat": 8,
+        "WaitBetweenAction": 500
+      }
+    ]
+  }
+]

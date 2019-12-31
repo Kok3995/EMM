@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -22,6 +23,7 @@ namespace Data
         /// <returns>Return null if the user press cancel or close the dialog</returns>
         public LoadedTemplate LoadFromFile(string initialDirectory = null, Action<Newtonsoft.Json.Serialization.ErrorEventArgs> errorCallback = null)
         {
+            
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 CheckFileExists = true,
@@ -29,11 +31,10 @@ namespace Data
                 Filter = @"Easy Macro Maker (.emm)|*.emm|All files (*.*)|*.*",
                 InitialDirectory = (string.IsNullOrEmpty(this.lastPath)) ? (initialDirectory ?? Environment.CurrentDirectory) : lastPath,
             };
-
             openFileDialog.ShowDialog();
 
             //Check if the user press cancel
-            if (openFileDialog.FileName == null || openFileDialog.FileName.Equals(string.Empty))
+            if (string.IsNullOrEmpty(openFileDialog.FileName))
                 return null;
 
             //set last path

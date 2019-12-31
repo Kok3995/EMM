@@ -19,7 +19,7 @@
             <local:ActionDescriptionRepeatView/>
         </StackPanel>
         <TextBlock TextWrapping="Wrap" Margin="20 0 20 0" Text="This Action is Another Eden specific. It'll only work with AEMG made for Another Eden. This Program will ignore this action when generate the scripts" FontStyle="Italic"/>
-        
+
         <StackPanel Margin="5" Orientation="Horizontal">
             <TextBlock Text="●  "/>
             <TextBlock Text="Another Eden Action: " FontWeight="DemiBold"/>
@@ -31,11 +31,6 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-        </StackPanel>
-        <StackPanel Margin="5" Orientation="Horizontal">
-            <TextBlock Text="●  "/>
-            <TextBlock Text="Repeat: " FontWeight="DemiBold"/>
-            <local:NumberUpDown NumbericTextBox="{Binding Repeat, UpdateSourceTrigger=PropertyChanged}" Width="50" Height="26"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

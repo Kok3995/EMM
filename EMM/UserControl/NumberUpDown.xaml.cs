@@ -27,7 +27,7 @@ namespace EMM
         private void UpRepeatButton_Click(object sender, RoutedEventArgs e)
         {
             if (int.TryParse(numbericTextBox.Text, out int currentNumber))
-                NumbericTextBox = (currentNumber + 1 <= 99999) ? (currentNumber += 1) : 99999;
+                NumbericTextBox = (currentNumber + 1 < int.MaxValue - 1) ? (currentNumber += 1) : int.MaxValue - 1;
             else
                 NumbericTextBox = 1;
         }
@@ -35,7 +35,7 @@ namespace EMM
         private void DownRepeatButton_Click(object sender, RoutedEventArgs e)
         {
             if (int.TryParse(numbericTextBox.Text, out int currentNumber))
-                NumbericTextBox = (currentNumber - 1 > 0) ? (currentNumber -= 1) : 1;
+                NumbericTextBox = (currentNumber - 1 >= 0) ? (currentNumber -= 1) : 0;
             else
                 NumbericTextBox = 1;
         }

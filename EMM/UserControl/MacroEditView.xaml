@@ -92,7 +92,7 @@
                 <!-- Groups list -->
                 <local:AutoListBox x:Name="GroupList" Grid.Row="1" Grid.Column="1" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"
                                  ItemsSource="{Binding ViewModelList}" 
-                                 Style="{StaticResource ActionList}" 
+                                 Style="{StaticResource GroupList}" 
                                  SelectedItem="{Binding SelectedItem}" SelectedIndex="{Binding SelectedItemIndex}">
                     <local:AutoListBox.InputBindings>
                         <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}"/>

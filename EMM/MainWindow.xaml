@@ -169,9 +169,7 @@
             <!-- Export Settings -->
             <local:SettingView Grid.Row="2" DataContext="{Binding CurrentSettings}" Margin="20 0 20 0"/>
 
-            <!--<Button Grid.Row="3" Content="CONVERT" Command="{Binding ScriptGenerator.ConvertCommand}" 
-                    Width="64" Height="30" HorizontalAlignment="Right" Margin="0 -30 30 2"/>-->
-            <Button Grid.Row="3" Content="CONVERT" Command="{Binding AutoLocation.ToggleCaptureLocationCommand}" 
+            <Button Grid.Row="3" Content="CONVERT" Command="{Binding ScriptGenerator.ConvertCommand}" 
                     Width="64" Height="30" HorizontalAlignment="Right" Margin="0 -30 30 2"/>
         </Grid>
         
