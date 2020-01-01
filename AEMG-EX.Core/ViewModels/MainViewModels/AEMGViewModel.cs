@@ -17,6 +17,9 @@ namespace AEMG_EX.Core
             this.MacroManager.ScanForMacroes();
 
             InitializeCommandAndEvents();
+
+            if (Settings.IsAutoUpdateEnable == true)
+                this.AutoUpdater.CheckForUpdate();
         }
 
         private AEScriptGenerator scriptGenerator;

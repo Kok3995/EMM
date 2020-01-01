@@ -121,7 +121,7 @@ namespace EMM.Core
         public string Priority { get; set; } = "99";
 
         [JsonProperty("time")]
-        public string Time { get; set; } = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
+        public string Time { get; set; } = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
     }
 
     public class PlaySet
