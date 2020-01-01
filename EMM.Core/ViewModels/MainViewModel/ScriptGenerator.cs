@@ -68,8 +68,8 @@ namespace EMM.Core.ViewModels
 
             try
             {
-                GlobalData.ScaleX = setting.CustomX / macroViewModel.OriginalX;
-                GlobalData.ScaleY = setting.CustomY / macroViewModel.OriginalY;
+                GlobalData.ScaleX = (double)setting.CustomX / macroViewModel.OriginalX;
+                GlobalData.ScaleY = (double)setting.CustomY / macroViewModel.OriginalY;
             }
             catch
             {

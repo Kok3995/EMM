@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Linq;
 
 namespace EMM
 {
@@ -23,8 +24,6 @@ namespace EMM
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            MainWindow = new MainWindow();
 
             //reset working directory
             Environment.CurrentDirectory = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -64,13 +63,16 @@ namespace EMM
 
             var mainWindowViewModel = new MainWindowViewModel(macroManagerVM, settingVM, autoUpdater, timerToolVM, resolutionToolVM, scriptGeneratorVM, customActionManager, autoLocationVM);
 
-            MainWindow.DataContext = mainWindowViewModel;
+            MainWindow = new MainWindow
+            {
+                DataContext = mainWindowViewModel
+            };
 
             //Handle arguments
             var agrs = Environment.GetCommandLineArgs();
             if (agrs.Length > 1)
             {
-                var filepath = agrs[1];
+                var filepath = agrs.Where(s => s.Contains(".emm")).First();
 
                 macroManagerVM.SetCurrentMacro(filepath);
             }

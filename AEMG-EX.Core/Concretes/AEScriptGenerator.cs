@@ -115,8 +115,8 @@ namespace AEMG_EX.Core
 
             try
             {
-                GlobalData.ScaleX = setting.CustomX / macro.OriginalX;
-                GlobalData.ScaleY = setting.CustomY / macro.OriginalY;
+                GlobalData.ScaleX = (double)setting.CustomX / macro.OriginalX;
+                GlobalData.ScaleY = (double)setting.CustomY / macro.OriginalY;
             }
             catch
             {

@@ -166,7 +166,7 @@ namespace EMM.Core.ViewModels
             if (loadedMacro == null)
                 return;
 
-            this.CurrentMacro = this.LoadMacroViewModel(path);
+            this.CurrentMacro = loadedMacro;
             this.CurrentMacro?.AcceptChanges();
         }
 

@@ -14,7 +14,12 @@ namespace Data
     /// </summary>
     public class DataIO
     {
-        private readonly string savedTemplateDirectory = Path.Combine(Environment.CurrentDirectory);
+        public DataIO()
+        {
+            Directory.CreateDirectory(savedTemplateDirectory);
+        }
+
+        private readonly string savedTemplateDirectory = Path.Combine(Environment.CurrentDirectory, "Macroes");
         private string lastPath = string.Empty;
 
         /// <summary>
@@ -29,7 +34,7 @@ namespace Data
                 CheckFileExists = true,
                 CheckPathExists = true,
                 Filter = @"Easy Macro Maker (.emm)|*.emm|All files (*.*)|*.*",
-                InitialDirectory = (string.IsNullOrEmpty(this.lastPath)) ? (initialDirectory ?? Environment.CurrentDirectory) : lastPath,
+                InitialDirectory = (string.IsNullOrEmpty(this.lastPath)) ? (initialDirectory ?? savedTemplateDirectory) : lastPath,
             };
             openFileDialog.ShowDialog();
 
@@ -55,7 +60,7 @@ namespace Data
                 CheckPathExists = true,
                 Filter = @"Easy Macro Maker (.emm)|*.emm|All files (*.*)|*.*",
                 Multiselect = true,
-                InitialDirectory = (string.IsNullOrEmpty(this.lastPath)) ? (initialDirectory ?? Environment.CurrentDirectory) : lastPath, 
+                InitialDirectory = (string.IsNullOrEmpty(this.lastPath)) ? (initialDirectory ?? savedTemplateDirectory) : lastPath, 
             };
 
             openFileDialog.ShowDialog();

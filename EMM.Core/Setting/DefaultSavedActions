@@ -125,7 +125,7 @@
           }
         ],
         "Repeat": 1,
-        "WaitBetweenAction": 100
+        "WaitBetweenAction": 900
       }
     ]
   },
@@ -155,7 +155,7 @@
           }
         ],
         "Repeat": 1,
-        "WaitBetweenAction": 100
+        "WaitBetweenAction": 900
       }
     ]
   },
@@ -185,7 +185,7 @@
           }
         ],
         "Repeat": 1,
-        "WaitBetweenAction": 100
+        "WaitBetweenAction": 900
       }
     ]
   },
@@ -215,7 +215,7 @@
           }
         ],
         "Repeat": 1,
-        "WaitBetweenAction": 100
+        "WaitBetweenAction": 900
       }
     ]
   },

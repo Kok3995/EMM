@@ -105,14 +105,19 @@ namespace AEMG_EX.Core
                 //find the current selected macro path
                 var path = CheckIfSelectedMacroStillExist();
 
-                if (path != null)
+                var result = this.messageBoxService.ShowMessageBox("Do you want to delete this macro?", "DELETE", MessageButton.YesNo, MessageImage.Question, MessageResult.No);
+
+                if (result == MessageResult.Yes)
                 {
-                    File.Delete(path);
-                    this.MacroList.Remove(SelectedMacro);
-                }
-                else
-                {
-                    this.ScanForMacroes();
+                    if (path != null)
+                    {
+                        File.Delete(path);
+                        this.MacroList.Remove(SelectedMacro);
+                    }
+                    else
+                    {
+                        this.ScanForMacroes();
+                    }
                 }
             }, p => this.SelectedMacro != null);
 
@@ -160,7 +165,8 @@ namespace AEMG_EX.Core
                     var startInfo = new ProcessStartInfo()
                     {
                         FileName = AEMGStatic.EMM_NAME,
-                        Arguments = path,
+                        Arguments = "\"" + path + "\"",
+                        UseShellExecute = false
                     };
 
                     process.StartInfo = startInfo;
