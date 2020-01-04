@@ -2,11 +2,11 @@
   "Version": {
     "Major": 1,
     "Minor": 0,
-    "Build": 1,
+    "Build": 2,
     "Revision": 0,
     "MajorRevision": 0,
     "MinorRevision": 0
   },
   "Url": "https://github.com/Kok3995/EMM/releases/latest/download/EMM.zip",
-  "Changelog": "- Open in EMM in AEMG-EX now working.\n- Add confirm dialog when delete macro in AEMG-EX.\n- Default folder for EMM is now Macroes"
+  "Changelog": "- Fix critical bug in AEMG-EX where the script will not outputted correctly if the original resolution is other than 1280x720"
 }
