@@ -2,6 +2,7 @@
 using EMM.Core;
 using EMM.Core.Converter;
 using EMM.Core.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,7 +61,7 @@ namespace AEMG_EX.Core
             if (!ApplyConvertSetting(macro))
                 return false;
 
-            var actionList = aEAction.UserChoicesToActionList();
+            var actionList = ScaleActionsToMacroResolution(macro, aEAction.UserChoicesToActionList());
 
             var script = new StringBuilder();
 
@@ -84,7 +85,7 @@ namespace AEMG_EX.Core
 
             foreach (var action in aEActionList)
             {
-                var actionList = action.UserChoicesToActionList();
+                var actionList = ScaleActionsToMacroResolution(template, action.UserChoicesToActionList());
                 var actionIndexToInsert = action.ActionIndex;
 
                 //Fix index to insert if placeholder in the same actiongroup
@@ -125,6 +126,40 @@ namespace AEMG_EX.Core
             }
 
             return true;
+        }
+
+        private IList<IAction> ScaleActionsToMacroResolution(MacroTemplate macro, IList<IAction> actionList)
+        {
+            var newList = new List<IAction>();
+            double scaleX = macro.OriginalX / 1280.0;
+            double scaleY = macro.OriginalY / 720.0;
+
+            foreach (var action in actionList)
+            {
+                switch (action.BasicAction)
+                {
+                    case BasicAction.Click:
+                        var copied = this.autoMapper.SimpleAutoMap<Click, Click>(action as Click);
+                        copied.ClickPoint = new System.Windows.Point(Math.Round((action as Click).ClickPoint.X * scaleX), Math.Round((action as Click).ClickPoint.Y * scaleY));
+                        newList.Add(copied);
+                        break;
+                    case BasicAction.Swipe:
+                        var copiedSwipe = this.autoMapper.SimpleAutoMap<Swipe, Swipe>(action as Swipe);
+                        copiedSwipe.PointList = copiedSwipe.PointList.Select(sp => new SwipePoint
+                        {
+                            HoldTime = sp.HoldTime,
+                            SwipeSpeed = sp.SwipeSpeed,
+                            Point = new System.Windows.Point(Math.Round(sp.Point.X * scaleX), Math.Round(sp.Point.Y * scaleY))
+                        }).ToList();
+                        newList.Add(copiedSwipe);
+                        break;
+                    default:
+                        newList.Add(action);
+                        break;
+                }
+            }
+
+            return newList;
         }
     }
 }
