@@ -13,7 +13,8 @@ namespace EMM
             if (this.Items == null || this.Items.Count < 1)
                 return;
 
-            this.ScrollIntoView(this.Items.GetItemAt(this.Items.Count - 1));
+            if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Move)
+                this.ScrollIntoView(this.Items.GetItemAt(e.NewStartingIndex));
         }
     }
 }

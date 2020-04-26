@@ -13,6 +13,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Linq;
+using System.Threading;
+using System.IO;
+using MTPExplorer;
 
 namespace EMM
 {
@@ -28,31 +31,33 @@ namespace EMM
             //reset working directory
             Environment.CurrentDirectory = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
+            //set culture
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+
             var autoMapper = new SimpleAutoMapper();
             var dataIO = new DataIO();
             var messageBox = new MessageBoxService();
             var mouseHook = new MouseHook();
             var timerTool = new TimerTool();
             var autoUpdater = new AutoUpdater(messageBox);
+            var clipboard = new ViewModelClipboard();
+            var recent = new RecentFileManager();
+            var mtpManager = new MTPManager();
 
             var DependencyDict = new Dictionary<Type, object>()
             {
                 { typeof(SimpleAutoMapper), autoMapper },
-                { typeof(MessageBoxService), messageBox }
-            };
-
-            var scriptApplyDict = new Dictionary<Emulator, IApplyScriptToFolder>()
-            {
-                { Emulator.Nox, new NoxScriptApply(messageBox) },
-                { Emulator.Memu, new MemuScriptApply(messageBox) }
-            };
+                { typeof(MessageBoxService), messageBox },
+                { typeof(ViewModelClipboard), clipboard },
+            };          
 
             var viewModelFactory = new ViewModelFactory(DependencyDict);
-            
-            var settingVM = new SettingViewModel(Settings.Default(), autoMapper);
-            var macroManagerVM = new MacroManagerViewModel(dataIO, messageBox, viewModelFactory);
-            var scriptApplyFactory = new ScriptApplyFactory(messageBox, scriptApplyDict);
-            var scriptGenerator = new ScriptGenerator(scriptApplyFactory, settingVM, messageBox);
+            (new ScriptGenerateBootstrap()).SetUp(out IActionToScriptFactory actionToScriptFactory, out IEmulatorToScriptFactory emulatorToScriptFactory);
+
+            var settingVM = new SettingViewModel(Settings.Default(), autoMapper, mtpManager);
+            var macroManagerVM = new MacroManagerViewModel(dataIO, messageBox, viewModelFactory, recent);
+            var scriptApplyFactory = new ScriptApplyBootStrap(messageBox, mtpManager).GetScriptApplyFactory();
+            var scriptGenerator = new ScriptGenerator(scriptApplyFactory, settingVM, messageBox, emulatorToScriptFactory, actionToScriptFactory);
             var scriptGeneratorVM = new ScriptGeneratorViewModel(macroManagerVM, scriptGenerator, messageBox);
             var customActionManager = new CustomActionManager(macroManagerVM, viewModelFactory, dataIO, messageBox);
 
@@ -74,7 +79,7 @@ namespace EMM
             {
                 var filepath = agrs.Where(s => s.Contains(".emm")).First();
 
-                macroManagerVM.SetCurrentMacro(filepath);
+                macroManagerVM.SetCurrentMacro(filepath, agrs.Any(s => s.Equals(StaticVariables.NO_SAVE_AGRS)));
             }
 
             // Select the text in a TextBox when it receives focus.
@@ -118,6 +123,9 @@ namespace EMM
         protected override void OnExit(ExitEventArgs e)
         {
             Messenger.Send(this, new AppEventArgs(EventMessage.SaveSettings));
+
+            if (Directory.Exists(StaticVariables.TEMP_FOLDER))
+                Directory.Delete(StaticVariables.TEMP_FOLDER, true);
 
             base.OnExit(e);
         }

@@ -27,13 +27,10 @@ namespace Data
         /// </summary>
         public int Repeat { get; set; } = 1;
 
+
         /// <summary>
-        /// Skip this action
+        /// True to disable this action
         /// </summary>
-        /// <param name="timer">the timer</param>
-        public StringBuilder GenerateAction(ref int timer)
-        {
-            return new StringBuilder(string.Empty);
-        }
+        public bool IsDisable { get; set; }
     }
 }

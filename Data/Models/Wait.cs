@@ -22,10 +22,9 @@ namespace Data
         /// </summary>
         public int WaitTime { get; set; }
 
-        public StringBuilder GenerateAction(ref int timer)
-        {
-            timer += WaitTime;
-            return new StringBuilder(string.Empty);
-        }
+        /// <summary>
+        /// True to disable this action
+        /// </summary>
+        public bool IsDisable { get; set; }
     }
 }

@@ -40,42 +40,23 @@ namespace Data
         public int WaitBetweenAction { get; set; }
 
         /// <summary>
-        /// Generate click script
+        /// True to disable this action
         /// </summary>
-        /// <param name="timer">The timer</param>
-        public StringBuilder GenerateAction(ref int timer)
+        public bool IsDisable { get; set; }
+
+        public void Scale()
         {
-            var x = (GlobalData.ScaleX.Equals(1.0)) ? ClickPoint.X : Math.Round(ClickPoint.X * GlobalData.ScaleX);
-            var y = (GlobalData.ScaleY.Equals(1.0)) ? ClickPoint.Y : Math.Round(ClickPoint.Y * GlobalData.ScaleY);
-            string xString = x.ToString();
-            string yString = y.ToString();
+            this.ClickPoint = ClickPoint.ScalePointBaseOnMode();
+        }
 
-            var random = new Random();
-
-            StringBuilder script = new StringBuilder();
-
-            for (int i = 1; i <= Repeat; i++)
+        public Point Randomize(Random random)
+        {
+            if (GlobalData.Randomize > 0)
             {
-                if (GlobalData.Randomize > 0)
-                {
-                    xString = random.RandomCoordinate(x, GlobalData.Randomize).ToString();
-                    yString = random.RandomCoordinate(y, GlobalData.Randomize).ToString();
-                }
+                return new Point(random.RandomCoordinate(this.ClickPoint.X, GlobalData.Randomize), random.RandomCoordinate(this.ClickPoint.Y, GlobalData.Randomize));
+            }
 
-                //Mouse down
-                script.AppendAction(ScriptMouseAction.MouseDown, xString, yString, ref timer);
-
-                //hold time
-                timer += HoldTime;
-
-                //mouse up
-                script.AppendAction(ScriptMouseAction.MouseUp, xString, yString, ref timer);
-
-                //wait for next action
-                timer += WaitBetweenAction;
-            }               
-
-            return script;
-        }       
+            return this.ClickPoint;
+        }
     }
 }

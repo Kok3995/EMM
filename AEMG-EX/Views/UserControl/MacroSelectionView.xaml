@@ -16,11 +16,14 @@
         <DockPanel LastChildFill="False" Grid.Row="0" Grid.Column="0">
             <Button Style="{StaticResource ImageButton}" Tag="{StaticResource Add}" Width="16" Height="16"
                     Command="{Binding AddCommand}" ToolTip="Add a new macro to the list"/>
+            <local:AESaveManager DataContext="{Binding DataContext.SaveManager, RelativeSource={RelativeSource AncestorType={x:Type local:AEMG}}}"/>
             <Button Style="{StaticResource ImageButton}" Tag="{StaticResource ReloadFolder}" Width="16" Height="16"
                     Command="{Binding ReScanCommand}" ToolTip="Rescan the Macroes folder"/>
             <Button Style="{StaticResource ImageButton}" Tag="{StaticResource Delete}" Width="16" Height="16"
                     Command="{Binding DeleteCommand}" ToolTip="Delete the current macro"/>
-            <Button Style="{StaticResource ImageButton}" Tag="{StaticResource Download}" Width="16" Height="16" DockPanel.Dock="Right" Margin="0 0 42 0"
+            <Button Style="{StaticResource ImageButton}" Tag="{StaticResource Application}" Width="16" Height="16" DockPanel.Dock="Right" Margin="0 0 42 0"
+                    Command="{Binding OpenSettingWindowCommand}" ToolTip="Setting"/>
+            <Button Style="{StaticResource ImageButton}" Tag="{StaticResource Download}" Width="16" Height="16" DockPanel.Dock="Right" Margin="0 0 5 0"
                     Command="{Binding DataContext.AutoUpdater.CheckForUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type local:AEMG}}}" ToolTip="Check for Update"/>
         </DockPanel>
 

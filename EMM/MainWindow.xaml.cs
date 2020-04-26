@@ -47,7 +47,7 @@ namespace EMM
         {
             var vm = this.DataContext as MainWindowViewModel;
             var result = MessageBoxResult.No;
-            if (vm.MacroManager.CurrentMacro != null && vm.MacroManager.CurrentMacro.IsChanged == true)
+            if (vm.MacroManager.CurrentMacro != null && vm.MacroManager.CurrentMacro.IsDirty())
             {
                 result = MessageBox.Show("The Macro has not been saved. Do you want to save before exiting?", "Exiting", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             }
@@ -60,14 +60,13 @@ namespace EMM
                     break;
                 case MessageBoxResult.Yes:
                     Messenger.Send(this, new AppEventArgs(EventMessage.SaveMacroBeforeExit));
+                    //unhook autolocation handler
+                    if (vm.AutoLocation.IsCaptureStarted)
+                        vm.AutoLocation.ToggleCaptureLocationCommand.Execute(null);
                     break;
                 case MessageBoxResult.No:
                     break;
-            }
-
-            //unhook autolocation handler
-            if (vm.AutoLocation.IsCaptureStarted)
-                vm.AutoLocation.ToggleCaptureLocationCommand.Execute(null);
+            }            
         }
 
         private void Window_Drop(object sender, DragEventArgs e)
@@ -86,7 +85,7 @@ namespace EMM
 
         private void Donate_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("https://www.paypal.me/kok3995"));
+            Process.Start(new ProcessStartInfo("https://www.paypal.me/kok3995/1"));
             e.Handled = true;
         }
 

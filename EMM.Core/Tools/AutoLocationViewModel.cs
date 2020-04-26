@@ -57,14 +57,23 @@ namespace EMM.Core.Tools
                     var scaleX = this.macroManager.GetCurrentMacro().OriginalX / clientRect.Width;
                     var scaleY = this.macroManager.GetCurrentMacro().OriginalY / clientRect.Height;
 
-                    if (this.macroManager.GetCurrentSelectedActionViewModel() is ILocationSettable selectedAction)
-                    {
-                        selectedAction.SetLocation(new Point(Math.Round(relativePos.X * scaleX, MidpointRounding.AwayFromZero), Math.Round(relativePos.Y * scaleY, MidpointRounding.AwayFromZero)));
-                    }
+                    SetLocationRecursive(this.macroManager.GetCurrentSelectedActionViewModel(), relativePos.X, scaleX, relativePos.Y, scaleY);
                 }
             }
 
             return MouseHook.CallNextHookEx(mouseHook.GetCurrentHookID(), nCode, wParam, lParam);
+        }
+
+        private void SetLocationRecursive(IActionViewModel actionViewModel, double x, double scaleX, double y, double scaleY)
+        {
+            if (actionViewModel is ILocationSettable selectedAction)
+            {
+                selectedAction.SetLocation(new Point(Math.Round(x * scaleX, MidpointRounding.AwayFromZero), Math.Round(y * scaleY, MidpointRounding.AwayFromZero)));
+            }
+            else if (actionViewModel is CommonViewModel commonViewModel)
+            {
+                SetLocationRecursive(commonViewModel.SelectedItem, x, scaleX, y, scaleY);
+            }
         }
     }
 }

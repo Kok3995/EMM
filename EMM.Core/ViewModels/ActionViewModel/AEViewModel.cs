@@ -1,5 +1,6 @@
 ﻿using Data;
 using EMM.Core.Converter;
+using PropertyChanged;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -42,7 +43,12 @@ namespace EMM.Core.ViewModels
         /// Repeat the action. Use for Battle
         /// </summary>
         public int Repeat { get; set; } = 1;
-        
+
+        /// <summary>
+        /// True to disable this action
+        /// </summary>
+        public bool IsDisable { get; set; }
+
         /// <summary>
         /// Convert the viewmodel back to model for saving, Generate scripts
         /// </summary>

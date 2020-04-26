@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using Data;
 using EMM;
@@ -86,6 +87,34 @@ namespace AEMG_EX.Core
             CurrentTurn = this.TurnList[TotalTurn - 1];
         }
 
+        public override IAEAction ConvertBackToAction()
+        {
+            if (!(base.ConvertBackToAction() is IBattle battle))
+                throw new ArgumentException("IAEAction does not implement IBattle");
+
+            battle.BattleExitTime = this.BattleExitTime;
+            battle.Loop = this.Loop;
+            battle.SelectedLeftRight = this.SelectedLeftRight.ToList();
+            return (IAEAction)battle;
+        }
+
+        public override IAEActionViewModel ConvertFromAction(IAEAction action)
+        {
+            if (action.AEAction != AEAction)
+                return null;
+
+            if (!(action is IBattle battle))
+                throw new ArgumentException("IAEAction does not implement IBattle");
+
+            var baseBattle = base.ConvertFromAction(action);
+
+            this.Loop = battle.Loop;
+            this.BattleExitTime = battle.BattleExitTime;
+            this.SelectedLeftRight = (battle.SelectedLeftRight == null) ? this.SelectedLeftRight : new ObservableCollection<Action>(battle.SelectedLeftRight.ToList());
+
+            return baseBattle;
+        }
+
         #endregion
 
         public override IList<IAction> UserChoicesToActionList()
@@ -102,7 +131,7 @@ namespace AEMG_EX.Core
             }
 
             //Add Wait for battle to load
-            runList.Add(this.actionProvider.GetWait(4000));
+            runList.Add(this.actionProvider.GetWait(4500));
 
             //add battle
             runList.AddRange(base.UserChoicesToActionList());
@@ -131,6 +160,7 @@ namespace AEMG_EX.Core
             var sourceObject = source as EXPBattleViewModel;
 
             this.Loop = sourceObject.Loop;
+            this.BattleExitTime = sourceObject.BattleExitTime;
 
             SelectedLeftRight = new ObservableCollection<Action>(sourceObject.SelectedLeftRight);
         }

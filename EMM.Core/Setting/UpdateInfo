@@ -2,11 +2,11 @@
   "Version": {
     "Major": 1,
     "Minor": 0,
-    "Build": 2,
+    "Build": 9,
     "Revision": 0,
     "MajorRevision": 0,
     "MinorRevision": 0
   },
   "Url": "https://github.com/Kok3995/EMM/releases/latest/download/EMM.zip",
-  "Changelog": "- Fix critical bug in AEMG-EX where the script will not outputted correctly if the original resolution is other than 1280x720"
+  "Changelog": "- Support BlueStacks, LDPlayer\nSupport HiroMacro, Robotmon, AnkuLua (Android),AutoTouch (iOS)\nQOL, bug fixes and many more, check the site changelog for the full list"
 }

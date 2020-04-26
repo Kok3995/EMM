@@ -8,8 +8,10 @@ namespace AEMG_EX.Core
     {
         public static string MACRO_FOLDER = Path.Combine(Environment.CurrentDirectory, "Macroes");
         public static string AEMG_FOLDER = Path.Combine(Environment.CurrentDirectory, "AEMG");
+        public static string SAVED_AEACTION_FILEPATH = Path.Combine(Environment.CurrentDirectory, "AEMG", "SavedAEActions");
         public const string AEMG_DEFAULT_PREDEFINED_ACTIONS_FILENAME = "DefaultAction";
         public const string EMM_NAME = "EMM.exe";
+        public const string SAVED_SETUP_EXTENSION = ".emms";
 
         public static BitmapImage C1 = new BitmapImage(new Uri(Path.Combine(Environment.CurrentDirectory,"Images", "Battle", "C-1.png")));
         public static BitmapImage C2 = new BitmapImage(new Uri(Path.Combine(Environment.CurrentDirectory,"Images", "Battle", "C-2.png")));

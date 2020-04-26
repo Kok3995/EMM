@@ -59,6 +59,10 @@ namespace EMM.Core
             int pasteIndex;
             var selectedItems = GetSelectedElement(list);
 
+            //if list is empty then return -1
+            if (list.Count == 0)
+                return -1;
+
             //No selected, paste to the end of the list
             if (selectedIndex < 0)
                 pasteIndex = list.Count - 1;

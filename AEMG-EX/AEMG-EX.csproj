@@ -40,11 +40,34 @@
   <PropertyGroup>
     <ApplicationIcon>AEMG-EX.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=4.1.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.4.1.0\lib\net40\Costura.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,10 +90,15 @@
     <Compile Include="Bootstrap\Bootstrap.cs" />
     <Compile Include="Converter\AEActionToStringConverter.cs" />
     <Compile Include="Converter\BacklineSkillVisibilityConverter.cs" />
+    <Compile Include="Converter\BooleanToForegroundColorConverter.cs" />
+    <Compile Include="Converter\EnumDisplayNameConverter.cs" />
     <Compile Include="Converter\LeftRightToImageConverter.cs" />
     <Compile Include="Converter\NullToVisibilityConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converter\PositionToImageConverter.cs" />
+    <Compile Include="Converter\SbyteToSpeedConverter.cs" />
     <Compile Include="Converter\SkillEnumToStringConverter.cs" />
+    <Compile Include="Converter\TextLengthToBackgroundColorConverter.cs" />
     <Compile Include="CustomControl\NumbericTextBox.cs" />
     <Compile Include="Views\UserControl\AEActionView\EXPBattleView.xaml.cs">
       <DependentUpon>EXPBattleView.xaml</DependentUpon>
@@ -83,6 +111,9 @@
     </Compile>
     <Compile Include="Views\UserControl\AEActionView\WaitView.xaml.cs">
       <DependentUpon>WaitView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControl\AESaveManager.xaml.cs">
+      <DependentUpon>AESaveManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControl\AESettingView.xaml.cs">
       <DependentUpon>AESettingView.xaml</DependentUpon>
@@ -99,8 +130,14 @@
     <Compile Include="Views\UserControl\CustomElement\CutCornerBox.xaml.cs">
       <DependentUpon>CutCornerBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControl\CustomElement\PointInput.xaml.cs">
+      <DependentUpon>PointInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControl\MacroSelectionView.xaml.cs">
       <DependentUpon>MacroSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\Setting.xaml.cs">
+      <DependentUpon>Setting.xaml</DependentUpon>
     </Compile>
     <Page Include="AEMG.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -138,6 +175,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Tab.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -166,6 +207,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserControl\AESaveManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControl\AESettingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -186,7 +231,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserControl\CustomElement\PointInput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\UserControl\MacroSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\Setting.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -231,8 +284,20 @@
       <Project>{F2E8DC53-3CB2-46CA-AF4E-A325E789B286}</Project>
       <Name>EMM.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MTPExplorer\MTPExplorer.csproj">
+      <Project>{6917691c-85d7-4a57-914b-669f8eb7dc86}</Project>
+      <Name>MTPExplorer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Toolbar\Open.png" />
+    <Resource Include="Images\Toolbar\Apply.png" />
+    <Resource Include="Images\Toolbar\Mobile.png" />
+    <Resource Include="Images\Toolbar\Save.png" />
+    <Resource Include="Images\Toolbar\Save-Down.png" />
+    <Resource Include="Images\Toolbar\Save-Plus.png" />
+    <Resource Include="Images\Toolbar\Save-Multiple.png" />
+    <Resource Include="Images\Toolbar\Application.png" />
     <Content Include="Images\UI\BattleScreenEXP.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

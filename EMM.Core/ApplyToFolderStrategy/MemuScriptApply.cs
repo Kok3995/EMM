@@ -1,3 +1,4 @@
+using MTPExplorer;
 using System;
 using System.IO;
 using System.Linq;
@@ -8,36 +9,40 @@ namespace EMM.Core
     /// <summary>
     /// This class is used to apply script to emulator folder
     /// </summary>
-    public class MemuScriptApply : IApplyScriptToFolder
+    public class MemuScriptApply : BaseScriptApply, IApplyScriptToFolder
     {
-        public MemuScriptApply(IMessageBoxService messageBoxService)
+        public MemuScriptApply(IMessageBoxService messageBoxService, IMTPManager mTPManager) : base(mTPManager)
         {
             this.messageBoxService = messageBoxService;
         }
 
         private IMessageBoxService messageBoxService;
 
-        public bool? ApplyScriptTo(string scriptName, string path, StringBuilder script, bool prompt = true)
+        public bool? ApplyScriptTo(string scriptName, string path, object scriptObj, bool prompt = true)
         {
             try
             {
+                var script = scriptObj as string;
+
+                if (script == null)
+                {
+                    throw new InvalidOperationException("Passed in script object is not a string");
+                }
+
                 var currentTime = DateTime.Now.ToString("yyyy'-'MM'-'dd' 'HH':'mm':'ss");
                 var section = Uri.EscapeDataString(currentTime);
 
                 var fullPath = Path.Combine(path, currentTime.Replace("-",string.Empty).Replace(":",string.Empty).Replace(" ", string.Empty) + ".mir");
                 var record = Path.Combine(path, "info.ini");
 
-                if (!File.Exists(record))
+                //Directory.CreateDirectory(path);
+                CreateFolder(path);
+                StringBuilder iniFile;
+                if (IsFileExist(record))
                 {
-                    Directory.CreateDirectory(path);
-                    File.Create(record).Close();
-                }
+                    //Read the file into a string array
+                    var iniFileStringList = /*File.ReadAllLines(record).ToList()*/ReadAllLines(record).ToList();
 
-                //Read the file into a string array
-                var iniFileStringList = File.ReadAllLines(record).ToList();
-
-                if (iniFileStringList.Count > 0)
-                {
                     //check name exist
                     var name = iniFileStringList.Where(m => m.Equals("name=" + scriptName)).FirstOrDefault();
 
@@ -61,19 +66,26 @@ namespace EMM.Core
                                 .Replace("[", string.Empty).Replace("]", string.Empty) + ".mir";
 
                             //overwrite it
-                            File.WriteAllText(Path.Combine(path, filenameOnDisk), script.ToString());
+                            //File.WriteAllText(Path.Combine(path, filenameOnDisk), script);
+                            WriteAllText(Path.Combine(path, filenameOnDisk), script);
                             return true;
                         }
                         else
                             return null;
-                    } 
+                    }
+
+                    iniFile = new StringBuilder(/*File.ReadAllText(record)*/ReadAllText(record));
+                }
+                else 
+                {
+                    iniFile = new StringBuilder();
                 };
 
                 //Name not exist then just write to disk
-                File.WriteAllText(fullPath, script.ToString());
+                //File.WriteAllText(fullPath, script);
+                WriteAllText(fullPath, script);
 
                 //Reconstruct the ini file
-                StringBuilder iniFile = new StringBuilder(File.ReadAllText(record));
                 iniFile.AppendLine().Append("[" + section + "]")
                     .AppendLine()
                     .Append("name=" + scriptName)
@@ -81,7 +93,8 @@ namespace EMM.Core
                     .Append("replayTime=0\nreplayCycles=1\nreplayAccelRates=1\nreplayInterval=0\ncycleInfinite=false\nbNew=false")
                     .AppendLine();
 
-                File.WriteAllText(record, iniFile.ToString());
+                //File.WriteAllText(record, iniFile.ToString());
+                WriteAllText(record, iniFile.ToString());
 
                 return true;
             }

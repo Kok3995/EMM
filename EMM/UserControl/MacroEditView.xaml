@@ -101,6 +101,7 @@
                         <KeyBinding Key="Delete" Command="{Binding DeleteCommand}"/>
                         <KeyBinding Key="Up" Modifiers="Ctrl" Command="{Binding UpCommand}"/>
                         <KeyBinding Key="Down" Modifiers="Ctrl" Command="{Binding DownCommand}"/>
+                        <KeyBinding Key="F7" Command="{Binding ToggleActionCommand}"/>
                         <KeyBinding Key="F5" Command="{Binding DataContext.ScriptGenerator.TestSelectedGroupCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"/>
                     </local:AutoListBox.InputBindings>
                     <local:AutoListBox.ContextMenu>
@@ -120,6 +121,13 @@
                                       Command="{Binding PlacementTarget.Tag.ScriptGenerator.TestSelectedGroupCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
                                 <MenuItem.Icon>
                                     <Image Source="{StaticResource TestButton}"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Header="Enable/Disable" InputGestureText="F7" 
+                                      Command="{Binding ToggleActionCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="{StaticResource ToggleButton}"/>
                                 </MenuItem.Icon>
                             </MenuItem>
                             <Separator/>

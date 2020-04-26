@@ -35,17 +35,5 @@ namespace Data
         /// </summary>
         public List<IAction> ActionGroupList { get; set; }
 
-        public StringBuilder GenerateScript(ref int timer)
-        {
-            var script = new StringBuilder();
-
-            foreach (var actionGroup in this.ActionGroupList)
-            {
-                script.Append(actionGroup.GenerateAction(ref timer));
-            }
-
-            return script;
-        }
-
     }
 }

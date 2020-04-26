@@ -39,6 +39,11 @@ namespace EMM.Core.ViewModels
         /// </summary>
         public int Repeat { get; set; } = 1;
 
+        /// <summary>
+        /// True to disable this action
+        /// </summary>
+        public bool IsDisable { get; set; }
+
 
         #endregion
 

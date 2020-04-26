@@ -9,7 +9,7 @@ namespace AEMG_EX.Core
 {
     public class AEActionFactory : IAEActionFactory
     {
-        public AEActionFactory()
+        public AEActionFactory(IPredefinedActionProvider actionProvider)
         {
             this.AEActionDict = new Dictionary<AEAction, Type>()
             {
@@ -23,13 +23,12 @@ namespace AEMG_EX.Core
 
             var autoMapper = new SimpleAutoMapper();
             var turnFactory = new TurnFactory();
-            var messagebox = new MessageBoxService();
 
             this.DependencyDict = new Dictionary<Type, object>()
             {
                 { typeof(SimpleAutoMapper), autoMapper },
                 { typeof(ITurnFactory), turnFactory },
-                { typeof(IPredefinedActionProvider),  new ActionProvider(autoMapper, messagebox) }
+                { typeof(IPredefinedActionProvider),  actionProvider }
             };
         }
 

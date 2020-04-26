@@ -33,6 +33,26 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -43,6 +63,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +74,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IAEAction.cs" />
+    <Compile Include="Abstract\IAEGenericRepository.cs" />
+    <Compile Include="Abstract\IAERepository.cs" />
+    <Compile Include="Abstract\IAESavedSetupRepository.cs" />
     <Compile Include="Abstract\ITurnFactory.cs" />
     <Compile Include="Abstract\IAEActionFactory.cs" />
     <Compile Include="Abstract\IAEActionViewModel.cs" />
@@ -61,36 +85,48 @@
     <Compile Include="Abstract\IMacroManager.cs" />
     <Compile Include="Abstract\IPredefinedActionProvider.cs" />
     <Compile Include="Abstract\IScanner.cs" />
+    <Compile Include="Abstract\IWindowInitlizer.cs" />
     <Compile Include="Concretes\ActionProvider.cs" />
+    <Compile Include="Concretes\AEBaseRepository.cs" />
+    <Compile Include="Concretes\AEMacroManager.cs" />
+    <Compile Include="Concretes\AERepository.cs" />
+    <Compile Include="Concretes\AESavedSetupRepository.cs" />
     <Compile Include="Concretes\AEScriptGenerator.cs" />
+    <Compile Include="Concretes\WindowInit.cs" />
     <Compile Include="Enum\Action.cs" />
     <Compile Include="Factory\TurnFactory.cs" />
-    <Compile Include="Models\AEAction\BossBattle.cs" />
-    <Compile Include="Models\AEAction\EXPBattle.cs" />
     <Compile Include="Concretes\MacroScanner.cs" />
-    <Compile Include="Models\AEAction\TrashMobBattle.cs" />
+    <Compile Include="Helpers\AEMGHelpers.cs" />
+    <Compile Include="Models\AEAction\AEWait.cs" />
+    <Compile Include="Models\AEAction\Battle.cs" />
     <Compile Include="Enum\CharacterAction.cs" />
     <Compile Include="Enum\Position.cs" />
     <Compile Include="Factory\AEActionFactory.cs" />
     <Compile Include="Helpers\StaticVariables.cs" />
+    <Compile Include="Models\AEAction\Food.cs" />
+    <Compile Include="Models\AEAction\Turn.cs" />
+    <Compile Include="Models\SavedAEProfile.cs" />
+    <Compile Include="Models\SavedAESetup.cs" />
     <Compile Include="Settings\AESetting.cs" />
     <Compile Include="Settings\AESettingViewModel.cs" />
-    <Compile Include="ViewModels\AEActionViewModel\EXPTurnViewModel.cs" />
-    <Compile Include="ViewModels\AEActionViewModel\BossTurnViewModel.cs" />
+    <Compile Include="Models\AEAction\Character.cs" />
+    <Compile Include="Settings\ApplicationSettingViewModel.cs" />
+    <Compile Include="ViewModels\Base\EXPTurnViewModel.cs" />
+    <Compile Include="ViewModels\Base\BossTurnViewModel.cs" />
     <Compile Include="ViewModels\AEActionViewModel\WaitViewModel.cs" />
     <Compile Include="ViewModels\AEActionViewModel\ReFoodViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseBattle.cs" />
-    <Compile Include="Models\Character.cs" />
+    <Compile Include="ViewModels\Base\CharacterViewModel.cs" />
     <Compile Include="Models\PredefineAction.cs" />
-    <Compile Include="Models\SavedAEAction.cs" />
-    <Compile Include="ViewModels\AEActionViewModel\TurnViewModel.cs" />
+    <Compile Include="ViewModels\Base\TurnViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\MainViewModels\AEActionListViewModel.cs" />
     <Compile Include="ViewModels\AEActionViewModel\BossBattleViewModel.cs" />
     <Compile Include="ViewModels\AEActionViewModel\EXPBattleViewModel.cs" />
     <Compile Include="ViewModels\AEActionViewModel\FoodViewModel.cs" />
     <Compile Include="ViewModels\AEActionViewModel\TrashMobBattleViewModel.cs" />
-    <Compile Include="ViewModels\MainViewModels\AEMacroManager.cs" />
+    <Compile Include="ViewModels\MainViewModels\AEMacroManagerViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModels\AEMacroSaveManagerViewModel.cs" />
     <Compile Include="ViewModels\MainViewModels\AEMGViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +137,10 @@
     <ProjectReference Include="..\EMM.Core\EMM.Core.csproj">
       <Project>{f2e8dc53-3cb2-46ca-af4e-a325e789b286}</Project>
       <Name>EMM.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MTPExplorer\MTPExplorer.csproj">
+      <Project>{6917691c-85d7-4a57-914b-669f8eb7dc86}</Project>
+      <Name>MTPExplorer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

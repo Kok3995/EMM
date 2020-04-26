@@ -1,7 +1,10 @@
 ﻿using Data;
 using EMM.Core.Converter;
+using MTPExplorer;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using WPF.Dialogs;
@@ -15,16 +18,18 @@ namespace EMM.Core.ViewModels
     {
         #region Ctor
 
-        public SettingViewModel()
-        {           
+        public SettingViewModel(IMTPManager mTPManager)
+        {
+            this.mTPManager = mTPManager;
         }
 
-        public SettingViewModel(Settings settings, SimpleAutoMapper autoMapper)
+        public SettingViewModel(Settings settings, SimpleAutoMapper autoMapper, IMTPManager mTPManager)
         {
             this.autoMapper = autoMapper;
             this.settings = settings;
+            this.mTPManager = mTPManager;
 
-            this.autoMapper.SimpleAutoMap<Settings, SettingViewModel>(this.settings, this);
+            this.autoMapper.SimpleAutoMap(this.settings, this);
 
             Messenger.Register((sender, e) =>
             {
@@ -46,6 +51,8 @@ namespace EMM.Core.ViewModels
         private Settings settings;
 
         private SimpleAutoMapper autoMapper;
+
+        private IMTPManager mTPManager;
 
         #endregion
 
@@ -76,7 +83,35 @@ namespace EMM.Core.ViewModels
         /// </summary>
         public virtual string MemuScriptLocation { get; set; }
 
-        public virtual string SelectedPath => (SelectedEmulator == Emulator.Nox) ? NoxScriptLocation : MemuScriptLocation;
+        /// <summary>
+        /// Location to bluestack script folder
+        /// </summary>
+        public virtual string BlueStackScriptLocation { get; set; }
+
+        /// <summary>
+        /// Location to LDplayer script folder
+        /// </summary>
+        public virtual string LDPlayerScriptLocation { get; set; }
+
+        /// <summary>
+        /// Location to Hiro script folder
+        /// </summary>
+        public virtual string HiroMacroScriptLocation { get; set; }
+
+        /// <summary>
+        /// Location to AnkuLua script folder
+        /// </summary>
+        public virtual string AnkuLuaScriptLocation { get; set; }
+
+        /// <summary>
+        /// Location to Click Assistant script folder
+        /// </summary>
+        public virtual string RobotmonScriptLocation { get; set; }
+
+        /// <summary>
+        /// Location to AutoTouch script folder
+        /// </summary>
+        public virtual string AutoTouchScriptLocation { get; set; }
 
         #endregion
 
@@ -102,6 +137,11 @@ namespace EMM.Core.ViewModels
         /// </summary>
         public virtual Emulator SelectedEmulator { get; set; }
 
+        /// <summary>
+        /// Scale Mode
+        /// </summary>
+        public virtual ScaleMode ScaleMode { get; set; } = ScaleMode.Stretch;
+
         #endregion
 
         #region View Properties
@@ -111,9 +151,33 @@ namespace EMM.Core.ViewModels
         /// </summary>
         public virtual List<Emulator> EmulatorList { get; set; } = Enum.GetValues(typeof(Emulator)).Cast<Emulator>().ToList();
 
+        /// <summary>
+        /// List of scale mode available
+        /// </summary>
+        public virtual List<ScaleMode> ScaleModeList { get; set; } = Enum.GetValues(typeof(ScaleMode)).Cast<ScaleMode>().ToList();
+
         public virtual bool IsNox => ((SelectedEmulator == Emulator.Nox) ? true : false);
+        public virtual bool IsMemu => ((SelectedEmulator == Emulator.Memu) ? true : false);
+        public virtual bool IsBlueStack => ((SelectedEmulator == Emulator.BlueStack) ? true : false);
+        public virtual bool IsLDPlayer => ((SelectedEmulator == Emulator.LDPlayer) ? true : false);
+        public virtual bool IsHiroMacro => ((SelectedEmulator == Emulator.HiroMacro) ? true : false);
+        public virtual bool IsAnkuLua => ((SelectedEmulator == Emulator.AnkuLua) ? true : false);
+        public virtual bool IsRobotmon => ((SelectedEmulator == Emulator.Robotmon) ? true : false);
+        public virtual bool IsAutoTouch => ((SelectedEmulator == Emulator.AutoTouch) ? true : false);
+
+        public virtual string SelectedPath =>
+            (SelectedEmulator == Emulator.Nox) ? NoxScriptLocation :
+            (SelectedEmulator == Emulator.Memu) ? MemuScriptLocation :
+            (SelectedEmulator == Emulator.BlueStack) ? BlueStackScriptLocation :
+            (SelectedEmulator == Emulator.LDPlayer) ? LDPlayerScriptLocation :
+            (SelectedEmulator == Emulator.HiroMacro) ? HiroMacroScriptLocation :
+            (SelectedEmulator == Emulator.AnkuLua) ? AnkuLuaScriptLocation :
+            (SelectedEmulator == Emulator.Robotmon) ? RobotmonScriptLocation :
+            AutoTouchScriptLocation;
 
         public virtual ICommand OpenEmulatorFolderCommand { get; set; }
+        public ICommand OpenFolderCommand { get; set; }
+        public ICommand OpenMTPFolderCommand { get; set; }
 
         protected virtual void InitializeCommands()
         {
@@ -123,17 +187,66 @@ namespace EMM.Core.ViewModels
 
                 if (openFolderDialog.ShowDialog() == true)
                 {
-                    switch(SelectedEmulator)
-                    {
-                        case Emulator.Nox:
-                            NoxScriptLocation = openFolderDialog.SelectedPath;
-                            break;
-                        case Emulator.Memu:
-                            MemuScriptLocation = openFolderDialog.SelectedPath;
-                            break;
-                    }
+                    SetSelectedPath(openFolderDialog.SelectedPath);
                 }
             });
+
+            OpenFolderCommand = new RelayCommand(p =>
+            {
+                try
+                {
+                    var path = Path.GetFullPath(SelectedPath);
+                    Process.Start(path);
+                }
+                catch
+                {
+                    Process.Start(Environment.CurrentDirectory);
+                }
+            });
+
+            OpenMTPFolderCommand = new RelayCommand(p =>
+            {
+                var mtp = mTPManager.Open(SelectedPath);
+                if (mtp.Result == true)
+                {
+                    SetSelectedPath(mtp.SelectedPath);
+                }
+            });
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private void SetSelectedPath(string path)
+        {
+            switch (SelectedEmulator)
+            {
+                case Emulator.Nox:
+                    NoxScriptLocation = path;
+                    break;
+                case Emulator.Memu:
+                    MemuScriptLocation = path;
+                    break;
+                case Emulator.BlueStack:
+                    BlueStackScriptLocation = path;
+                    break;
+                case Emulator.LDPlayer:
+                    LDPlayerScriptLocation = path;
+                    break;
+                case Emulator.HiroMacro:
+                    HiroMacroScriptLocation = path;
+                    break;
+                case Emulator.AnkuLua:
+                    AnkuLuaScriptLocation = path;
+                    break;
+                case Emulator.Robotmon:
+                    RobotmonScriptLocation = path;
+                    break;
+                case Emulator.AutoTouch:
+                    AutoTouchScriptLocation = path;
+                    break;
+            }
         }
 
         #endregion

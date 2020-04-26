@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using EMM.Core.ViewModels;
+using MTPExplorer;
 
 namespace EMM.Core
 {
@@ -10,13 +11,10 @@ namespace EMM.Core
     /// </summary>
     public class ScriptApplyFactory
     {
-        public ScriptApplyFactory(IMessageBoxService messageBoxService, Dictionary<Emulator, IApplyScriptToFolder> scriptApplyDict)
+        public ScriptApplyFactory(Dictionary<Emulator, IApplyScriptToFolder> scriptApplyDict)
         {
-            this.messageBoxService = messageBoxService;
             this.scriptApplyDict = scriptApplyDict;
         }
-
-        private IMessageBoxService messageBoxService;
 
         private Dictionary<Emulator, IApplyScriptToFolder> scriptApplyDict;
 
@@ -32,6 +30,38 @@ namespace EMM.Core
 
             return scriptApplyDict[emulator];
         }
+    }
 
+    public class ScriptApplyBootStrap
+    {
+        public ScriptApplyBootStrap(IMessageBoxService messageBoxService, IMTPManager mTPManager)
+        {
+            this.messageBoxService = messageBoxService;
+            this.mTPManager = mTPManager;
+        }
+
+        private IMessageBoxService messageBoxService;
+        private IMTPManager mTPManager;
+
+        private Dictionary<Emulator, IApplyScriptToFolder> scriptApplyDict;
+
+        public ScriptApplyFactory GetScriptApplyFactory()
+        {
+            if (scriptApplyDict == null) {
+                scriptApplyDict = new Dictionary<Emulator, IApplyScriptToFolder>()
+                {
+                    { Emulator.Nox, new NoxScriptApply(messageBoxService, mTPManager) },
+                    { Emulator.Memu, new MemuScriptApply(messageBoxService, mTPManager) },
+                    { Emulator.BlueStack, new BlueStackScriptApply(messageBoxService, mTPManager) },
+                    { Emulator.LDPlayer, new LDPlayerScriptApply(messageBoxService, mTPManager) },
+                    { Emulator.HiroMacro, new HiroMacroScriptApply(messageBoxService, mTPManager) },
+                    { Emulator.AnkuLua, new AnkuMacroScriptApply(messageBoxService, mTPManager) },
+                    { Emulator.AutoTouch, new AnkuMacroScriptApply(messageBoxService, mTPManager) },
+                    { Emulator.Robotmon, new RobotmonScriptApply(messageBoxService, mTPManager) },
+                };
+            }
+
+            return new ScriptApplyFactory(scriptApplyDict);
+        }
     }
 }

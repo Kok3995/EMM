@@ -1,0 +1,48 @@
+﻿<Window x:Class="MTPExplorer.MTPExplorer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MTPExplorer"
+        mc:Ignorable="d"
+        Title="MTP Explorer" Height="330" Width="600">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <local:ExtendedTreeView Grid.Row="1" ItemsSource="{Binding Drives}" SelectedItem_="{Binding SelectedItem, Mode=TwoWay}">
+            <local:ExtendedTreeView.Resources>
+                <Style TargetType="TreeView">
+                    <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+                    <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+                </Style>
+            </local:ExtendedTreeView.Resources>
+            <TreeView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </TreeView.ItemsPanel>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="local:TreeViewItemBehavior.IsBroughtIntoViewWhenSelected" Value="True"/>
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding ChildrenDirectory}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="24" Margin="3" Source="{Binding Type, Converter={local:HeaderToImageConverter}}"/>
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </local:ExtendedTreeView>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0 10 0 0" Orientation="Horizontal">
+            <Button Width="64" Height="24" Margin="10 0" Command="{Binding OKCommand}">OK</Button>
+            <Button Width="64" Height="24" Click="Close">Cancel</Button>
+        </StackPanel>
+    </Grid>
+</Window>

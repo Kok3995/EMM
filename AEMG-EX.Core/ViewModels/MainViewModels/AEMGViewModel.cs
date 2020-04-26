@@ -1,19 +1,23 @@
 ﻿using EMM;
 using EMM.Core;
+using System;
+using System.IO;
 using System.Windows.Input;
 
 namespace AEMG_EX.Core
 {
     public class AEMGViewModel : BaseViewModel
     {
-        public AEMGViewModel(IMacroManager macroManager, AEActionListViewModel AEActionList, AESettingViewModel Settings, AEScriptGenerator scriptGenerator, IMessageBoxService messageBoxService, IAutoUpdater AutoUpdater)
+        public AEMGViewModel(AEMacroManagerViewModel macroManagerViewModel, AEActionListViewModel AEActionList, AESettingViewModel Settings, AEScriptGenerator scriptGenerator, IMessageBoxService messageBoxService, IAutoUpdater AutoUpdater, AEMacroSaveManagerViewModel saveManager, IMacroManager macroManager)
         {
-            this.MacroManager = macroManager;
+            this.MacroManager = macroManagerViewModel;
             this.AEActionListViewModel = AEActionList;
             this.Settings = Settings;
             this.scriptGenerator = scriptGenerator;
             this.messageBoxService = messageBoxService;
             this.AutoUpdater = AutoUpdater;
+            this.SaveManager = saveManager;
+            this.macroManager = macroManager;
             this.MacroManager.ScanForMacroes();
 
             InitializeCommandAndEvents();
@@ -24,8 +28,9 @@ namespace AEMG_EX.Core
 
         private AEScriptGenerator scriptGenerator;
         private IMessageBoxService messageBoxService;
+        private IMacroManager macroManager;
 
-        public IMacroManager MacroManager { get; set; }
+        public AEMacroManagerViewModel MacroManager { get; set; }
 
         public AEActionListViewModel AEActionListViewModel { get; set; }
 
@@ -33,14 +38,17 @@ namespace AEMG_EX.Core
 
         public IAutoUpdater AutoUpdater { get; set; }
 
+        public AEMacroSaveManagerViewModel SaveManager { get; set; }
+
         public ICommand ConvertCommand { get; set; }
         public ICommand TestSelectedCommand { get; set; }
+        public ICommand PreviewInEMMCommand { get; set; }
 
         private void InitializeCommandAndEvents()
         {
             ConvertCommand = new RelayCommand(p =>
             {
-                var result = this.scriptGenerator.GenerateScript(MacroManager.GetCurrentTemplate(), AEActionListViewModel.AEActionList);
+                var result = this.scriptGenerator.GenerateScript(macroManager.GetCurrentTemplate(), AEActionListViewModel.AEActionList);
 
                 if (result == null)
                     return;
@@ -53,12 +61,26 @@ namespace AEMG_EX.Core
 
             TestSelectedCommand = new RelayCommand(p =>
             {
-                this.scriptGenerator.GenerateScript(MacroManager.GetCurrentTemplate(), aEAction: AEActionListViewModel.GetSelected());
+                this.scriptGenerator.GenerateScript(macroManager.GetCurrentTemplate(), aEAction: AEActionListViewModel.GetSelected());
             });
 
-            MacroManager.SelectChanged += (sender, e) =>
+            PreviewInEMMCommand = new RelayCommand(p =>
             {
-                Settings.CustomName = MacroManager.GetCurrentTemplate()?.MacroName;
+                //check if EMM exist
+                if (!File.Exists(Path.Combine(Environment.CurrentDirectory, AEMGStatic.EMM_NAME)))
+                {
+                    this.messageBoxService.ShowMessageBox("Cannot find EMM application. Put this application to the same folder as EMM.exe", "ERROR", MessageButton.OK, MessageImage.Error);
+                    return;
+                }
+
+                var path = this.scriptGenerator.GenerateTempScript(macroManager.GetCurrentTemplate(), AEActionListViewModel.AEActionList);
+
+                AEMGHelpers.StartEMM(path, StaticVariables.NO_SAVE_AGRS);
+            });
+
+            macroManager.SelectChanged += (sender, e) =>
+            {
+                Settings.CustomName = e.NewMacro?.MacroName;
             };
         }             
     }

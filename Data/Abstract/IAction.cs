@@ -11,10 +11,6 @@ namespace Data
 
         string ActionDescription { get; set; }        
 
-        /// <summary>
-        /// Generate the action script
-        /// </summary>
-        /// <param name="timer">the timer</param>
-        StringBuilder GenerateAction(ref int timer);
+        bool IsDisable { get; set; }
     }
 }

@@ -46,12 +46,42 @@ namespace EMM.Core
         /// <summary>
         /// The location of Nox's record file
         /// </summary>
-        public string NoxScriptLocation { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Nox", "record");
+        public string NoxScriptLocation { get; set; } = StaticVariables.DEFAULT_NOX_FOLDER;
 
         /// <summary>
         /// The location to memu script folder
         /// </summary>
-        public string MemuScriptLocation { get; set; } = Path.Combine(UsefulStaticMethod.GetInstallationPath("MEmu"), "MEmu", "scripts");
+        public string MemuScriptLocation { get; set; } = StaticVariables.DEFAULT_MEMU_FOLDER;
+
+        /// <summary>
+        /// Location to bluestack script folder
+        /// </summary>
+        public string BlueStackScriptLocation { get; set; } = StaticVariables.DEFAULT_BLUESTACKS_FOLDER;
+
+        /// <summary>
+        /// Location to LDplayer script folder
+        /// </summary>
+        public string LDPlayerScriptLocation { get; set; } = StaticVariables.DEFAULT_LDPlayer_FOLDER;
+
+        /// <summary>
+        /// Location to Hiro script folder
+        /// </summary>
+        public string HiroMacroScriptLocation { get; set; } = StaticVariables.DEFAULT_MOBILE_FOLDER;
+
+        /// <summary>
+        /// Location to AnkuLua script folder
+        /// </summary>
+        public string AnkuLuaScriptLocation { get; set; } = StaticVariables.DEFAULT_MOBILE_FOLDER;
+
+        /// <summary>
+        /// Location to Robotmon script folder
+        /// </summary>
+        public string RobotmonScriptLocation { get; set; } = StaticVariables.DEFAULT_MOBILE_FOLDER;
+
+        /// <summary>
+        /// Location to AutoTouch script folder
+        /// </summary>
+        public string AutoTouchScriptLocation { get; set; } = StaticVariables.DEFAULT_MOBILE_FOLDER;
 
         #endregion
 
@@ -76,6 +106,11 @@ namespace EMM.Core
         /// The selected emulator
         /// </summary>
         public Emulator SelectedEmulator { get; set; } = Emulator.Nox;
+
+        /// <summary>
+        /// Scale Mode
+        /// </summary>
+        public ScaleMode ScaleMode { get; set; } = ScaleMode.Stretch;
 
         #endregion
 

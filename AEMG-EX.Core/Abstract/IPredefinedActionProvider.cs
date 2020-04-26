@@ -6,6 +6,18 @@ namespace AEMG_EX.Core
     public interface IPredefinedActionProvider
     {
         /// <summary>
+        /// Get the predefined action
+        /// </summary>
+        /// <returns></returns>
+        DefaultAction GetDefaultActions();
+
+        /// <summary>
+        /// Save a new PredefinedAction
+        /// </summary>
+        /// <param name="predefineAction"></param>
+        bool SaveDefaultActions(DefaultAction defaultAction);
+
+        /// <summary>
         /// Return list of IAction
         /// </summary>
         /// <param name="action"></param>
@@ -33,6 +45,5 @@ namespace AEMG_EX.Core
         /// <param name="waittime"></param>
         /// <returns></returns>
         IAction GetWait(int waittime);
-
     }
 }

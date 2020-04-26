@@ -1,6 +1,10 @@
 ﻿using Data;
-using EMM.Core.Converter;
+using EMM.Core.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -14,12 +18,12 @@ namespace EMM.Core.ViewModels
     {
         #region Ctor
 
-        public MacroManagerViewModel(DataIO dataIO, IMessageBoxService messageBoxService, ViewModelFactory viewModelFactory)
+        public MacroManagerViewModel(DataIO dataIO, IMessageBoxService messageBoxService, ViewModelFactory viewModelFactory, IRecentFile recentFile)
         {
             this.dataIO = dataIO;
             this.messageBoxService = messageBoxService;
             this.viewModelFactory = viewModelFactory;
-
+            this.recentFile = recentFile;
             //var test = new TestClass();
 
             //CurrentMacro = this.LoadMacroViewModel(test.ReturnTestTemplate());
@@ -35,6 +39,7 @@ namespace EMM.Core.ViewModels
         private DataIO dataIO;
         private IMessageBoxService messageBoxService;
         private ViewModelFactory viewModelFactory;
+        private IRecentFile recentFile;
 
         private MacroViewModel currentMacro;
         private int errorCount;
@@ -61,6 +66,11 @@ namespace EMM.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// Recently opened macroes
+        /// </summary>
+        public ObservableCollection<RecentItem> RecentList => recentFile.GetRecentItems();
+
         #endregion
 
         #region Commands
@@ -70,6 +80,7 @@ namespace EMM.Core.ViewModels
         public ICommand ExitCommand { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand SaveAsCommand { get; set; }
+        public ICommand OpenRecentFileCommand { get; set; }
 
         private void InitializeCommands()
         {
@@ -79,6 +90,7 @@ namespace EMM.Core.ViewModels
                     return;
 
                 CurrentMacro = viewModelFactory.NewMacroViewModel();
+                CurrentMacro.AcceptChanges();
             });
 
             OpenCommand = new RelayCommand(async p =>
@@ -86,14 +98,27 @@ namespace EMM.Core.ViewModels
                 if (await ShouldSaveMacro() == null)
                     return;
 
-                var loadedMacro = await Task.Run(() => this.LoadMacroViewModel());
+                await Task.Run(() => this.LoadMacroViewModel());
+            });
 
-                if (loadedMacro == null)
+            OpenRecentFileCommand = new RelayCommand(async p =>
+            {
+                if (await ShouldSaveMacro() == null)
+                    return;
+
+                var path = p as string;
+
+                if (string.IsNullOrWhiteSpace(path))
+                    return;
+
+                if (!File.Exists(path))
                 {
+                    this.messageBoxService.ShowMessageBox("The file does not exist anymore", "Error", MessageButton.OK, MessageImage.Error);
+                    recentFile.RemoveRecentItem(path);
                     return;
                 }
 
-                this.CurrentMacro = loadedMacro;
+                SetCurrentMacro(path);
             });
 
             ExitCommand = new RelayCommand(p => Application.Current.Shutdown());
@@ -101,12 +126,18 @@ namespace EMM.Core.ViewModels
             SaveCommand = new RelayCommand(async p =>
             {
                 this.CurrentMacro.MacroPath = await Task.Run(() => this.SaveMacro(CurrentMacro, this.CurrentMacro.MacroPath));
+
+                recentFile.AddRecentItem(this.CurrentMacro.MacroPath);
+
                 CurrentMacro.AcceptChanges();
             }, p => CurrentMacro != null);
 
             SaveAsCommand = new RelayCommand(async p =>
             {
                 this.CurrentMacro.MacroPath = await Task.Run(() => this.SaveAsMacro(CurrentMacro, this.CurrentMacro.MacroPath));
+
+                recentFile.AddRecentItem(this.CurrentMacro.MacroPath);
+
                 CurrentMacro.AcceptChanges();
             }, p => CurrentMacro != null);
         }
@@ -151,23 +182,36 @@ namespace EMM.Core.ViewModels
         /// Set the current macro to the pass in macro
         /// </summary>
         /// <param name="macro"></param>
-        public void SetCurrentMacro(MacroViewModel macro)
+        public void SetCurrentMacro(MacroViewModel macro, string path = null)
         {
+            if (macro == null)
+                return;
+
             this.CurrentMacro = macro;
+
+            if (!string.IsNullOrWhiteSpace(path) && Path.GetExtension(path).Equals(".emm", StringComparison.InvariantCultureIgnoreCase))
+            {
+                this.CurrentMacro.MacroPath = path;
+                recentFile.AddRecentItem(CurrentMacro.MacroPath);
+            }
+
+            this.CurrentMacro.AcceptChanges();
         }
 
         /// <summary>
         /// set the current macro base on the path
         /// </summary>
         /// <param name="macro"></param>
-        public void SetCurrentMacro(string path)
+        public void SetCurrentMacro(string path, bool nosave = false)
         {
             var loadedMacro = this.LoadMacroViewModel(path);
             if (loadedMacro == null)
                 return;
 
-            this.CurrentMacro = loadedMacro;
-            this.CurrentMacro?.AcceptChanges();
+            if (nosave)
+                path = null;
+
+            SetCurrentMacro(loadedMacro, path);
         }
 
         public MacroViewModel GetCurrentMacro()
@@ -191,7 +235,7 @@ namespace EMM.Core.ViewModels
         /// <returns></returns>
         public MacroViewModel LoadMacroViewModel(MacroTemplate macroTemplate)
         {
-            return viewModelFactory.NewMacroViewModel().PopulateProperties(macroTemplate);
+           return viewModelFactory.NewMacroViewModel().PopulateProperties(macroTemplate);
         }
 
         /// <summary>
@@ -211,37 +255,31 @@ namespace EMM.Core.ViewModels
                 return null;
             }
 
-            var vm = viewModelFactory.NewMacroViewModel().PopulateProperties(loadedMacro.MacroTemplate);
-            vm.MacroPath = path;
-            return vm;
+            return this.LoadMacroViewModel(loadedMacro.MacroTemplate);
         }
 
         /// <summary>
         /// Load <see cref="MacroViewModel"/> from file using OpenFileDialog
         /// </summary>
         /// <returns></returns>
-        public MacroViewModel LoadMacroViewModel()
+        public void LoadMacroViewModel()
         {
             this.errorCount = 0;
             var loadedMacro = this.dataIO.LoadFromFile(null, ErrorCallBack);
             this.CheckError();
 
             if (loadedMacro == null && errorCount == 0) //User press cancel
-                return null;
+                return;
 
             if (loadedMacro == null)
             {
                 this.messageBoxService.ShowMessageBox("Cannot parse the file", "ERROR", MessageButton.OK, MessageImage.Error);
-                return null;
+                return;
             }
 
             var macroViewModel = this.LoadMacroViewModel(loadedMacro.MacroTemplate);
 
-            macroViewModel.MacroPath = loadedMacro.MacroFullPath;
-
-            macroViewModel.AcceptChanges();
-
-            return macroViewModel;
+            SetCurrentMacro(macroViewModel, loadedMacro.MacroFullPath);
         }
 
         /// <summary>
@@ -274,7 +312,7 @@ namespace EMM.Core.ViewModels
             if (CurrentMacro == null)
                 return false;
 
-            if (CurrentMacro.IsChanged == true)
+            if (CurrentMacro?.IsDirty() == true)
             {
                 MessageResult result = MessageResult.Cancel;
                 if (CurrentMacro != null)
@@ -302,6 +340,7 @@ namespace EMM.Core.ViewModels
         {
             this.errorCount++;
         }
+
         private void CheckError()
         {
             if (errorCount > 0)
@@ -309,8 +348,7 @@ namespace EMM.Core.ViewModels
                 this.messageBoxService.ShowMessageBox(this.errorCount + " error(s) occur while trying to parse the file. The parsed macro might not be completed", "ERROR", MessageButton.OK, MessageImage.Error);
                 return;
             }
-        }
-
+        }        
 
         #endregion
     }

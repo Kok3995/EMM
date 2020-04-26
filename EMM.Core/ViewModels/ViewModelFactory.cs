@@ -18,20 +18,24 @@ namespace EMM.Core.ViewModels
             this.dependencyDict = dependencyDict;
         }
 
-        private SimpleAutoMapper autoMapper = new SimpleAutoMapper();
-
         private Dictionary<Type, object> dependencyDict;
 
         public MacroViewModel NewMacroViewModel()
         {
-            return new MacroViewModel(autoMapper, this);
+            return new MacroViewModel(this.GetDependency<SimpleAutoMapper>(), this, new ViewModelClipboard());
         }
 
         public IActionViewModel NewActionViewModel(BasicAction actionType)
         {
             try
             {
-                return (IActionViewModel)Activator.CreateInstance(Type.GetType("EMM.Core.ViewModels." + Enum.GetName(typeof(BasicAction), actionType) + "ViewModel"), this.GetDependency<SimpleAutoMapper>(), this);
+                var type = Type.GetType("EMM.Core.ViewModels." + Enum.GetName(typeof(BasicAction), actionType) + "ViewModel");
+                if (type == typeof(ActionGroupViewModel) || type == typeof(CustomActionViewModel))
+                {
+                    return (IActionViewModel)Activator.CreateInstance(type, this.GetDependency<SimpleAutoMapper>(), this, this.GetDependency<ViewModelClipboard>());
+                }
+
+                return (IActionViewModel)Activator.CreateInstance(type, this.GetDependency<SimpleAutoMapper>(), this);
             }
             catch
             {

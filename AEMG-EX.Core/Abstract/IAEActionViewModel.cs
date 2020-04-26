@@ -8,8 +8,18 @@ using System.Threading.Tasks;
 
 namespace AEMG_EX.Core
 {
-    public interface IAEActionViewModel : IViewModel, IAEAction, ICopy<IAEActionViewModel>
+    public interface IAEActionViewModel : IViewModel, ICopy<IAEActionViewModel>
     {
+        /// <summary>
+        /// Another Eden specific action
+        /// </summary>
+        AEAction AEAction { get; }
+
+        /// <summary>
+        /// Action description
+        /// </summary>
+        string ActionDescription { get; set; }
+
         int ActionGroupIndex { get; set; }
 
         int ActionIndex { get; set; }

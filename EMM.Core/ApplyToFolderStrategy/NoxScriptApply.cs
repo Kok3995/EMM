@@ -1,4 +1,5 @@
 using Data;
+using MTPExplorer;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,19 +13,26 @@ namespace EMM.Core
     /// <summary>
     /// This class is used to apply script to emulator folder
     /// </summary>
-    public class NoxScriptApply : IApplyScriptToFolder
+    public class NoxScriptApply : BaseScriptApply, IApplyScriptToFolder
     {
-        public NoxScriptApply(IMessageBoxService messageBoxService)
+        public NoxScriptApply(IMessageBoxService messageBoxService, IMTPManager mTPManager) : base(mTPManager)
         {
             this.messageBoxService = messageBoxService;
         }
 
         private IMessageBoxService messageBoxService;
 
-        public bool? ApplyScriptTo(string scriptName, string path, StringBuilder script, bool prompt = true)
+        public bool? ApplyScriptTo(string scriptName, string path, object scriptObj, bool prompt = true)
         {
             try
             {
+                var script = scriptObj as string;
+
+                if (script == null)
+                {
+                    throw new InvalidOperationException("Passed in script object is not a string");
+                }
+
                 var fileNameInRecordFolder = CalculateMD5Hash(DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString());
                 var fullPathToMacroFile = Path.Combine(path, fileNameInRecordFolder); // path/md5string
                 var recordsFileFullPath = Path.Combine(path, "records"); // path/records
@@ -37,7 +45,8 @@ namespace EMM.Core
 
                 if (isNameExisted == null)
                 {
-                    File.WriteAllText(fullPathToMacroFile, script.ToString());
+                    //File.WriteAllText(fullPathToMacroFile, script);
+                    WriteAllText(fullPathToMacroFile, script);
                     recordsFileContent.Add(fileNameInRecordFolder, new NoxRecordFormat { Name = scriptName });
                 }
                 else
@@ -49,13 +58,17 @@ namespace EMM.Core
 
                     if (overwriteChoice == MessageResult.Yes)
                     {
-                        File.WriteAllText(Path.Combine(path, key), script.ToString());
+                        //File.WriteAllText(Path.Combine(path, key), script);
+                        WriteAllText(Path.Combine(path, key), script);
+
                     }
                     else
                         return null; //user press No return null
                 }
 
-                File.WriteAllText(recordsFileFullPath, JsonConvert.SerializeObject(recordsFileContent, Formatting.Indented));
+                //File.WriteAllText(recordsFileFullPath, JsonConvert.SerializeObject(recordsFileContent, Formatting.Indented));
+                WriteAllText(recordsFileFullPath, JsonConvert.SerializeObject(recordsFileContent, Formatting.Indented));
+
                 return true;
             }
             catch (Exception ex)
@@ -67,14 +80,15 @@ namespace EMM.Core
 
         private void LoadRecord(string record, ref Dictionary<string, NoxRecordFormat> recordContent)
         {
-            if (!File.Exists(record))
+            if (!/*File.Exists(record)*/IsFileExist(record))
             {
-                (new FileInfo(record)).Directory.Create();
+                //(new FileInfo(record)).Directory.Create();
+                CreateFolder(Path.GetDirectoryName(record));
                 recordContent = new Dictionary<string, NoxRecordFormat>();
             }
             else
             {
-                recordContent = JsonConvert.DeserializeObject<Dictionary<string, NoxRecordFormat>>(File.ReadAllText(record));
+                recordContent = JsonConvert.DeserializeObject<Dictionary<string, NoxRecordFormat>>(/*File.ReadAllText(record)*/ReadAllText(record));
             }
         }
 

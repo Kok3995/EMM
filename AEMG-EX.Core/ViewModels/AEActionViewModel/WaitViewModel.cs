@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Data;
 using EMM.Core;
+using EMM.Core.Converter;
 
 namespace AEMG_EX.Core
 {
@@ -8,12 +9,16 @@ namespace AEMG_EX.Core
     {
         #region Ctor
 
-        public WaitViewModel(IPredefinedActionProvider actionProvider)
+        public WaitViewModel(IPredefinedActionProvider actionProvider, SimpleAutoMapper autoMapper)
         {
             this.actionProvider = actionProvider;
+            this.autoMapper = autoMapper;
         }
 
         private IPredefinedActionProvider actionProvider;
+        private SimpleAutoMapper autoMapper;
+
+
         #endregion
 
         #region View Properties
@@ -35,12 +40,20 @@ namespace AEMG_EX.Core
 
         public IAEAction ConvertBackToAction()
         {
-            throw new System.NotImplementedException();
+            return autoMapper.SimpleAutoMap<WaitViewModel, AEWait>(this);
         }
 
         public IAEActionViewModel ConvertFromAction(IAEAction action)
         {
-            throw new System.NotImplementedException();
+            if (action.AEAction != AEAction)
+                return null;
+
+            if (!(action is AEWait wait))
+                return null;
+
+            autoMapper.SimpleAutoMap(wait, this);
+
+            return this;
         }
 
         public IList<IAction> UserChoicesToActionList()

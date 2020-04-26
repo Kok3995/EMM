@@ -1,5 +1,6 @@
 ﻿using Data;
 using EMM.Core.Converter;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +11,7 @@ namespace EMM.Core.ViewModels
 {
     public class ActionGroupViewModel : CommonViewModel, IActionViewModel
     {
-        public ActionGroupViewModel(SimpleAutoMapper autoMapper, ViewModelFactory viewModelFactory)
+        public ActionGroupViewModel(SimpleAutoMapper autoMapper, ViewModelFactory viewModelFactory, ViewModelClipboard clipboard) : base(clipboard)
         {
             this.autoMapper = autoMapper;
             this.viewModelFactory = viewModelFactory;
@@ -26,7 +27,8 @@ namespace EMM.Core.ViewModels
         #endregion
 
         #region Public Properties
-        public BasicAction BasicAction { get => BasicAction.ActionGroup; set { } }
+
+        public virtual BasicAction BasicAction { get => BasicAction.ActionGroup; set { } }
 
         /// <summary>
         /// Description of the action group
@@ -37,6 +39,11 @@ namespace EMM.Core.ViewModels
         /// Repeat this action group
         /// </summary>
         public int Repeat { get; set; } = 1;
+
+        /// <summary>
+        /// True to disable this action
+        /// </summary>
+        public bool IsDisable { get; set; }
 
         #endregion
 
@@ -54,39 +61,34 @@ namespace EMM.Core.ViewModels
 
         #region Interface Implement
 
-        public IAction ConvertBackToAction()
+        public virtual IAction ConvertBackToAction()
         {
             var actionGroup = this.autoMapper.SimpleAutoMap<ActionGroupViewModel, ActionGroup>(this);
-            actionGroup.ActionList = new List<IAction>();
-
-            foreach (var actionViewModel in this.ViewModelList)
-            {
-                actionGroup.ActionList.Add(actionViewModel.ConvertBackToAction());
-            }
+            actionGroup.ActionList = new List<IAction>(this.ViewModelList.Select(a => a.ConvertBackToAction()));
 
             return actionGroup;
         }
-        public IActionViewModel MakeCopy()
+        public virtual IActionViewModel MakeCopy()
         {
             var newGroup = (ActionGroupViewModel)viewModelFactory.NewActionViewModel(this.BasicAction);
-            this.autoMapper.SimpleAutoMap<ActionGroupViewModel, ActionGroupViewModel>(this, newGroup, new List<Type> { typeof(ICommand), typeof(ObservableCollection<IActionViewModel>), typeof(IActionViewModel) });
+            this.autoMapper.SimpleAutoMap(this, newGroup, new List<Type> { typeof(ICommand), typeof(ObservableCollection<IActionViewModel>), typeof(IActionViewModel) });
             newGroup.ViewModelList = new ObservableCollection<IActionViewModel>(this.ViewModelList.Select(i => i.MakeCopy()));
             return newGroup;
         }
-        public IActionViewModel ConvertFromAction(IAction action)
+        public virtual IActionViewModel ConvertFromAction(IAction action)
         {
             var actionGroup = action as ActionGroup;
-            this.autoMapper.SimpleAutoMap<ActionGroup, ActionGroupViewModel>(actionGroup as ActionGroup, this);
+            this.autoMapper.SimpleAutoMap(actionGroup as ActionGroup, this);
             ViewModelList = this.LoadActionsViewModel(actionGroup.ActionList);
             return this;
         }
-        public IActionViewModel ChangeResolution(double scaleX, double scaleY, MidpointRounding roundMode = MidpointRounding.ToEven)
+        public virtual IActionViewModel ChangeResolution(double scaleX, double scaleY, MidpointRounding roundMode = MidpointRounding.ToEven)
         {
-            var newActionGroupVM = this.MakeCopy() as ActionGroupViewModel;
+            var newActionGroupVM = this.MakeCopy() as CommonViewModel;
 
             newActionGroupVM.ViewModelList = new ObservableCollection<IActionViewModel>(this.ViewModelList.Select(i => i.ChangeResolution(scaleX, scaleY, roundMode)));
 
-            return newActionGroupVM;
+            return (IActionViewModel)newActionGroupVM;
         }
 
         #endregion
@@ -106,6 +108,9 @@ namespace EMM.Core.ViewModels
         {
             try
             {
+                if (base.ViewModelList.Count == 0)
+                    SelectedItemIndex = -1;
+
                 base.ViewModelList.Insert(SelectedItemIndex + 1, SelectedItem = viewModelFactory.NewActionViewModel(ActionBaseOnCommandParameter(parameter)));
             }
             catch { }
@@ -119,13 +124,13 @@ namespace EMM.Core.ViewModels
         /// Load list of <see cref="IActionViewModel"/> from a list of <see cref="IAction"/>
         /// </summary>
         /// <param name="actionList">the list of <see cref="IAction"/> to load/></param>
-        protected ObservableCollection<IActionViewModel> LoadActionsViewModel(IList<IAction> actionList)
+        protected virtual ObservableCollection<IActionViewModel> LoadActionsViewModel(IList<IAction> actionList)
         {
             var list = new ObservableCollection<IActionViewModel>();
 
             foreach (var action in actionList)
             {
-                var viewmodel = this.viewModelFactory.NewActionViewModel(action.BasicAction).ConvertFromAction(action);
+                var viewmodel = this.viewModelFactory.NewActionViewModel(action.BasicAction == BasicAction.ActionGroup ? BasicAction.CustomAction : action.BasicAction).ConvertFromAction(action);
                 if (viewmodel == null)
                     continue;
                 list.Add(viewmodel);

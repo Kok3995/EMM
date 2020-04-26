@@ -18,5 +18,10 @@ namespace EMM.Core.Extension
 
             return targetString;
         }
+
+        public static string ToStringDotSeperator(this double target)
+        {
+            return target.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+        }
     }
 }

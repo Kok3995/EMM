@@ -41,6 +41,28 @@
   <PropertyGroup>
     <ApplicationIcon>EMM.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=4.1.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.4.1.0\lib\net40\Costura.dll</HintPath>
@@ -49,6 +71,7 @@
       <HintPath>..\packages\PropertyChanged.Fody.3.1.3\lib\net40\PropertyChanged.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
@@ -72,12 +95,15 @@
     <Compile Include="ControlExtension\TextBoxAttachProperties.cs" />
     <Compile Include="Converter\AEActionToStringConverter.cs" />
     <Compile Include="Converter\BasicActionToImageConverter.cs" />
+    <Compile Include="Converter\EnumDisplayNameConverter.cs" />
+    <Compile Include="Converter\FalseToRedConverter.cs" />
     <Compile Include="Converter\BooleanToRedGreenConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\SbyteToSpeedConverter.cs" />
     <Compile Include="Converter\ScaleValueToForegroundConverter.cs" />
     <Compile Include="Converter\TextLengthToBackgroundColorConverter.cs" />
     <Compile Include="CustomControl\ScrollIntoViewListBox.cs" />
+    <Compile Include="Extension\DependencyObjectExtension.cs" />
     <Compile Include="UserControl\ActionDescriptionRepeatView.xaml.cs">
       <DependentUpon>ActionDescriptionRepeatView.xaml</DependentUpon>
     </Compile>
@@ -284,6 +310,10 @@
       <Project>{f2e8dc53-3cb2-46ca-af4e-a325e789b286}</Project>
       <Name>EMM.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MTPExplorer\MTPExplorer.csproj">
+      <Project>{6917691c-85d7-4a57-914b-669f8eb7dc86}</Project>
+      <Name>MTPExplorer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\MenuItemIcon\Application.bmp" />
@@ -385,6 +415,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\MenuItemIcon\Keyboard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\Toggle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MiscIcon\Mobile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\Arrow-Left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\Arrow-Down.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

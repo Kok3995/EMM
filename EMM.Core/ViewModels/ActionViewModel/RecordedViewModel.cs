@@ -25,6 +25,11 @@ namespace EMM.Core.ViewModels
 
         public Emulator RecordedStringEmulator { get; set; }
 
+        /// <summary>
+        /// True to disable this action
+        /// </summary>
+        public bool IsDisable { get; set; }
+
         #region Commands
 
         #endregion

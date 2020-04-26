@@ -25,7 +25,7 @@ namespace EMM
                     return Application.Current.TryFindResource("WaitButton");
                 case BasicAction.AE:
                     return Application.Current.TryFindResource("AEButton");
-                case BasicAction.ActionGroup:
+                case BasicAction.CustomAction:
                     return Application.Current.TryFindResource("CustomButton");
                 default:
                     return null;

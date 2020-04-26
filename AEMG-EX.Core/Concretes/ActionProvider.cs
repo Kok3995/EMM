@@ -17,7 +17,7 @@ namespace AEMG_EX.Core
             this.autoMapper = autoMapper;
             this.messageBoxService = messageBoxService;
 
-            defaultAction = new DefaultAction { Version = new Version(1, 0, 0, 0) };
+            defaultAction = new DefaultAction { Version = new Version(1, 1, 0, 0) };
 
             if (!CreateDefaultActionIfNotExistedOrOutDated())
                 LoadDefaultAction();
@@ -39,7 +39,7 @@ namespace AEMG_EX.Core
 
                     var loaddefaultAction = JsonConvert.DeserializeObject<DefaultAction>(defaultActionString, new CustomJsonConverter());
 
-                    if (loaddefaultAction.Version.CompareTo(this.defaultAction.Version) >= 0)
+                    if (loaddefaultAction.Version.CompareTo(this.defaultAction.Version) >= 0 || loaddefaultAction.IsKeepAfterUpdate)
                         return false;
                 }
                 catch
@@ -63,20 +63,20 @@ namespace AEMG_EX.Core
             }
 
             //In Battle
-            defaultAction.Dict[Action.ClickFirstCharacter].Add(new Click { ActionDescription = "ClickFirstCharacter", ClickPoint = new Point(100,660), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickSecondCharacter].Add(new Click { ActionDescription = "ClickSecondCharacter", ClickPoint = new Point(260,660), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickThirdCharacter].Add(new Click { ActionDescription = "ClickThirdCharacter", ClickPoint = new Point(430,660), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickFourthCharacter].Add(new Click { ActionDescription = "ClickFourthCharacter", ClickPoint = new Point(600,660), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickFifthCharacter].Add(new Click { ActionDescription = "ClickFifthCharacter", ClickPoint = new Point(800,660), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickSixthCharacter].Add(new Click { ActionDescription = "ClickSixthCharacter", ClickPoint = new Point(960,660), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickDefaultSkill].Add(new Click { ActionDescription = "ClickDefaultSkill", ClickPoint = new Point(150,550), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickFirstSkill].Add(new Click { ActionDescription = "ClickFirstSkill", ClickPoint = new Point(380,550), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickSecondSKill].Add(new Click { ActionDescription = "ClickSecondSKill", ClickPoint = new Point(630,550), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickThirdSkill].Add(new Click { ActionDescription = "ClickThirdSkill", ClickPoint = new Point(890, 550), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickSwitch_FrontLine].Add(new Click { ActionDescription = "ClickSwitch_FrontLine", ClickPoint = new Point(1130, 550), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickSub].Add(new Click { ActionDescription = "ClickSub", ClickPoint = new Point(1130,660), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickAF].Add(new Click { ActionDescription = "ClickAF", ClickPoint = new Point(1200,80), WaitBetweenAction = 500 });
-            defaultAction.Dict[Action.ClickAttack].Add(new Click { ActionDescription = "ClickAttack", ClickPoint = new Point(1170,620), WaitBetweenAction = 500 });
+            defaultAction.Dict[Action.ClickFirstCharacter].Add(new Click { ActionDescription = "Click First Character", ClickPoint = new Point(160,610), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickSecondCharacter].Add(new Click { ActionDescription = "Click Second Character", ClickPoint = new Point(260, 610), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickThirdCharacter].Add(new Click { ActionDescription = "Click Third Character", ClickPoint = new Point(430, 610), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickFourthCharacter].Add(new Click { ActionDescription = "Click Fourth Character", ClickPoint = new Point(600, 610), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickFifthCharacter].Add(new Click { ActionDescription = "Click Fifth Character", ClickPoint = new Point(800, 610), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickSixthCharacter].Add(new Click { ActionDescription = "Click Sixth Character", ClickPoint = new Point(960, 610), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickDefaultSkill].Add(new Click { ActionDescription = "Click Default Skill", ClickPoint = new Point(150,550), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickFirstSkill].Add(new Click { ActionDescription = "Click First Skill", ClickPoint = new Point(380,550), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickSecondSKill].Add(new Click { ActionDescription = "Click Second SKill", ClickPoint = new Point(630,550), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickThirdSkill].Add(new Click { ActionDescription = "Click Third Skill", ClickPoint = new Point(890, 550), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickSwitch_FrontLine].Add(new Click { ActionDescription = "Click Switch_FrontLine", ClickPoint = new Point(1130, 550), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickSub].Add(new Click { ActionDescription = "Click Sub", ClickPoint = new Point(1130,660), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickAF].Add(new Click { ActionDescription = "Click AF", ClickPoint = new Point(1200,80), WaitBetweenAction = 600 });
+            defaultAction.Dict[Action.ClickAttack].Add(new Click { ActionDescription = "Click Attack", ClickPoint = new Point(1170,550), WaitBetweenAction = 600 });
             defaultAction.Dict[Action.Wait].Add(new Wait { ActionDescription = "Wait" });
 
             //Food in AD
@@ -113,16 +113,9 @@ namespace AEMG_EX.Core
                 WaitBetweenAction = 400
             });
 
-            File.WriteAllText(filepath, JsonConvert.SerializeObject(defaultAction));
+            File.WriteAllText(filepath, JsonConvert.SerializeObject(defaultAction, Formatting.Indented));
 
             return true;
-        }
-
-        private void LoadDefaultAction()
-        {
-            var dictString = File.ReadAllText(filepath);
-
-            defaultAction = JsonConvert.DeserializeObject<DefaultAction>(dictString, new CustomJsonConverter());
         }
 
         public IList<IAction> GetCharacterAction(Action action)
@@ -157,7 +150,6 @@ namespace AEMG_EX.Core
             return list;
         }
 
-
         public IList<IAction> GetSkillClick(CharacterAction skill)
         {
             var action = this.CharacterActionToAction(skill);
@@ -174,7 +166,28 @@ namespace AEMG_EX.Core
             wait.WaitTime = waittime;
             return wait;
         }
-        
+
+        public DefaultAction GetDefaultActions()
+        {
+            return defaultAction;
+        }
+
+        public bool SaveDefaultActions(DefaultAction defaultAction)
+        {
+            try
+            {
+                File.WriteAllText(filepath, JsonConvert.SerializeObject(defaultAction, Formatting.Indented));
+            }
+            catch
+            {
+                messageBoxService.ShowMessageBox("Can not save default actions", "ERROR", MessageButton.OK, MessageImage.Error);
+                return false;
+            }
+
+            LoadDefaultAction();
+            return true;
+        }
+
         #region Helpers
 
         private Action CharacterActionToAction(CharacterAction action)
@@ -261,8 +274,14 @@ namespace AEMG_EX.Core
             }
         }
 
-        #endregion
+        private void LoadDefaultAction()
+        {
+            var dictString = File.ReadAllText(filepath);
 
+            defaultAction = JsonConvert.DeserializeObject<DefaultAction>(dictString, new CustomJsonConverter());
+        }
+
+        #endregion
     }
 
     public class DefaultAction
@@ -276,5 +295,20 @@ namespace AEMG_EX.Core
         /// List of default actions
         /// </summary>
         public Dictionary<Action, List<IAction>> Dict;
+
+        /// <summary>
+        /// X res
+        /// </summary>
+        public int X { get; set; } = 1280;
+
+        /// <summary>
+        /// Y res
+        /// </summary>
+        public int Y { get; set; } = 720;
+
+        /// <summary>
+        /// Whether to update the file after update
+        /// </summary>
+        public bool IsKeepAfterUpdate { get; set; }
     }
 }

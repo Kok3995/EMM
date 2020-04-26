@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:EMM"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <Grid Grid.Column="2">
 
         <Grid.ColumnDefinitions>
@@ -101,7 +102,7 @@
         <!-- Action list -->
         <local:AutoListBox x:Name="ActionList" Grid.Row="1" Grid.Column="1" IsHitTestVisible="True" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"
                                  ItemsSource="{Binding ViewModelList}" 
-                                 Style="{StaticResource ActionList}" 
+                                 Style="{DynamicResource ActionList}" 
                                  SelectedItem="{Binding SelectedItem}" SelectedIndex="{Binding SelectedItemIndex}">
             <local:AutoListBox.InputBindings>
                 <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}"/>
@@ -110,6 +111,7 @@
                 <KeyBinding Key="Delete" Command="{Binding DeleteCommand}"/>
                 <KeyBinding Key="Up" Modifiers="Ctrl" Command="{Binding UpCommand}"/>
                 <KeyBinding Key="Down" Modifiers="Ctrl" Command="{Binding DownCommand}"/>
+                <KeyBinding Key="F7" Command="{Binding ToggleActionCommand}"/>
                 <KeyBinding Key="F5" Command="{Binding DataContext.ScriptGenerator.TestSelectedActionCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"/>
             </local:AutoListBox.InputBindings>
             <local:AutoListBox.ContextMenu>
@@ -167,6 +169,13 @@
                               Command="{Binding PlacementTarget.Tag.ScriptGenerator.TestSelectedActionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
                         <MenuItem.Icon>
                             <Image Source="{StaticResource TestButton}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Enable/Disable" InputGestureText="F7" 
+                                      Command="{Binding ToggleActionCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ToggleButton}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>

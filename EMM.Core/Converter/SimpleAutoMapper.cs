@@ -68,8 +68,8 @@ namespace EMM.Core.Converter
             foreach (var propertyInfo in propertyInfos)
             {
                 //Check if setter exist
-                if (propertyInfo.GetSetMethod() == null)
-                    continue;
+                //if (propertyInfo.GetSetMethod() == null)
+                //    continue;
 
                 if (ignoreTypes?.Contains(propertyInfo.PropertyType) == true)
                     continue;
@@ -78,8 +78,16 @@ namespace EMM.Core.Converter
                     if (!destinationPropertyInfos.Where(i => i.Name.Equals(propertyInfo.Name)).Any())
                         continue;
 
-                    typeof(TU).GetProperty(propertyInfo.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase)
-                        .SetValue(destination, propertyInfo.GetValue(source));
+                    var targetProperty = typeof(TU).GetProperty(propertyInfo.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+
+                    if (targetProperty == null)
+                        continue;
+
+                    //Check if setter exist
+                    if (targetProperty.GetSetMethod() == null)
+                        continue;
+
+                    targetProperty.SetValue(destination, propertyInfo.GetValue(source));
                 }
                 catch { /*Ignore errors.... */ }
             }

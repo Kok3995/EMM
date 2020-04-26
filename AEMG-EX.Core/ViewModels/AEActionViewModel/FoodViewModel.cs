@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Data;
 using EMM;
 using EMM.Core;
+using EMM.Core.Converter;
 
 namespace AEMG_EX.Core
 {
@@ -11,14 +12,16 @@ namespace AEMG_EX.Core
     {
         #region Ctor
 
-        public FoodViewModel(IPredefinedActionProvider actionProvider)
+        public FoodViewModel(IPredefinedActionProvider actionProvider, SimpleAutoMapper autoMapper)
         {
             this.actionProvider = actionProvider;
+            this.autoMapper = autoMapper;
 
             InitializeCommands();
         }
 
         private IPredefinedActionProvider actionProvider;
+        private SimpleAutoMapper autoMapper;
 
         #endregion
 
@@ -56,14 +59,22 @@ namespace AEMG_EX.Core
 
         public virtual AEAction AEAction => AEAction.FoodAD;
 
-        public IAEAction ConvertBackToAction()
+        public virtual IAEAction ConvertBackToAction()
         {
-            throw new System.NotImplementedException();
+            return autoMapper.SimpleAutoMap<FoodViewModel, Food>(this);
         }
 
-        public IAEActionViewModel ConvertFromAction(IAEAction action)
+        public virtual IAEActionViewModel ConvertFromAction(IAEAction action)
         {
-            throw new System.NotImplementedException();
+            if (action.AEAction != AEAction)
+                return null;
+
+            if (!(action is Food food))
+                return null;
+
+            autoMapper.SimpleAutoMap(food, this);
+
+            return this;
         }
 
         public IAEActionViewModel Copy()

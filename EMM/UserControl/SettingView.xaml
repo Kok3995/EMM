@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EMM"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="500">
+             d:DesignHeight="120" d:DesignWidth="500">
     <UserControl.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -21,35 +21,46 @@
 
             <!-- Location Settings -->
             <Grid ToolTip="Path to the macro FOLDER of the chosen emulator&#x0a;You can manually set the folder if the application fail to find it">
-                <!-- NOX location -->
-                <Grid Visibility="{Binding IsNox, Converter={local:BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Content="NOX Script Folder: "/>
-                    <TextBox Grid.Column="1" Text="{Binding NoxScriptLocation}" />
-                    <Button Grid.Column="2" Command="{Binding OpenEmulatorFolderCommand}" Content="..." Width="24" Height="24" Margin="10 0 0 0"/>
-                </Grid>
-
-                <!-- MEMU Location -->
-                <Grid Visibility="{Binding IsNox, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=reverse}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Content="MENU Script Folder: " />
-                    <TextBox Grid.Column="1" Text="{Binding MemuScriptLocation}"/>
-                    <Button Grid.Column="2" Command="{Binding OpenEmulatorFolderCommand}" Content="..." Width="24" Height="24" Margin="10 0 0 0"/>
+                    <Label Grid.Column="0">
+                        <Label.Content>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} Script Folder: ">
+                                        <Binding Path="SelectedEmulator" Converter="{local:EnumDisplayNameConverter}"></Binding>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Label.Content>
+                    </Label>
+                    <TextBox Grid.Column="1" Text="{Binding NoxScriptLocation}" Visibility="{Binding IsNox, Converter={local:BooleanToVisibilityConverter}}"/>
+                    <TextBox Grid.Column="1" Text="{Binding MemuScriptLocation}" Visibility="{Binding IsMemu, Converter={local:BooleanToVisibilityConverter}}"/>
+                    <TextBox Grid.Column="1" Text="{Binding BlueStackScriptLocation}" Visibility="{Binding IsBlueStack, Converter={local:BooleanToVisibilityConverter}}"/>
+                    <TextBox Grid.Column="1" Text="{Binding LDPlayerScriptLocation}" Visibility="{Binding IsLDPlayer, Converter={local:BooleanToVisibilityConverter}}"/>
+                    <TextBox Grid.Column="1" Text="{Binding HiroMacroScriptLocation}" Visibility="{Binding IsHiroMacro, Converter={local:BooleanToVisibilityConverter}}"/>
+                    <TextBox Grid.Column="1" Text="{Binding AnkuLuaScriptLocation}" Visibility="{Binding IsAnkuLua, Converter={local:BooleanToVisibilityConverter}}"/>
+                    <TextBox Grid.Column="1" Text="{Binding RobotmonScriptLocation}" Visibility="{Binding IsRobotmon, Converter={local:BooleanToVisibilityConverter}}"/>
+                    <TextBox Grid.Column="1" Text="{Binding AutoTouchScriptLocation}" Visibility="{Binding IsAutoTouch, Converter={local:BooleanToVisibilityConverter}}"/>
                 </Grid>
-
+                <Button Grid.Column="1" Command="{Binding OpenEmulatorFolderCommand}" Content="..." Width="24" Height="24" Margin="5 0 0 0"/>
+                <Button Style="{StaticResource ImageButton}" Tag="{StaticResource OpenButton}" Grid.Column="2" Command="{Binding OpenFolderCommand}" Content="..." Width="24" Height="24" Margin="5 0 0 0"/>
+                <Button Style="{StaticResource ImageButton}" Tag="{StaticResource Mobile}" Grid.Column="3" Command="{Binding OpenMTPFolderCommand}" Content="..." Width="24" Height="24" Margin="0"
+                        ToolTip="Select a folder from Mobile devices"/>
             </Grid>
 
             <StackPanel Orientation="Horizontal" Margin="3" HorizontalAlignment="Left">
                 <Label Content="Emulator: "/>
-                <ComboBox ItemsSource="{Binding EmulatorList}" Width="64" SelectedItem="{Binding SelectedEmulator}"/>
+                <ComboBox ItemsSource="{Binding EmulatorList}" Width="64" SelectedItem="{Binding SelectedEmulator}" Style="{StaticResource EmulatorList}"/>
 
                 <Label Margin="10 0 0 0" Content="Custom Resolution: "/>
                 <StackPanel Orientation="Horizontal">
@@ -58,7 +69,12 @@
                     <local:NumbericTextBox Text="{Binding CustomY, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Width="30"/>
                 </StackPanel>
 
-                <Label Margin="10 0 0 0" Content="Random Pixel:"/>
+                <Label Margin="10 0 0 0" Content="Scale Mode:"/>
+                <ComboBox ItemsSource="{Binding ScaleModeList}" Width="72" SelectedItem="{Binding ScaleMode}" ToolTipService.ShowDuration="10000"
+                          ToolTip="Stretch: Default. The original resolution will be stretch to fit the new resolution&#x0a;Fit: Keep aspect ratio. Scale up/down to fit the new resolution then center&#x0a;Zoom: Keep aspect ratio. Scale up/down but the source will be clipped to fit the new resolution (immersive mode)"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="3" HorizontalAlignment="Left">
+                <Label Content="Random Pixel:"/>
                 <local:NumbericTextBox Text="{Binding Randomize, UpdateSourceTrigger=PropertyChanged}" Width="32"/>
             </StackPanel>
 

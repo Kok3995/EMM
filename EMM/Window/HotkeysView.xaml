@@ -36,7 +36,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Text="New Macro" Margin="0 0 0 5"/>
         <TextBlock Grid.Row="0" Grid.Column="2" Text="Ctrl + N" FontWeight="DemiBold"/>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Oepn Macro" Margin="0 0 0 5"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Open Macro" Margin="0 0 0 5"/>
         <TextBlock Grid.Row="1" Grid.Column="2" Text="Ctrl + O" FontWeight="DemiBold"/>
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Save" Margin="0 0 0 5"/>

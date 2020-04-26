@@ -38,15 +38,16 @@ namespace AEMG_EX.Core
         {
             for (int i = 0; i < macro.ActionGroupList.Count; i++)
             {
-                var actionGroup = macro.ActionGroupList[i] as ActionGroup;
-                if (actionGroup == null)
+                if (!(macro.ActionGroupList[i] is ActionGroup actionGroup))
                     throw new InvalidOperationException("Can not cast ActionGroup");
+
+                if (actionGroup.IsDisable)
+                    continue;
 
 
                 for (int j = 0; j < actionGroup.ActionList.Count; j++)
                 {
-                    var ae = actionGroup.ActionList[j] as AE;
-                    if (ae == null)
+                    if (!(actionGroup.ActionList[j] is AE ae) || ae.IsDisable)
                         continue;
 
                     var aeaction = this.factory.NewAEActionViewModel(ae.AnotherEdenAction);

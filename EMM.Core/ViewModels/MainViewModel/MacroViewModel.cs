@@ -18,7 +18,7 @@ namespace EMM.Core.ViewModels
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public MacroViewModel(SimpleAutoMapper autoMapper, ViewModelFactory viewModelFactory)
+        public MacroViewModel(SimpleAutoMapper autoMapper, ViewModelFactory viewModelFactory, ViewModelClipboard clipboard) : base(clipboard)
         {
             this.autoMapper = autoMapper;
             this.viewModelFactory = viewModelFactory;
@@ -152,12 +152,14 @@ namespace EMM.Core.ViewModels
             if (macroTemplate == null)
                 return null;
 
-            this.autoMapper.SimpleAutoMap<MacroTemplate, MacroViewModel>(macroTemplate, this);
-
+            this.autoMapper.SimpleAutoMap(macroTemplate, this);
+            var temp = new ObservableCollection<IActionViewModel>();
             foreach (var actionGroup in macroTemplate.ActionGroupList)
             {
-                base.ViewModelList.Add(viewModelFactory.NewActionViewModel(BasicAction.ActionGroup).ConvertFromAction(actionGroup));
+                temp.Add(viewModelFactory.NewActionViewModel(BasicAction.ActionGroup).ConvertFromAction(actionGroup));
             }
+
+            base.ViewModelList = temp;
 
             return this;
         }
@@ -167,6 +169,9 @@ namespace EMM.Core.ViewModels
         }
         protected override void InsertItem(object parameter)
         {
+            if (base.ViewModelList.Count == 0)
+                SelectedItemIndex = -1;
+
             base.ViewModelList.Insert(SelectedItemIndex + 1, SelectedItem = viewModelFactory.NewActionViewModel(BasicAction.ActionGroup));
         }
 

@@ -1,21 +1,27 @@
 ﻿using Data;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace EMM.Core.ViewModels
 {
     public class ScriptGenerator
     {
-        public ScriptGenerator(ScriptApplyFactory scriptApplyFactory, SettingViewModel setting, IMessageBoxService messageBoxService)
+        public ScriptGenerator(ScriptApplyFactory scriptApplyFactory, SettingViewModel setting, IMessageBoxService messageBoxService, IEmulatorToScriptFactory emulatorToScriptFactory, IActionToScriptFactory actionToScriptFactory)
         {
             this.scriptApplyFactory = scriptApplyFactory;
             this.setting = setting;
             this.messageBoxService = messageBoxService;
+            this.emulatorToScriptFactory = emulatorToScriptFactory;
+            this.actionToScriptFactory = actionToScriptFactory;
         }
 
         private ScriptApplyFactory scriptApplyFactory;
         private SettingViewModel setting;
         private IMessageBoxService messageBoxService;
+        private IEmulatorToScriptFactory emulatorToScriptFactory;
+        private IActionToScriptFactory actionToScriptFactory;
 
 
         /// <summary>
@@ -25,14 +31,12 @@ namespace EMM.Core.ViewModels
         /// <returns></returns>
         public virtual bool? GenerateScript(MacroViewModel macroViewModel)
         {
-            var timer = 200;
-
             if (!ApplyConvertSetting(macroViewModel))
                 return false;
 
             var macroTemplate = macroViewModel.ConvertBack();
 
-            var script = macroTemplate.GenerateScript(ref timer);
+            var script = this.emulatorToScriptFactory.GetEmulatorScriptGenerator(setting.SelectedEmulator).MacroToScript(macroTemplate);
 
             return scriptApplyFactory.GetScriptApplier(setting.SelectedEmulator).ApplyScriptTo(macroTemplate.MacroName, setting.SelectedPath, script);
         }
@@ -44,38 +48,29 @@ namespace EMM.Core.ViewModels
         /// <returns></returns>
         public virtual bool? GenerateScript(IList<IActionViewModel> actionViewModelList, MacroViewModel currentMacro)
         {
-            StringBuilder script = new StringBuilder();
-
-            var timer = 200;
-
             if (!ApplyConvertSetting(currentMacro))
                 return false;
 
-            foreach (var actionViewModel in actionViewModelList)
-            {
-                script.Append(actionViewModel.ConvertBackToAction().GenerateAction(ref timer));
-            }
+            var script = this.emulatorToScriptFactory.GetEmulatorScriptGenerator(setting.SelectedEmulator).MacroToScript(actionViewModelList.Select(a => a.ConvertBackToAction()).ToList());
 
             return scriptApplyFactory.GetScriptApplier(setting.SelectedEmulator).ApplyScriptTo(currentMacro.MacroName + "_Test", setting.SelectedPath, script, false);
         }
 
-        private bool ApplyConvertSetting(MacroViewModel macroViewModel)
+        private bool ApplyConvertSetting(MacroViewModel macro)
         {
-            GlobalData.CustomX = setting.CustomX;
-            GlobalData.CustomY = setting.CustomY;
-            GlobalData.Emulator = setting.SelectedEmulator;
-            GlobalData.Randomize = setting.Randomize;
-
-            try
+            if (macro.OriginalX == 0 || double.IsNaN(macro.OriginalX) || macro.OriginalY == 0 || double.IsNaN(macro.OriginalY))
             {
-                GlobalData.ScaleX = (double)setting.CustomX / macroViewModel.OriginalX;
-                GlobalData.ScaleY = (double)setting.CustomY / macroViewModel.OriginalY;
-            }
-            catch
-            {
-                messageBoxService.ShowMessageBox("Please set the Macro resolution", "Error", MessageButton.OK, MessageImage.Error);
+                messageBoxService.ShowMessageBox("The macro doesnt have any resolution set. Please set in in EMM", "Error", MessageButton.OK, MessageImage.Error);
                 return false;
             }
+
+            GlobalData.CustomX = setting.CustomX;
+            GlobalData.CustomY = setting.CustomY;
+            GlobalData.OriginalX = macro.OriginalX;
+            GlobalData.OriginalY = macro.OriginalY;
+            GlobalData.Emulator = setting.SelectedEmulator;
+            GlobalData.Randomize = setting.Randomize;
+            GlobalData.ScaleMode = setting.ScaleMode;
 
             return true;
         }

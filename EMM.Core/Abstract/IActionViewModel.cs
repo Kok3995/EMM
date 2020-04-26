@@ -8,6 +8,8 @@ namespace EMM.Core
     {
         BasicAction BasicAction { get; set; }
 
+        bool IsDisable { get; set; }
+
         /// <summary>
         /// Convert the viewmodel back to model for saving, Generate scripts
         /// </summary>

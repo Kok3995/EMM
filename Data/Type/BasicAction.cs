@@ -7,7 +7,8 @@
         Wait,
         AE,
         Recorded,
-        ActionGroup
+        ActionGroup,
+        CustomAction
     }
 }
 

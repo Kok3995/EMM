@@ -9,6 +9,7 @@ namespace Data
     public class ActionGroup : IAction
     {
         public BasicAction BasicAction { get => BasicAction.ActionGroup; set { } }
+
         public string ActionDescription { get; set; }
 
         /// <summary>
@@ -20,18 +21,11 @@ namespace Data
         /// List of actions within the group
         /// </summary>
         public List<IAction> ActionList { get; set; }
-        public StringBuilder GenerateAction(ref int timer)
-        {
-            StringBuilder script = new StringBuilder();
 
-            for (int i = 1; i <= Repeat; i++)
-            {
-                foreach (var action in this.ActionList)
-                {
-                    script.Append(action.GenerateAction(ref timer));
-                }
-            }
-            return script;
-        }
+        /// <summary>
+        /// True to disable this action
+        /// </summary>
+        public bool IsDisable { get; set; }
+
     }
 }

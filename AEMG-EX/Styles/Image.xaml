@@ -14,6 +14,14 @@
     <BitmapImage x:Key="Erase" UriSource="../Images/Toolbar/Erase.png"/>
     <BitmapImage x:Key="EMM" UriSource="../Images/Toolbar/EMM_Icon.png"/>
     <BitmapImage x:Key="Download" UriSource="../Images/Toolbar/Download.png"/>
+    <BitmapImage x:Key="OpenButton" UriSource="../Images/Toolbar/Open.png"/>
+    <BitmapImage x:Key="ApplyButton" UriSource="../Images/Toolbar/Apply.png"/>
+    <BitmapImage x:Key="Mobile" UriSource="../Images/Toolbar/Mobile.png"/>
+    <BitmapImage x:Key="Save" UriSource="../Images/Toolbar/Save.png"/>
+    <BitmapImage x:Key="SaveDown" UriSource="../Images/Toolbar/Save-Down.png"/>
+    <BitmapImage x:Key="SavePlus" UriSource="../Images/Toolbar/Save-Plus.png"/>
+    <BitmapImage x:Key="SaveMultiple" UriSource="../Images/Toolbar/Save-Multiple.png"/>
+    <BitmapImage x:Key="Application" UriSource="../Images/Toolbar/Application.png"/>
 
 
     <BitmapImage x:Key="SkillButton" UriSource="../Images/UI/Skillbutton.png"/>

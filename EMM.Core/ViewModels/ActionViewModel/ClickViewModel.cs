@@ -55,6 +55,11 @@ namespace EMM.Core.ViewModels
         public int WaitBetweenAction { get; set; } = 100;
 
         /// <summary>
+        /// True to disable this action
+        /// </summary>
+        public bool IsDisable { get; set; }
+
+        /// <summary>
         /// Convert the viewmodel back to model for saving, Generate scripts
         /// </summary>
         /// <returns></returns>
@@ -77,8 +82,8 @@ namespace EMM.Core.ViewModels
         public IActionViewModel MakeCopy()
         {
             var clickVM = (ClickViewModel)viewModelFactory.NewActionViewModel(this.BasicAction);
-            this.autoMapper.SimpleAutoMap<ClickViewModel, ClickViewModel>(this, clickVM, new List<Type>() { typeof(ClickPointWrapper) });
-            clickVM.PointWrapper.point = this.PointWrapper.point;
+            this.autoMapper.SimpleAutoMap(this, clickVM, new List<Type>() { typeof(ClickPointWrapper) });
+            clickVM.PointWrapper = new ClickPointWrapper(this.PointWrapper.point);
             return clickVM;
         }
 
@@ -95,6 +100,7 @@ namespace EMM.Core.ViewModels
         public void SetLocation(Point location)
         {
             this.PointWrapper.point = location;
+            IsChanged = true;
             OnPropertyChanged(nameof(PointWrapper));
         }
 

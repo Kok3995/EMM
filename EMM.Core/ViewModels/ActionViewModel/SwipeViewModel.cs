@@ -54,6 +54,11 @@ namespace EMM.Core.ViewModels
         /// </summary>
         public int WaitBetweenAction { get; set; } = 100;
 
+        /// <summary>
+        /// True to disable this action
+        /// </summary>
+        public bool IsDisable { get; set; }
+
 
         #endregion
 
@@ -99,8 +104,7 @@ namespace EMM.Core.ViewModels
             var swipe = this.autoMapper.SimpleAutoMap<SwipeViewModel, Swipe>(this);
 
             //Sync the changes
-            swipe.PointList.Clear();
-            swipe.PointList.AddRange(this.PointCollection.Select(i => i.SwipePoint).ToList());
+            swipe.PointList = new List<SwipePoint>(this.PointCollection.Select(i => new SwipePoint(i.SwipePoint)));
 
             return swipe;
         }
@@ -108,16 +112,17 @@ namespace EMM.Core.ViewModels
         public IActionViewModel MakeCopy()
         {
             var newSwipeVM = (SwipeViewModel)viewModelFactory.NewActionViewModel(this.BasicAction);
-            this.autoMapper.SimpleAutoMap<SwipeViewModel, SwipeViewModel>(this, newSwipeVM, new List<Type> { typeof(ICommand), typeof(ObservableCollection<SwipePointWrapper>), typeof(List<SwipePoint>) });
+            this.autoMapper.SimpleAutoMap(this, newSwipeVM, new List<Type> { typeof(ICommand), typeof(ObservableCollection<SwipePointWrapper>), typeof(List<SwipePoint>) });
             newSwipeVM.PointCollection = new ObservableCollection<SwipePointWrapper>(this.PointCollection.Select(i => new SwipePointWrapper(new SwipePoint(i.SwipePoint))));
+            newSwipeVM.PointList = new List<SwipePoint>(this.PointList.Select(p => new SwipePoint(p)));
 
             return newSwipeVM;
         }
 
         public IActionViewModel ConvertFromAction(IAction action)
         {
-            this.autoMapper.SimpleAutoMap<Swipe, SwipeViewModel>(action as Swipe, this);
-            this.PointCollection = new ObservableCollection<SwipePointWrapper>((action as Swipe).PointList.Select(i => new SwipePointWrapper(i)).ToList());
+            this.autoMapper.SimpleAutoMap(action as Swipe, this);
+            this.PointCollection = new ObservableCollection<SwipePointWrapper>((action as Swipe).PointList.Select(i => new SwipePointWrapper(i)));
 
             return this;
         }
@@ -138,6 +143,7 @@ namespace EMM.Core.ViewModels
         public void SetLocation(Point location)
         {
             this.PointCollection.Add(new SwipePointWrapper(new SwipePoint { Point = location }));
+            IsChanged = true;
         }
 
         #endregion
@@ -152,7 +158,7 @@ namespace EMM.Core.ViewModels
 
         public SwipePointWrapper(SwipePoint swipePoint)
         {
-            SwipePoint = swipePoint;
+            SwipePoint = new SwipePoint(swipePoint);
         }
 
         /// <summary>

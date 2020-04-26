@@ -1,11 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:AEMG_EX"
-                    xmlns:core="clr-namespace:AEMG_EX.Core;assembly=AEMG-EX.Core">
+                    xmlns:core="clr-namespace:AEMG_EX.Core;assembly=AEMG-EX.Core"
+                    xmlns:data="clr-namespace:Data;assembly=Data">
 
     <Style x:Key="AEActionListBox" TargetType="{x:Type ListBox}">
         <Style.Resources>
-            <Style TargetType="ListBoxItem">
+            <Style TargetType="{x:Type ListBoxItem}">
                 <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
             </Style>
         </Style.Resources>
@@ -26,9 +27,8 @@
 
     <Style x:Key="FrontlineStyle" TargetType="{x:Type ListBox}">
         <Style.Resources>
-            <Style TargetType="ListBoxItem">
+            <Style TargetType="{x:Type ListBoxItem}">
                 <Setter Property="Padding" Value="0"/>
-                <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
             </Style>
         </Style.Resources>
         <Setter Property="BorderThickness" Value="0"/>
@@ -56,14 +56,14 @@
         </Setter>
         <Setter Property="ItemTemplate">
             <Setter.Value>
-                <DataTemplate DataType="{x:Type core:Character}">
+                <DataTemplate DataType="{x:Type core:CharacterViewModel}">
                     <DockPanel LastChildFill="False">
                         <Border DockPanel.Dock="Top" CornerRadius="4" BorderThickness="2" SnapsToDevicePixels="True"
                                 BorderBrush="{StaticResource SkillBorderBrush}" Background="{StaticResource BackgroundLightTransparentBrush}" Width="100" Margin="0 0 6 0" 
                                 Visibility="{Binding DataContext.IsSelectedSkillVisible, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={local:BooleanToVisibilityConverter}}">
                             <TextBlock Text="{Binding CurrentAction, Converter={local:SkillEnumToStringConverter}}" TextAlignment="Center" Foreground="{StaticResource ForegoundLightBrush}" FontSize="16" FontFamily="Times New Roman"/>
                         </Border>
-                        <Button DockPanel.Dock="Bottom" Style="{StaticResource ImageButton}" Tag="{Binding CharacterIMG}" Width="100" Height="88" Margin="0 6 6 0" 
+                        <Button DockPanel.Dock="Bottom" Style="{StaticResource ImageButton}" Tag="{Binding CharacterIMG, Converter={local:PositionToImageConverter}}" Width="100" Height="88" Margin="0 6 6 0" 
                             Command="{Binding DataContext.SelectCharacterCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
                             CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"/>
                     </DockPanel>
@@ -75,7 +75,7 @@
     <Style x:Key="BacklineStyle" TargetType="ListBox" BasedOn="{StaticResource FrontlineStyle}">
         <Setter Property="ItemTemplate">
             <Setter.Value>
-                <DataTemplate DataType="{x:Type core:Character}">
+                <DataTemplate DataType="{x:Type core:CharacterViewModel}">
                     <DockPanel LastChildFill="False" >
                         <Border DockPanel.Dock="Top" CornerRadius="4" BorderThickness="2" SnapsToDevicePixels="True"
                                 BorderBrush="{StaticResource SkillBorderBrush}" Background="{StaticResource BackgroundLightTransparentBrush}" Width="100" Margin="0 0 6 0"
@@ -88,7 +88,7 @@
                             </Border.Visibility>
                             <TextBlock Text="{Binding CurrentAction}" TextAlignment="Center" Foreground="{StaticResource ForegoundLightBrush}" FontSize="16" FontFamily="Times New Roman"/>
                         </Border>
-                        <Button DockPanel.Dock="Bottom" Style="{StaticResource ImageButton}" Tag="{Binding CharacterIMG}" Width="100" Height="88" Margin="0 0 6 0"
+                        <Button DockPanel.Dock="Bottom" Style="{StaticResource ImageButton}" Tag="{Binding CharacterIMG, Converter={local:PositionToImageConverter}}" Width="100" Height="88" Margin="0 0 6 0"
                                 Command="{Binding DataContext.SelectCharacterCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
                                 CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"/>
                     </DockPanel>
@@ -106,6 +106,52 @@
                 <DataTemplate>
                     <Button Style="{StaticResource ImageButton}" Tag="{Binding Converter={local:LeftRightToImageConverter}}" Width="30" Margin="0 -3"
                             Command="{Binding DataContext.UndoSelectCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" ToolTip="Undo select"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SavedSetupList" TargetType="{x:Type MenuItem}">
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type MenuItem}">
+                    <Setter Property="Command" Value="{Binding DataContext.LoadCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                    <Setter Property="CommandParameter" Value="{Binding }"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate DataType="{x:Type core:IAEAction}">
+                    <Grid Margin="-32 0 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Style="{StaticResource ImageButton}" Tag="{StaticResource Erase}" Height="16"
+                                Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=local:AEActionList}}"
+                                CommandParameter="{Binding }"/>
+                        <TextBlock Margin="20 0 0 0"  Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} - {1}">
+                                    <Binding Path="Name"/>
+                                    <Binding Path="AEAction" Converter="{local:AEActionToStringConverter}"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+    <Style x:Key="EmulatorList" TargetType="{x:Type ComboBox}">
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate DataType="{x:Type data:Emulator}">
+                    <TextBlock Text="{Binding Converter={local:EnumDisplayNameConverter}}"/>
                 </DataTemplate>
             </Setter.Value>
         </Setter>

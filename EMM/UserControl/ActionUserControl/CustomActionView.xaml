@@ -27,9 +27,9 @@
                     Command="{Binding DataContext.CustomActionManager.UnPackCustomActionCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" Margin="10 0 0 0"/>
         </StackPanel>
         
-        <Grid Grid.Row="1">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <TabControl ItemsSource="{Binding ViewModelList}" TabStripPlacement="Left">
+        <!--<Grid Grid.Row="1">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="False">
+                <TabControl ItemsSource="{Binding ViewModelList}" TabStripPlacement="Left" SelectedItem="{Binding SelectedItem}" SelectedIndex="{Binding SelectedItemIndex}">
                     <TabControl.Resources>
                         <Style TargetType="TabItem" BasedOn="{StaticResource TabItemStyle}"/>
                     </TabControl.Resources>
@@ -49,7 +49,7 @@
                     </TabControl.ContentTemplate>
                 </TabControl>
             </ScrollViewer>
-        </Grid>
+        </Grid>-->
     </Grid>
         
 </UserControl>

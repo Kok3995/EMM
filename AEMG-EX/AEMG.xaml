@@ -80,9 +80,14 @@
             <local:AESettingView Grid.Row="2" Grid.Column="0" DataContext="{Binding Settings}"/>
             
             <!-- Convert Button -->
-            <Button Grid.Row="2" Grid.Column="0"  Content="CONVERT" 
-                    Width="80" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 10 0"
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 10 0">
+                <Button Content="PREVIEW" 
+                    Width="80" Height="32" Margin="0 0 10 0"
+                    Command="{Binding PreviewInEMMCommand}"/>
+                <Button Grid.Row="2" Grid.Column="0"  Content="CONVERT" 
+                    Width="80" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right"
                     Command="{Binding ConvertCommand}"/>
+            </StackPanel>
         </Grid>
         
         <!-- Options -->

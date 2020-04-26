@@ -1,0 +1,29 @@
+﻿];
+
+var isStop = false;
+var len = script.length;
+
+function start(loop) {
+	if (len <= 0)
+		return;
+	isStop = false;
+	var loopCount = 1;
+	var i = 0;
+	while(loopCount <= loop) {
+		i = 0;
+		while(!isStop && i < len) {
+			eval(script[i]);
+			i++;
+		}
+
+		if (isStop)
+			loopCount = loop;
+
+		loopCount++;
+	}
+	stop();
+}
+
+function stop() {
+	isStop = true;
+}

@@ -18,16 +18,40 @@
             <ListBox.InputBindings>
                 <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}"/>
                 <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding ApplyCommand}"/>
-                <KeyBinding Key="F5" Command="{Binding Tag.TestSelectedCommand}"/>
+                <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding OpenSavedDialogCommand}"/>
+                <KeyBinding Key="F5" Command="{Binding DataContext.TestSelectedCommand, RelativeSource={RelativeSource AncestorType={x:Type local:AEMG}}}"/>
             </ListBox.InputBindings>
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Copy Setup" InputGestureText="Ctrl + C" Command="{Binding CopyCommand}"/>
                     <MenuItem Header="Apply Setup" InputGestureText="Ctrl + V" Command="{Binding ApplyCommand}"/>
                     <Separator/>
+                    <MenuItem Header="Save Setup" InputGestureText="Ctrl + S" Command="{Binding OpenSavedDialogCommand}"/>
+                    <MenuItem Header="Load Setup" ItemsSource="{Binding SavedAEActions}" Style="{StaticResource SavedSetupList}" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"/>
+                    <Separator/>
                     <MenuItem Header="Test Selected" InputGestureText="F5" Command="{Binding PlacementTarget.Tag.TestSelectedCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>
+
+        <Popup IsOpen="{Binding IsSavedSetupDialogOpen}" StaysOpen="False" Placement="Center" PlacementTarget="{Binding RelativeSource={RelativeSource AncestorType=local:AEMG}}" AllowsTransparency="True">
+            <Popup.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding SaveCommand}"/>
+            </Popup.InputBindings>
+            <Border Background="Azure" BorderThickness="1" CornerRadius="4" BorderBrush="#003366">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Give this Set up a name: "/>
+                    <TextBox Width="200" x:Name="newSetupNameTextBox" 
+                             Text="{Binding SavedSetupName, UpdateSourceTrigger=PropertyChanged}" 
+                             BorderBrush="{Binding Text, RelativeSource={RelativeSource Self}, Converter={local:TextLengthToBackgroundColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="24" Margin="0 5 0 -5">
+                        <Button Style="{StaticResource ImageButton}" Tag="{StaticResource ApplyButton}"
+                                Command="{Binding SaveCommand}"
+                                Height="20" Margin="0 -4 50 0"/>
+                        <Button Style="{StaticResource ImageButton}" Tag="{StaticResource Close}" Command="{Binding CloseSavedDialogCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
     </Grid>
 </UserControl>

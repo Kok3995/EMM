@@ -4,9 +4,17 @@
                     xmlns:core="clr-namespace:EMM.Core.ViewModels;assembly=EMM.Core"
                     xmlns:data="clr-namespace:Data;assembly=Data">
 
+    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#1F26A0DA"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#a826A0Da"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFDADADA"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#FF26A0DA"/>
+    
     <Style TargetType="ListBox">
-        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Standard"/>
     </Style>
+    
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -16,98 +24,392 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    
     <Style x:Key="EditableListBoxItemStyle" TargetType="local:EditableListBoxItem">
         <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Padding" Value="4,1"/>
-        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
     </Style>
 
-    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#1F26A0DA"/>
-    <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#a826A0Da"/>
-    <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
-    <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFDADADA"/>
-    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA"/>
-    <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#FF26A0DA"/>
+    <Style x:Key="NoScrollListBox" TargetType="{x:Type local:AutoListBox}">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="#FFABADB3"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:AutoListBox}">
+                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="1" SnapsToDevicePixels="True" UseLayoutRounding="True">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" UseLayoutRounding="True" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" TargetName="Bd" Value="White"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="#FFD9D9D9"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Start here-->
+    <ControlTemplate x:Key="ActionControlTemplate" TargetType="local:EditableListBoxItem">
+        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+            <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1" x:Name="ItemTextBlock" ToolTip="{Binding ActionDescription}" ToolTipService.ShowDuration="30000" Foreground="{Binding IsDisable, Converter={local:FalseToRedConverter}}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} x{1}">
+                            <Binding Path="ActionDescription"/>
+                            <Binding Path="Repeat" FallbackValue="1"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBox Grid.Column="1" x:Name="EditableTextBox" BorderThickness="0" Background="{Binding Text, RelativeSource={RelativeSource Self}, Converter={local:TextLengthToBackgroundColorConverter}}"
+                                             Text="{Binding ActionDescription, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"/>
+                <Image Margin="0 0 5 0"  Grid.Column="0" Source="{Binding BasicAction, Converter={local:BasicActionToImageConverter}}" Width="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseDoubleClicked" Value="True">
+                <Setter TargetName="EditableTextBox" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="ItemTextBlock" Property="Visibility" Value="Hidden"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="False">
+                <Setter TargetName="EditableTextBox" Property="Visibility" Value="Hidden"/>
+                <Setter TargetName="ItemTextBlock" Property="Visibility" Value="Visible"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                    <Condition Property="IsSelected" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Border}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                    <Condition Property="IsSelected" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
+            </MultiTrigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="CustomActionControlTemplate" TargetType="local:EditableListBoxItem">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Description, repeat... -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="1" x:Name="ItemTextBlock" ToolTip="{Binding ActionDescription}" ToolTipService.ShowDuration="30000" Foreground="{Binding IsDisable, Converter={local:FalseToRedConverter}}">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} x{1}">
+                                    <Binding Path="ActionDescription"/>
+                                    <Binding Path="Repeat" FallbackValue="1"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBox Grid.Column="1" x:Name="EditableTextBox" BorderThickness="0" Background="{Binding Text, RelativeSource={RelativeSource Self}, Converter={local:TextLengthToBackgroundColorConverter}}"
+                                                            Text="{Binding ActionDescription, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"/>
+                        <ToggleButton Grid.Column="2" IsChecked="{Binding IsExpanded}" Style="{StaticResource CaretButton}"/>
+                        <Image Margin="0 0 5 0"  Grid.Column="0" Source="{Binding BasicAction, Converter={local:BasicActionToImageConverter}}" Width="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Tree -->
+            <Grid Grid.Row="1" x:Name="ActionsTreeView" Visibility="Collapsed">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </Style>
+                </Grid.Style>
+                <local:AutoListBox ItemsSource="{Binding ActionsTreeView}" SelectedItem="{Binding DataContext.SelectedItem, RelativeSource={RelativeSource AncestorType=local:ActionListView}, Mode=OneWayToSource}">
+                    <local:AutoListBox.Style>
+                        <Style TargetType="local:AutoListBox" BasedOn="{StaticResource NoScrollListBox}">
+                            <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Margin" Value="5 0 0 0"/>
+                            <Style.Resources>
+                                <Style TargetType="local:EditableListBoxItem" BasedOn="{StaticResource EditableListBoxItemStyle}">
+                                    <Setter Property="Template" Value="{DynamicResource ActionControlTemplateIndent}" />
+
+                                    <!-- Custom Action Template -->
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding BasicAction}" Value="{x:Static data:BasicAction.CustomAction}">
+                                            <Setter Property="Template" Value="{DynamicResource CustomActionControlTemplateIndent}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </local:AutoListBox.Style>
+                </local:AutoListBox>
+            </Grid>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsExpanded}" Value="True">
+                <Setter TargetName="ActionsTreeView" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            <Trigger Property="IsMouseDoubleClicked" Value="True">
+                <Setter TargetName="EditableTextBox" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="ItemTextBlock" Property="Visibility" Value="Hidden"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="False">
+                <Setter TargetName="EditableTextBox" Property="Visibility" Value="Hidden"/>
+                <Setter TargetName="ItemTextBlock" Property="Visibility" Value="Visible"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                    <Condition Property="IsSelected" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Border}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                    <Condition Property="IsSelected" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
+            </MultiTrigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="ActionControlTemplateIndent" TargetType="local:EditableListBoxItem">
+        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+            <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="● " VerticalAlignment="Center" Foreground="#3498db"/>
+                <Image Margin="0 0 5 0"  Grid.Column="1" Source="{Binding BasicAction, Converter={local:BasicActionToImageConverter}}" Width="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="2" x:Name="ItemTextBlock" ToolTip="{Binding ActionDescription}" ToolTipService.ShowDuration="30000" Foreground="{Binding IsDisable, Converter={local:FalseToRedConverter}}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} x{1}">
+                            <Binding Path="ActionDescription"/>
+                            <Binding Path="Repeat" FallbackValue="1"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBox Grid.Column="2" x:Name="EditableTextBox" BorderThickness="0" Background="{Binding Text, RelativeSource={RelativeSource Self}, Converter={local:TextLengthToBackgroundColorConverter}}"
+                                             Text="{Binding ActionDescription, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"/>
+            </Grid>
+        </Border>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseDoubleClicked" Value="True">
+                <Setter TargetName="EditableTextBox" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="ItemTextBlock" Property="Visibility" Value="Hidden"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="False">
+                <Setter TargetName="EditableTextBox" Property="Visibility" Value="Hidden"/>
+                <Setter TargetName="ItemTextBlock" Property="Visibility" Value="Visible"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                    <Condition Property="IsSelected" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Border}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                    <Condition Property="IsSelected" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
+            </MultiTrigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="CustomActionControlTemplateIndent" TargetType="local:EditableListBoxItem">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Description, repeat... -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="● " VerticalAlignment="Center" Foreground="#3498db"/>
+                        <Image Margin="0 0 5 0"  Grid.Column="1" Source="{Binding BasicAction, Converter={local:BasicActionToImageConverter}}" Width="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" x:Name="ItemTextBlock" ToolTip="{Binding ActionDescription}" ToolTipService.ShowDuration="30000" Foreground="{Binding IsDisable, Converter={local:FalseToRedConverter}}">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} x{1}">
+                                    <Binding Path="ActionDescription"/>
+                                    <Binding Path="Repeat" FallbackValue="1"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <ToggleButton Grid.Column="3" Style="{StaticResource CaretButton}" IsChecked="{Binding IsExpanded}" />
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Tree -->
+            <Grid Grid.Row="1" x:Name="ActionsTreeView">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </Style>
+                </Grid.Style>
+                <local:AutoListBox ItemsSource="{Binding ActionsTreeView}" SelectedItem="{Binding DataContext.SelectedItem, RelativeSource={RelativeSource AncestorType=local:ActionListView}, Mode=OneWayToSource}">
+                    <local:AutoListBox.Style>
+                        <Style TargetType="local:AutoListBox" BasedOn="{StaticResource NoScrollListBox}">
+                            <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Margin" Value="5 0 0 0"/>
+                            <Style.Resources>
+                                <Style TargetType="local:EditableListBoxItem" BasedOn="{StaticResource EditableListBoxItemStyle}">
+                                    <Setter Property="Template" Value="{DynamicResource ActionControlTemplateIndent}" />
+
+                                    <!-- Custom Action Template -->
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding BasicAction}" Value="{x:Static data:BasicAction.CustomAction}">
+                                            <Setter Property="Template" Value="{DynamicResource CustomActionControlTemplateIndent}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </local:AutoListBox.Style>
+                </local:AutoListBox>
+            </Grid>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsExpanded}" Value="True">
+                <Setter TargetName="ActionsTreeView" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                    <Condition Property="IsSelected" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Border}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                    <Condition Property="IsSelected" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
+                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
+            </MultiTrigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 
     <Style x:Key="ActionList" TargetType="local:AutoListBox">
         <Setter Property="SelectionMode" Value="Extended" />
+        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+        <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
         <Style.Resources>
             <Style TargetType="local:EditableListBoxItem" BasedOn="{StaticResource EditableListBoxItemStyle}">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="local:EditableListBoxItem">
-                            <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                                <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="1" x:Name="ItemTextBlock" ToolTip="{Binding ActionDescription}" ToolTipService.ShowDuration="30000">
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0} x{1}">
-                                                <Binding Path="ActionDescription"/>
-                                                <Binding Path="Repeat" FallbackValue="1"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                    <TextBox Grid.Column="1" x:Name="EditableTextBox" BorderThickness="0" Background="{Binding Text, RelativeSource={RelativeSource Self}, Converter={local:TextLengthToBackgroundColorConverter}}"
-                                             Text="{Binding ActionDescription, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"/>
-                                    <Image Margin="0 0 5 0"  Grid.Column="0" Source="{Binding BasicAction, Converter={local:BasicActionToImageConverter}}" Width="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseDoubleClicked" Value="True">
-                                    <Setter TargetName="EditableTextBox" Property="Visibility" Value="Visible"/>
-                                    <Setter TargetName="ItemTextBlock" Property="Visibility" Value="Hidden"/>
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="False">
-                                    <Setter TargetName="EditableTextBox" Property="Visibility" Value="Hidden"/>
-                                    <Setter TargetName="ItemTextBlock" Property="Visibility" Value="Visible"/>
-                                </Trigger>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="IsMouseOver" Value="True"/>
-                                    </MultiTrigger.Conditions>
-                                    <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
-                                </MultiTrigger>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="Selector.IsSelectionActive" Value="False"/>
-                                        <Condition Property="IsSelected" Value="True"/>
-                                    </MultiTrigger.Conditions>
-                                    <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Border}"/>
-                                </MultiTrigger>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="Selector.IsSelectionActive" Value="True"/>
-                                        <Condition Property="IsSelected" Value="True"/>
-                                    </MultiTrigger.Conditions>
-                                    <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
-                                </MultiTrigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Template" Value="{DynamicResource ActionControlTemplate}" />
+                
+                <!-- Custom Action Template -->
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding BasicAction}" Value="{x:Static data:BasicAction.CustomAction}">
+                        <Setter Property="Template" Value="{DynamicResource CustomActionControlTemplate}"/>
+                    </DataTrigger>
+                </Style.Triggers>
             </Style>
         </Style.Resources>
     </Style>
 
     <Style x:Key="GroupList" TargetType="local:AutoListBox">
         <Setter Property="SelectionMode" Value="Extended" />
+        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
         <Style.Resources>
             <Style TargetType="local:EditableListBoxItem" BasedOn="{StaticResource EditableListBoxItemStyle}">
                 <Setter Property="Template">
@@ -115,7 +417,7 @@
                         <ControlTemplate TargetType="local:EditableListBoxItem">
                             <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
                                 <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                                    <TextBlock x:Name="ItemTextBlock" ToolTip="{Binding ActionDescription}" ToolTipService.ShowDuration="30000">
+                                    <TextBlock x:Name="ItemTextBlock" ToolTip="{Binding ActionDescription}" ToolTipService.ShowDuration="30000" Foreground="{Binding IsDisable, Converter={local:FalseToRedConverter}}">
                                         <TextBlock.Text>
                                             <MultiBinding StringFormat="{}{0} x{1}">
                                                 <Binding Path="ActionDescription"/>
@@ -203,6 +505,16 @@
                             <ComboBox Margin="5 0 0 0" Width="80" ItemsSource="{Binding SpeedOptions}" SelectedItem="{Binding SwipeSpeed, Converter={local:SbyteToSpeedConverter}}"/>
                         </StackPanel>
                     </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="EmulatorList" TargetType="{x:Type ComboBox}">
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate DataType="{x:Type data:Emulator}">
+                    <TextBlock Text="{Binding Converter={local:EnumDisplayNameConverter}}"/>
                 </DataTemplate>
             </Setter.Value>
         </Setter>

@@ -33,7 +33,7 @@
             </TextBlock>
             <TextBlock/>
             <TextBlock HorizontalAlignment="Center">
-                <Hyperlink NavigateUri="https://www.paypal.me/kok3995" RequestNavigate="Site_RequestNavigate">Donate!</Hyperlink>
+                <Hyperlink NavigateUri="https://www.paypal.me/kok3995/1" RequestNavigate="Site_RequestNavigate">Donate!</Hyperlink>
             </TextBlock>
             <DockPanel LastChildFill="False">
                 <TextBlock Text="{Binding CurrentVersion, FallbackValue='Current Version: 1.0'}" FontWeight="DemiBold" DockPanel.Dock="Right"/>

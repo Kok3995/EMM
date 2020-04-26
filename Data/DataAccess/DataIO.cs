@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +22,7 @@ namespace Data
 
         private readonly string savedTemplateDirectory = Path.Combine(Environment.CurrentDirectory, "Macroes");
         private string lastPath = string.Empty;
+        private string tempFolder = Path.Combine(Environment.CurrentDirectory, "temp");
 
         /// <summary>
         /// OpenFileDialog to Load macro .emm file
@@ -33,7 +35,7 @@ namespace Data
             {
                 CheckFileExists = true,
                 CheckPathExists = true,
-                Filter = @"Easy Macro Maker (.emm)|*.emm|All files (*.*)|*.*",
+                Filter = @"Easy Macro Maker (*.emm;*.zip)|*.emm;*.zip|All files (*.*)|*.*",
                 InitialDirectory = (string.IsNullOrEmpty(this.lastPath)) ? (initialDirectory ?? savedTemplateDirectory) : lastPath,
             };
             openFileDialog.ShowDialog();
@@ -58,7 +60,7 @@ namespace Data
             {
                 CheckFileExists = true,
                 CheckPathExists = true,
-                Filter = @"Easy Macro Maker (.emm)|*.emm|All files (*.*)|*.*",
+                Filter = @"Easy Macro Maker (*.emm;*.zip)|*.emm;*.zip|All files (*.*)|*.*",
                 Multiselect = true,
                 InitialDirectory = (string.IsNullOrEmpty(this.lastPath)) ? (initialDirectory ?? savedTemplateDirectory) : lastPath, 
             };
@@ -79,30 +81,61 @@ namespace Data
         }
 
         /// <summary>
-        /// Load .emm file given the path to the file
+        /// Load .emm and .zip file given the path to the file
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">Path to the .emm or .zip file</param>
         /// <returns>return null if can not parse the file</returns>
         /// <exception cref="ArgumentNullException"></exception>
         public LoadedTemplate LoadMacroFileFromPath(string path, Action<Newtonsoft.Json.Serialization.ErrorEventArgs> errorCallback = null)
         {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("The path can not be null");
-
-            string macroString = File.ReadAllText(path);
-
-            var setting = new JsonSerializerSettings();
-            setting.Converters.Add(new CustomJsonConverter());
-            setting.Error = (sender, e) =>
+            try
             {
-                errorCallback?.Invoke(e);
+                if (string.IsNullOrWhiteSpace(path))
+                    throw new ArgumentNullException("The path can not be null");
 
-                e.ErrorContext.Handled = true;
-            };
+                string macroString = null;
 
-            var macro = JsonConvert.DeserializeObject<MacroTemplate>(macroString, setting);
+                if (Path.GetExtension(path) == ".emm")
+                    macroString = File.ReadAllText(path);
+                else if (Path.GetExtension(path) == ".zip")
+                {
+                    Directory.CreateDirectory(tempFolder);
+                    ZipFile.ExtractToDirectory(path, tempFolder);
+                    var emmFile = Directory.GetFiles(tempFolder).Where(f => f.EndsWith("emm")).FirstOrDefault();
 
-            return (macro != null) ? new LoadedTemplate { MacroTemplate = macro, MacroFullPath = path } : null;
+                    if (emmFile != null)
+                        macroString = File.ReadAllText(emmFile);
+
+                    Directory.Delete(tempFolder, true);
+                }
+                else if (Path.GetExtension(path) == ".emms")
+                {
+                    //ignore
+                }
+                else
+                    throw new InvalidOperationException(Path.GetExtension(path) + " is not supported");
+
+                if (macroString == null)
+                    return null;
+
+                var setting = new JsonSerializerSettings();
+                setting.Converters.Add(new CustomJsonConverter());
+                setting.Error = (sender, e) =>
+                {
+                    errorCallback?.Invoke(e);
+
+                    e.ErrorContext.Handled = true;
+                };
+
+                var macro = JsonConvert.DeserializeObject<MacroTemplate>(macroString, setting);
+
+                return (macro != null) ? new LoadedTemplate { MacroTemplate = macro, MacroFullPath = path } : null;
+            }
+            catch
+            {
+                errorCallback?.Invoke(null);
+                return null;
+            }
         }
 
         /// <summary>
@@ -120,7 +153,7 @@ namespace Data
                 DefaultExt = ".emm",
                 InitialDirectory = (fullPath.Equals(string.Empty)) ? savedTemplateDirectory : Path.GetDirectoryName(fullPath),
                 Filter = @"Easy Macro Maker (.emm)|*.emm",
-                FileName = (fullPath.Equals(string.Empty)) ? string.Empty : Path.GetFileNameWithoutExtension(fullPath)
+                FileName = (fullPath.Equals(string.Empty)) ? macroTemplate.MacroName.Replace(" ", "_") : Path.GetFileNameWithoutExtension(fullPath)
             };
 
             var result = saveFileDialog.ShowDialog();
@@ -141,11 +174,14 @@ namespace Data
         /// <param name="fullPath">The path the <see cref="MacroTemplate"/></param>
         public string SaveToFile(MacroTemplate macroTemplate, string fullPath)
         {
-            if (fullPath.Equals(string.Empty))
+            if (string.IsNullOrWhiteSpace(fullPath))
                 return this.SaveAsToFile(macroTemplate, string.Empty);
             else
-            //Serialize the macro then save it
-            File.WriteAllText(fullPath, JsonConvert.SerializeObject(macroTemplate, Formatting.Indented));
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+                //Serialize the macro then save it
+                File.WriteAllText(fullPath, JsonConvert.SerializeObject(macroTemplate, Formatting.Indented));
+            }
 
             return fullPath;
         }

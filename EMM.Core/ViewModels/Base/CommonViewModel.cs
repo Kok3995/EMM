@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PropertyChanged;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -12,7 +13,13 @@ namespace EMM.Core.ViewModels
     {
         public CommonViewModel()
         {
-            InitializeCommands();
+            InitializeCommandsAndEvent();
+        }
+
+        public CommonViewModel(ViewModelClipboard clipboard)
+        {
+            this.clipboard = clipboard;
+            InitializeCommandsAndEvent();
         }
 
         #region Private members
@@ -22,10 +29,7 @@ namespace EMM.Core.ViewModels
         /// </summary>
         private ObservableCollection<IActionViewModel> backupCutList;
 
-        /// <summary>
-        /// List of item to be copied <see cref="IActionViewModel"/>
-        /// </summary>
-        private List<IActionViewModel> copiedList = new List<IActionViewModel>();
+        private ViewModelClipboard clipboard;
 
         #endregion
 
@@ -36,21 +40,33 @@ namespace EMM.Core.ViewModels
         /// </summary>
         public ObservableCollection<IActionViewModel> ViewModelList { get; set; } = new ObservableCollection<IActionViewModel>();
 
+        public void OnViewModelListChanged()
+        {
+            ViewModelList.CollectionChanged += (s, e) =>
+            {
+                IsChanged = true;
+            };
+        }
+
+        [DoNotSetChanged]
         /// <summary>
         /// The selected item
         /// </summary>
-        public IActionViewModel SelectedItem { get; set; }
+        public virtual IActionViewModel SelectedItem { get; set; }
 
+        [DoNotSetChanged]
+        /// <summary>
+        /// The selected items
+        /// </summary>
+        public ObservableCollection<IActionViewModel> SelectedItems { get; set; }
+
+        [DoNotSetChanged]
         /// <summary>
         /// The index of the selected group, default to -1 so insert work first time
         /// </summary>
-        public int SelectedItemIndex { get; set; } = -1;
+        public virtual int SelectedItemIndex { get; set; }/* = -1;*/
 
-        /// <summary>
-        /// Indicate if cut command is used previously
-        /// </summary>
-        public bool IsCut { get; set; }
-
+        [DoNotSetChanged]
         /// <summary>
         /// Disable action list part when no action group selected or created
         /// </summary>
@@ -69,21 +85,23 @@ namespace EMM.Core.ViewModels
         public ICommand DeleteCommand { get; set; }
         public ICommand UpCommand { get; set; }
         public ICommand DownCommand { get; set; }
+        public ICommand ToggleActionCommand { get; set; }
 
         /// <summary>
         /// Initilize all commands in this viewmodel
         /// </summary>
-        private void InitializeCommands()
+        private void InitializeCommandsAndEvent()
         {
             AddCommand = new RelayCommand(AddItem);
             InsertCommand = new RelayCommand(InsertItem);
-            CopyCommand = new RelayCommand(CopyItem, p => SelectedItem != null);
-            CutCommand = new RelayCommand(CutItem, p => SelectedItem != null);
+            CopyCommand = new RelayCommand(CopyItem, p => SelectedItem != null && SelectedItemIndex > -1);
+            CutCommand = new RelayCommand(CutItem, p => SelectedItem != null && SelectedItemIndex > -1);
             UndoCutCommand = new RelayCommand(UndoCutItem);
-            PasteCommand = new RelayCommand(PasteItem, p => this.copiedList.Count > 0);
-            DeleteCommand = new RelayCommand(DeleteItem, p => this.SelectedItem != null);
-            UpCommand = new RelayCommand(MoveItemUp, p => SelectedItem != null);
-            DownCommand = new RelayCommand(MoveItemDown, p => SelectedItem != null);
+            PasteCommand = new RelayCommand(PasteItem, p => clipboard.GetCopiedCount() > 0);
+            DeleteCommand = new RelayCommand(DeleteItem, p => this.SelectedItem != null && SelectedItemIndex > -1);
+            UpCommand = new RelayCommand(MoveItemUp, p => SelectedItem != null && SelectedItemIndex > -1);
+            DownCommand = new RelayCommand(MoveItemDown, p => SelectedItem != null && SelectedItemIndex > -1);
+            ToggleActionCommand = new RelayCommand(ToggleAction, p => SelectedItem != null && SelectedItemIndex > -1);          
         }
         #endregion
 
@@ -105,17 +123,16 @@ namespace EMM.Core.ViewModels
         {
             var selectedItems = this.ViewModelList.GetSelectedElement();
 
-            this.copiedList = selectedItems;
-
-            this.IsCut = false;
+            clipboard.Copy(selectedItems, this.ViewModelList);
         }
+
         protected virtual void CutItem(object parameter)
         {
-            this.CopyItem(null);
+            var selectedItems = this.ViewModelList.GetSelectedElement();
+
+            clipboard.Cut(selectedItems, this.ViewModelList);
 
             this.backupCutList = new ObservableCollection<IActionViewModel>(this.ViewModelList);
-
-            this.IsCut = true;
         }
         protected virtual void UndoCutItem(object parameter)
         {
@@ -125,21 +142,16 @@ namespace EMM.Core.ViewModels
         {           
             int pasteIndex = this.ViewModelList.GetPasteIndex(SelectedItemIndex);
            
-            for (int i = 1; i <= this.copiedList.Count; i++)
+            for (int i = 1; i <= clipboard.GetCopiedCount(); i++)
             {
-                var newItem = this.copiedList[i - 1].MakeCopy();
+                var newItem = clipboard.Get(i - 1).MakeCopy();
 
                 this.ViewModelList.Insert(pasteIndex + i, newItem);
+
+                newItem.IsSelected = true;
             }
 
-            if (this.IsCut == true)
-            {
-                foreach (var group in this.copiedList)
-                    this.ViewModelList.Remove(group);
-
-                this.copiedList.Clear();
-                this.IsCut = false;
-            }
+            clipboard.RemoveCopiedItemIfCut();
         }
         protected virtual void DeleteItem(object parameter)
         {
@@ -157,13 +169,90 @@ namespace EMM.Core.ViewModels
         }
         protected virtual void MoveItemUp(object parameter)
         {
-            this.ViewModelList.MoveSelectedElement(-1); 
+            var temp = ViewModelList.GetSelectedElement();
+
+            this.ViewModelList.MoveSelectedElement(-1);
+
+            temp.ForEach(v => v.IsSelected = true);
         }
         protected virtual void MoveItemDown(object parameter)
         {
+            var temp = ViewModelList.GetSelectedElement();
+
             this.ViewModelList.MoveSelectedElement(1);
+
+            temp.ForEach(v => v.IsSelected = true);
+        }
+        protected virtual void ToggleAction(object parameter)
+        {
+            var selectedItems = this.ViewModelList.GetSelectedElement();
+            foreach (var item in selectedItems)
+            {
+                item.IsDisable ^= true;
+            }
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// Clipboard for all viewmodel
+    /// </summary>
+    public class ViewModelClipboard
+    {
+        /// <summary>
+        /// List of item to be copied <see cref="IActionViewModel"/>
+        /// </summary>
+        private List<IActionViewModel> copiedList;
+
+        /// <summary>
+        /// List of action group
+        /// </summary>
+        private ObservableCollection<IActionViewModel> ViewModelList;
+
+        /// <summary>
+        /// Indicate if cut command is used previously
+        /// </summary>
+        public bool IsCut { get; set; }
+
+        public int GetCopiedCount()
+        {
+            return copiedList?.Count ?? 0;
+        }
+
+        public void Clear()
+        {
+            copiedList?.Clear();
+        }
+
+        public void Copy(List<IActionViewModel> copiedList, ObservableCollection<IActionViewModel> mainList)
+        {
+            this.copiedList = copiedList;
+            ViewModelList = mainList;
+            IsCut = false;
+        }
+
+        public void Cut(List<IActionViewModel> copiedList, ObservableCollection<IActionViewModel> mainList)
+        {
+            Copy(copiedList, mainList);
+            IsCut = true;
+        }
+
+        public IActionViewModel Get(int index)
+        {
+            return copiedList[index];
+        }
+
+        public void RemoveCopiedItemIfCut()
+        {
+            if (this.IsCut == true)
+            {
+                foreach (var group in this.copiedList)
+                    this.ViewModelList.Remove(group);
+
+                Clear();
+                IsCut = false;
+            }
+        }
     }
 }

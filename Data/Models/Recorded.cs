@@ -12,11 +12,9 @@ namespace Data
 
         public Emulator RecordedStringEmulator { get; set; }
 
-        public StringBuilder GenerateAction(ref int timer)
-        {
-            StringBuilder script = new StringBuilder();
-
-            return script;
-        }
+        /// <summary>
+        /// True to disable this action
+        /// </summary>
+        public bool IsDisable { get; set; }
     }
 }

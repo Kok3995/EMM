@@ -20,7 +20,10 @@
     <BitmapImage x:Key="CustomButton" UriSource="..\Images\Toolbar\Custom.png" />
     <BitmapImage x:Key="CustomAddButton" UriSource="..\Images\Toolbar\CustomAdd.png" />
     <BitmapImage x:Key="CustomLoadButton" UriSource="..\Images\Toolbar\CustomLoad.png" />
-    
+    <BitmapImage x:Key="ToggleButton" UriSource="..\Images\Toolbar\Toggle.png" />
+    <BitmapImage x:Key="ArrowLeft" UriSource="..\Images\Toolbar\Arrow-Left.png" />
+    <BitmapImage x:Key="ArrowDown" UriSource="..\Images\Toolbar\Arrow-Down.png" />
+
     <!-- Application Button -->
     <BitmapImage x:Key="AboutButton" UriSource="..\Images\MenuItemIcon\About.png" />
     <BitmapImage x:Key="PaypalButton" UriSource="..\Images\MenuItemIcon\Paypal.png" />
@@ -47,6 +50,7 @@
 
     <!-- -->
     <BitmapImage x:Key="EMMLogo" UriSource="..\Images\MiscIcon\EMMLogo.png" />
+    <BitmapImage x:Key="Mobile" UriSource="..\Images\MiscIcon\Mobile.png" />
 
 
 </ResourceDictionary>

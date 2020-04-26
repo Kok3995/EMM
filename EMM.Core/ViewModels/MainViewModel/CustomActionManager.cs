@@ -50,9 +50,9 @@ namespace EMM.Core
         private ActionGroupViewModel selectedActionGroupViewModel => GetSelectedActionGroupViewModel();
 
         /// <summary>
-        /// List of <see cref="ActionGroupViewModel"/> which is Custom Action in this case
+        /// List of <see cref="CustomActionViewModel"/>
         /// </summary>
-        public ObservableCollection<ActionGroupViewModel> CustomActionList { get; set; }
+        public ObservableCollection<CustomActionViewModel> CustomActionList { get; set; }
 
         /// <summary>
         /// To open new custom action pop up
@@ -100,14 +100,14 @@ namespace EMM.Core
                 if (selectedActionVM.Count == 0)
                     return;
 
-                var customAction = (ActionGroupViewModel)viewModelFactory.NewActionViewModel(BasicAction.ActionGroup);
+                var customAction = (CustomActionViewModel)viewModelFactory.NewActionViewModel(BasicAction.CustomAction);
 
                 customAction.ActionDescription = NewCustomActionName;
                 foreach (var actionVM in selectedActionVM)
                     customAction.ViewModelList.Add(actionVM.MakeCopy());
 
                 if (CustomActionList == null)
-                    CustomActionList = new ObservableCollection<ActionGroupViewModel>();
+                    CustomActionList = new ObservableCollection<CustomActionViewModel>();
 
                 CustomActionList.Add(customAction);
 
@@ -132,14 +132,15 @@ namespace EMM.Core
                 if (this.selectedActionGroupViewModel == null)
                     return;
 
-                var index = this.selectedActionGroupViewModel.SelectedItemIndex;
+                var index = this.selectedActionGroupViewModel.ViewModelList.Count == 0 ? -1 : this.selectedActionGroupViewModel.SelectedItemIndex;
 
                 this.selectedActionGroupViewModel.ViewModelList.Insert(index + 1, selectedCustomActionVM.MakeCopy());
+                this.selectedActionGroupViewModel.SelectedItem = this.selectedActionGroupViewModel.ViewModelList[index + 1];
             }, p => selectedActionGroupViewModel != null);
 
             DeleteCustomActionCommand = new RelayCommand(p =>
             {
-                if (!(p is ActionGroupViewModel selectedCustomActionVM))
+                if (!(p is CustomActionViewModel selectedCustomActionVM))
                     return;
 
                 this.CustomActionList.Remove(selectedCustomActionVM);
@@ -157,7 +158,7 @@ namespace EMM.Core
                 if (!(selectedCustomAction is ActionGroupViewModel))
                     return;
 
-                this.CustomActionList.Add(selectedCustomAction.MakeCopy() as ActionGroupViewModel);
+                this.CustomActionList.Add(selectedCustomAction.MakeCopy() as CustomActionViewModel);
 
                 SaveCustomActionList();           
             }, p => selectedActionGroupViewModel != null);
@@ -234,17 +235,17 @@ namespace EMM.Core
             var actionGroupList = this.dataIO.LoadCustomActions(path);
 
             if (CustomActionList == null)
-                CustomActionList = new ObservableCollection<ActionGroupViewModel>();
+                CustomActionList = new ObservableCollection<CustomActionViewModel>();
 
             if (actionGroupList == null)
                 return;
 
             foreach (var actionGroup in actionGroupList)
             {
-                var viewmodel = this.viewModelFactory.NewActionViewModel(actionGroup.BasicAction).ConvertFromAction(actionGroup);
+                var viewmodel = this.viewModelFactory.NewActionViewModel(BasicAction.CustomAction).ConvertFromAction(actionGroup);
                 if (viewmodel == null)
                     continue;
-                CustomActionList.Add(viewmodel as ActionGroupViewModel);
+                CustomActionList.Add(viewmodel as CustomActionViewModel);
             }
         }
 
