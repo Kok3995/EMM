@@ -23,13 +23,13 @@ namespace EMM.Core
             switch (mouseAction)
             {
                 case MouseAction.MouseDown:
-                    script.Append($"{touchDown}(Location({x}, {y}))").AppendLine();
+                    script.Append($"{{ action = \"{touchDown}\", target = Location({x}, {y}) }},").AppendLine();
                     break;
                 case MouseAction.MouseDrag:
-                    script.Append($"{touchMove}(Location({x}, {y}))").AppendLine();
+                    script.Append($"{{ action = \"{touchMove}\", target = Location({x}, {y}) }},").AppendLine();
                     break;
                 case MouseAction.MouseUp:
-                    script.Append($"{touchUp}(Location({x}, {y}))").AppendLine();
+                    script.Append($"{{ action = \"{touchUp}\", target = Location({x}, {y}) }},").AppendLine();
                     break;
             }
         }
@@ -44,7 +44,7 @@ namespace EMM.Core
             if (holdTime <= 0)
                 return;
 
-            script.Append($"{wait}({((double)holdTime / 1000):F3})").AppendLine();
+            script.Append($"{{ action = \"{wait}\", target = {((double)holdTime / 1000):F3} }},").AppendLine();
         }
 
         public override void WaitNext(object scriptObj, int waitNextTime, ref int timer)

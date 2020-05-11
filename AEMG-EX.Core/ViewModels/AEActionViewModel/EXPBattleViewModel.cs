@@ -155,6 +155,9 @@ namespace AEMG_EX.Core
 
         public override void CopyOntoSelf(IAEActionViewModel source)
         {
+            if (source.AEAction != AEAction || source.Equals(this))
+                return;
+
             base.CopyOntoSelf(source);
 
             var sourceObject = source as EXPBattleViewModel;

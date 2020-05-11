@@ -52,7 +52,7 @@ namespace EMM.Core
                     helper.Hold(script, swipe.PointList[i].HoldTime, ref timer);
 
                     //swiping
-                    var inbetweenPoints = Helpers.GetInBetweenPoints(startPoint, nextPoint, swipe.PointList[i].SwipeSpeed);
+                    var inbetweenPoints = Helpers.GetInBetweenPoints(startPoint, nextPoint, GetInBetweenSwipeStep(swipe.PointList[i].SwipeSpeed));
 
                     foreach (var point in inbetweenPoints)
                     {

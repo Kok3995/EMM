@@ -16,13 +16,7 @@ namespace EMM.Core
         public LDPlayerOperation(int timing, int x, int y, LDPLayerState state)
         {
             this.Timing = timing;
-            this.Points = new Dictionary<string, int> 
-            {
-                { "id", 1 },
-                { "x", x*15 },
-                { "y", y*15 },
-                { "state", (int)state },
-            };
+            this.Points = new [] { new LDPoint { X = x, Y = y, State = (int)state } };
         }
 
         [JsonProperty("timing")]
@@ -32,7 +26,7 @@ namespace EMM.Core
         public string OperationId { get; set; } = "PutMultiTouch";
 
         [JsonProperty("points")]
-        public Dictionary<string, int> Points { get; set; }
+        public LDPoint[] Points { get; set; }
     }
 
     /// <summary>

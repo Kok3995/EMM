@@ -116,7 +116,6 @@
     <Compile Include="Helpers\StaticVariables.cs" />
     <Compile Include="Messenger\Messenger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScriptGenerateStrategy\ActionJson\ClickAssistantAction.cs" />
     <Compile Include="ScriptGenerateStrategy\ActionStragegy\BaseScriptGenerateStragegy.cs" />
     <Compile Include="ScriptGenerateStrategy\ActionJson\LDPlayerOperation.cs" />
     <Compile Include="ScriptGenerateStrategy\ActionJson\BlueStackEvent.cs" />

@@ -80,14 +80,14 @@ namespace EMM.Test
             Assert.AreEqual(700, script[1].Timing);
             Assert.AreEqual("PutMultiTouch", script[0].OperationId);
             Assert.AreEqual("PutMultiTouch", script[1].OperationId);
-            Assert.AreEqual(1, script[0].Points["id"]);
-            Assert.AreEqual(1, script[1].Points["id"]);
-            Assert.AreEqual(14400, script[0].Points["x"]);
-            Assert.AreEqual(14400, script[1].Points["x"]);
-            Assert.AreEqual(6300, script[0].Points["y"]);
-            Assert.AreEqual(6300, script[1].Points["y"]);
-            Assert.AreEqual(1, script[0].Points["state"]);
-            Assert.AreEqual(0, script[1].Points["state"]);
+            Assert.AreEqual(1, script[0].Points[0].Id);
+            Assert.AreEqual(1, script[1].Points[0].Id);
+            Assert.AreEqual(14400, script[0].Points[0].X);
+            Assert.AreEqual(14400, script[1].Points[0].X);
+            Assert.AreEqual(6300, script[0].Points[0].Y);
+            Assert.AreEqual(6300, script[1].Points[0].Y);
+            Assert.AreEqual(1, script[0].Points[0].State);
+            Assert.AreEqual(0, script[1].Points[0].State);
         }
 
         [TestMethod]
@@ -138,10 +138,10 @@ namespace EMM.Test
             var script = actionToScriptFactory.GetActionScriptGenerator(Emulator.AnkuLua, BasicAction.Click).ActionToScript(click, ref timer) as StringBuilder;
 
             Assert.IsNotNull(script);
-            Assert.AreEqual("touchDown(Location(960, 420))" + Environment.NewLine
-                + "wait(0.500)" + Environment.NewLine
-                + "touchUp(Location(960, 420))" + Environment.NewLine
-                + "wait(1.000)" + Environment.NewLine, script.ToString());
+            Assert.AreEqual("{ action = \"touchDown\", target = Location(960, 420) }," + Environment.NewLine
+                + "{ action = \"wait\", target = 0.500 }," + Environment.NewLine
+                + "{ action = \"touchUp\", target = Location(960, 420) }," + Environment.NewLine
+                + "{ action = \"wait\", target = 1.000 }," + Environment.NewLine, script.ToString());
         }
 
         [TestMethod]
@@ -154,7 +154,7 @@ namespace EMM.Test
             Helpers.GetScriptGenerator(out IActionToScriptFactory actionToScriptFactory, out IEmulatorToScriptFactory emulatorToScriptFactory);
 
             var script = actionToScriptFactory.GetActionScriptGenerator(Emulator.AutoTouch, BasicAction.Click).ActionToScript(click, ref timer) as StringBuilder;
-
+            
             Assert.IsNotNull(script);
             Assert.AreEqual("touchDown(0, 960, 420);" + Environment.NewLine
                 + "usleep(500000);" + Environment.NewLine

@@ -24,7 +24,7 @@ namespace EMM.Core
 
         protected virtual string FileExtension => ".txt";
 
-        public bool? ApplyScriptTo(string scriptName, string path, object scriptObj, bool prompt = true)
+        public virtual bool? ApplyScriptTo(string scriptName, string path, object scriptObj, bool prompt = true)
         {
             try
             {

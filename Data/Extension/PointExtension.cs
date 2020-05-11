@@ -61,6 +61,13 @@ namespace Data
                 x = GlobalData.CustomY - temp;
             }
 
+            //adjust for LDPLayer
+            if (GlobalData.Emulator == Emulator.LDPlayer)
+            {     
+                x = x * 19200 / GlobalData.CustomX;
+                y = y * 10800 / GlobalData.CustomY;
+            }
+
             return new Point(x, y);
         }
     }

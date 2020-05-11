@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClickTestGenerate.cs" />
+    <Compile Include="ClickTestLDPLayer.cs" />
     <Compile Include="ClickTestHiro.cs" />
     <Compile Include="ClickTestLandScape.cs" />
     <Compile Include="Helpers.cs" />

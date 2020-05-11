@@ -23,7 +23,7 @@ namespace EMM.Core
         /// <param name="startPoint">Starting Point</param>
         /// <param name="endPoint">End Point</param>
         /// <returns></returns>
-        public static IEnumerable<Point> GetInBetweenPoints(Point startPoint, Point endPoint, sbyte step)
+        public static IEnumerable<Point> GetInBetweenPoints(Point startPoint, Point endPoint, int step)
         {
             double dx = endPoint.X - startPoint.X;
             double dy = endPoint.Y - startPoint.Y;
